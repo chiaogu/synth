@@ -1,3 +1,5 @@
+import path from 'path';
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   template: `${__dirname}/src/index.html`,
@@ -12,6 +14,15 @@ module.exports = {
   output: {
     path: `${__dirname}/dist`,
     filename: 'bundle.js',
+  },
+  resolve: {
+    alias: {
+      '@components': path.join(path.resolve(__dirname, "src"), 'components'),
+    },
+    modules: [
+      path.resolve(__dirname, "src"),
+      "node_modules"
+    ]
   },
   module: {
     loaders: [
