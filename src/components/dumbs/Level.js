@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const DRAG_RANGE = 200;
+
 const Root = styled.div`
     display: flex;
     flex-direction: column;
@@ -13,16 +15,21 @@ const Background = styled.div`
     position: relative;
     cursor: arrow;
     flex: 1 1 auto;
-    width: 100%;
+    width: 30px;
 `;
 
 const Progress = styled.div`
     background: #000;
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: 30px;
     pointer-events: none;
     height: ${props => (props.progress * 100) + '%'};
+`;
+
+const Value = styled.div`
+    color: #000;
+    font-size: 12px;
 `;
 
 const Text = styled.div`
@@ -67,7 +74,7 @@ export default class Level extends React.Component {
         let y = e.clientY;
 
         let value = this.state.value;
-        value += (this.dragFrom.y - y) / 100;
+        value += (this.dragFrom.y - y) / DRAG_RANGE;
         value = Math.max(0, Math.min(1, value));
         this.dragFrom = { x, y };
 
@@ -81,12 +88,11 @@ export default class Level extends React.Component {
     render() {
         return (
             <Root className={this.props.className}>
-                <Background
-                    onMouseDown={this.onMouseDown}
-                >
+                <Text>{this.props.name}</Text>
+                <Background onMouseDown={this.onMouseDown}>
                     <Progress progress={this.state.value} />
                 </Background>
-                <Text>{(this.state.value * 100).toFixed()}%</Text>
+                <Value>{(this.state.value * 100).toFixed()}%</Value>
             </Root>
         );
     }

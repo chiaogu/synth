@@ -1,12 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Tone from 'tone';
-import Level from '@components/dumbs/Level'
-
-const StyledLevel = styled(Level)`
-  height: 100px;
-  width: 30px;
-`;
+import Panel from '@components/smarts/Panel'
 
 const Root = styled.div`
   display: flex;
@@ -14,44 +9,58 @@ const Root = styled.div`
   position: relative;
 `;
 
-const TouchPad = styled.div`
-  width: 500px;
-  height: 500px;
-  background: #000;
-`;
+function getToneModule(type) {
+  switch (type) {
+    case 'oscillator':
+      return new Tone.Oscillator();
+    default:
+      throw new Error(`Unsupported type "${type}"`);
+  }
+}
+
+function getModuleControls(type) {
+  switch (type) {
+    case 'oscillator':
+      return [
+        {
+          type: 'level',
+          name: 'volumn',
+          min: -40,
+          max: 40
+        },
+        {
+          type: 'level',
+          name: 'frequency',
+          min: 0,
+          max: 440
+        }
+      ];
+    default:
+      throw new Error(`Unsupported type "${type}"`);
+  }
+}
 
 export default class Playground extends React.Component {
 
   constructor(props) {
     super(props);
 
-    let pingPong = new Tone.PingPongDelay("16n", 0.5);
-    this.freeverb = new Tone.Freeverb();
-    this.env = new Tone.AmplitudeEnvelope();
+    this.state = {
+      modules: ['oscillator']
+    };
 
-    this.sound = new Tone.Oscillator("C4")
-    this.sound.set('volume', -20);
-
-    this.sound.connect(this.freeverb);
-    this.freeverb.connect(this.env);
-    this.env.toMaster();
-
-    this.sound.start();
-  }
-
-  onLevelChange(e) {
-    console.log('onLevelChange', e);
+    let modules = this.state.modules.map(type => getToneModule(type));
   }
 
   render() {
+    let panels = this.state.modules.map((type, index) => {
+      let controls = getModuleControls(type);
+      return <Panel key={index} controls={controls} />
+    });
+
     return (
       <Root>
-        {/* <TouchPad
-          onMouseDown={this.onMouseDown.bind(this)}
-          onMouseMove={this.onMouseMove.bind(this)}
-          onMouseUp={this.onMouseUp.bind(this)}
-        ></TouchPad> */}
-        <StyledLevel onChange={this.onLevelChange.bind(this)}/>
+        {panels}
       </Root>
     );
   }
