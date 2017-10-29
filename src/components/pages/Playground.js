@@ -50,6 +50,22 @@ function getControls(type) {
           name: 'frequency',
           min: 0,
           max: 440
+        },
+        {
+          type: 'menu',
+          name: 'type',
+          choices: [
+            {key: 'sine'},
+            {key: 'square'},
+            {key: 'triangle'},
+            {key: 'sawtooth'}
+          ]
+        },
+        {
+          type: 'range',
+          name: 'partial-1',
+          min: 50,
+          max: -50
         }
       ];
     default:
@@ -75,7 +91,6 @@ export default class Playground extends React.Component {
       this.source.dispose();
     }
     this.source = getSource(this.state.source).toMaster().start();
-
     // this.effects = this.state.effect.map(type => getEffect(type));
   }
 
@@ -83,6 +98,10 @@ export default class Playground extends React.Component {
     if(!this.source) return;
 
     let { name, value } = e;
+
+    if(name.indexOf('partials') !== -1){
+
+    }
     this.source.set(name, value);
   }
 
