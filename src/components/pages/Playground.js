@@ -9,7 +9,24 @@ const Root = styled.div`
   position: relative;
 `;
 
-function getToneModule(type) {
+const StyledPanel = styled(Panel)`
+  margin: 8px;
+`;
+
+function getSource(type) {
+  switch(type){
+    case "white":
+    case "pink":
+    case "brown":
+      return new Tone.Noise(type);
+    case "oscillator":    
+      return new Tone.Oscillator();
+    default:
+      throw new Error(`Unsupported type "${type}"`);
+  }
+}
+
+function getEffect(type) {
   switch (type) {
     case 'oscillator':
       return new Tone.Oscillator();
@@ -18,18 +35,18 @@ function getToneModule(type) {
   }
 }
 
-function getModuleControls(type) {
+function getControls(type) {
   switch (type) {
     case 'oscillator':
       return [
         {
-          type: 'level',
-          name: 'volumn',
+          type: 'range',
+          name: 'volume',
           min: -40,
-          max: 40
+          max: 0
         },
         {
-          type: 'level',
+          type: 'range',
           name: 'frequency',
           min: 0,
           max: 440
@@ -46,20 +63,44 @@ export default class Playground extends React.Component {
     super(props);
 
     this.state = {
-      modules: ['oscillator']
+      source: 'oscillator',
+      effect: []
     };
 
-    let modules = this.state.modules.map(type => getToneModule(type));
+    this.syncTone();
+  }
+
+  syncTone() {
+    if(this.source) {
+      this.source.dispose();
+    }
+    this.source = getSource(this.state.source).toMaster().start();
+
+    // this.effects = this.state.effect.map(type => getEffect(type));
+  }
+
+  onSourceChange(e) {
+    if(!this.source) return;
+
+    let { name, value } = e;
+    this.source.set(name, value);
+  }
+
+  onPanelChange(index, e) {
+    console.log('onPanelChange', index, e);
   }
 
   render() {
-    let panels = this.state.modules.map((type, index) => {
-      let controls = getModuleControls(type);
-      return <Panel key={index} controls={controls} />
+    let panels = this.state.effect.map((type, index) => {
+      let controls = getControls(type);
+      return <StyledPanel key={index} controls={controls} onChange={e => this.onPanelChange(index, e)}/>
     });
+
+    let sourceControl = getControls(this.state.source);
 
     return (
       <Root>
+        <StyledPanel controls={sourceControl} onChange={this.onSourceChange.bind(this)}/>
         {panels}
       </Root>
     );

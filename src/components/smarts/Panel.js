@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import Level from '@components/dumbs/Level'
+import Range from '@components/dumbs/Range'
 import Tone from 'tone';
 
-const StyledLevel = styled(Level) `
+const StyledRange = styled(Range) `
     height: 200px;
     margin-right: 16px;
 `;
@@ -13,6 +13,7 @@ const Root = styled.div`
     flex-direction: row;
     position: relative;
     padding: 8px;
+    background: #fff;
 `;
 
 export default class Panel extends React.Component {
@@ -21,7 +22,7 @@ export default class Panel extends React.Component {
         super(props);
     }
 
-    onLevelChange(name, value) {
+    onRangeChange(name, value) {
         if (this.props.onChange) {
             this.props.onChange({ name, value });
         }
@@ -30,16 +31,16 @@ export default class Panel extends React.Component {
     render() {
         let controls = (this.props.controls || []).map((item, index) => {
             return (
-                <StyledLevel
+                <StyledRange
                     key={index}
-                    name={item.name}
-                    onChange={value => this.onLevelChange(item.name, value)}
+                    config={item}
+                    onChange={value => this.onRangeChange(item.name, value)}
                 />
             );
         });
 
         return (
-            <Root>
+            <Root className={this.props.className}>
                 {controls}
             </Root>
         );

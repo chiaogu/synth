@@ -24,7 +24,6 @@ const Progress = styled.div`
     bottom: 0;
     width: 30px;
     pointer-events: none;
-    height: ${props => (props.progress * 100) + '%'};
 `;
 
 const Value = styled.div`
@@ -37,13 +36,14 @@ const Text = styled.div`
 `;
 
 
-export default class Level extends React.Component {
+export default class Range extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            value: 0
+            value: 0,
+            ratio: 0
         }
 
         this.dragFrom = {};
@@ -72,13 +72,17 @@ export default class Level extends React.Component {
         
         let x = e.clientX;
         let y = e.clientY;
+        let {max, min} = this.props.config;
 
-        let value = this.state.value;
-        value += (this.dragFrom.y - y) / DRAG_RANGE;
-        value = Math.max(0, Math.min(1, value));
+        let ratio = this.state.ratio;
+        ratio += (this.dragFrom.y - y) / DRAG_RANGE;
+        ratio = Math.max(0, Math.min(1, ratio));
+
+        let value = min + ratio * (max - min);
+
         this.dragFrom = { x, y };
 
-        this.setState({ value });
+        this.setState({ value, ratio });
 
         if (this.props.onChange) {
             this.props.onChange(value);
@@ -88,11 +92,11 @@ export default class Level extends React.Component {
     render() {
         return (
             <Root className={this.props.className}>
-                <Text>{this.props.name}</Text>
+                <Text>{this.props.config.name}</Text>
                 <Background onMouseDown={this.onMouseDown}>
-                    <Progress progress={this.state.value} />
+                    <Progress style={{height: this.state.ratio * 100 + '%'}}/>
                 </Background>
-                <Value>{(this.state.value * 100).toFixed()}%</Value>
+                <Value>{this.state.value.toFixed()}</Value>
             </Root>
         );
     }
