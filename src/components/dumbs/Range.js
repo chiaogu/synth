@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Center from '@utils/Center';
 
 const DRAG_RANGE = 200;
 
