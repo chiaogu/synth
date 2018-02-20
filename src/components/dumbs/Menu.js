@@ -32,41 +32,41 @@ const Item = styled.div`
 
 export default class Menu extends React.Component {
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            selected: 0
-        }
+    this.state = {
+      selected: 0
+    }
+  }
+
+  onSelect(choice, index) {
+    if (this.props.onSelect) {
+      this.props.onSelect(choice, index);
     }
 
-    onSelect(choice, index) {
-        if(this.props.onSelect){
-            this.props.onSelect(choice, index);
-        }
+    this.setState({ selected: index });
+  }
 
-        this.setState({selected: index});
-    }
-
-    render() {
-        let items = (this.props.config.choices || []).map((choice, index) => {
-            let style = {
-                background: index === this.state.selected ? '#000' : '#fff',
-                color:  index === this.state.selected ? '#fff' : '#000'
-            };
-            return (
-                <Item key={index} style={style} onClick={e => this.onSelect(choice, index)}> 
-                    {choice.title || choice.key} 
-                </Item>
-            );
-        });
-        return (
-            <Root className={this.props.className}>
-                <Text>{this.props.config.name}</Text>
-                <List>
-                    {items}
-                </List>
-            </Root>
-        )
-    }
-}    
+  render() {
+    let items = (this.props.config.choices || []).map((choice, index) => {
+      let style = {
+        background: index === this.state.selected ? '#000' : '#fff',
+        color: index === this.state.selected ? '#fff' : '#000'
+      };
+      return (
+        <Item key={index} style={style} onClick={e => this.onSelect(choice, index)}>
+          {choice.title || choice.key}
+        </Item>
+      );
+    });
+    return (
+      <Root className={this.props.className}>
+        <Text>{this.props.config.name}</Text>
+        <List>
+          {items}
+        </List>
+      </Root>
+    )
+  }
+}

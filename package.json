@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "webpack-dev-server --config ./webpack.babel.js"
+    "start": "webpack-dev-server --config ./webpack.babel.js"
   },
   "author": "",
   "license": "ISC",
