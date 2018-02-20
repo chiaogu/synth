@@ -7,8 +7,6 @@ const Root = styled.div`
   align-items: center;
   justify-content: center;
   border: 1px solid #000;
-  width: 30px;
-  height: 30px;
   cursor: default;
   user-select: none;
 `;

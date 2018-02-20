@@ -7,10 +7,6 @@ const Root = styled.div`
     align-items: center;
 `;
 
-const Text = styled.div`
-    color: #000;
-`;
-
 const List = styled.div`
     display: flex;
     flex-direction: column;
@@ -63,7 +59,6 @@ export default class Menu extends React.Component {
     });
     return (
       <Root className={this.props.className}>
-        <Text>{this.props.config.name}</Text>
         <List>
           {items}
         </List>
