@@ -21,9 +21,13 @@ export default class Switch extends React.Component {
     };
   }
 
-  onSelect() {
+  onToggle() {
     const selected = !this.state.selected;
     this.setState({ selected });
+
+    if (this.props.onToggle) {
+      this.props.onToggle(selected);
+    }
   }
 
   render() {
@@ -37,7 +41,7 @@ export default class Switch extends React.Component {
       <Root
         style={style}
         className={this.props.className}
-        onClick={e => this.onSelect()}>
+        onClick={e => this.onToggle()}>
         {state}
       </Root>
     );

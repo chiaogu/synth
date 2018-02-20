@@ -4,23 +4,27 @@ const CONTROLS = {
   "oscillator": [
     {
       type: 'switch',
-      name: 'power'
+      name: 'power',
+      id: 'power'
     },
     {
       type: 'range',
       name: 'volume',
+      id: 'volume',
       min: -40,
       max: 0
     },
     {
       type: 'range',
       name: 'frequency',
+      id: 'frequency',
       min: 0,
       max: 440
     },
     {
       type: 'menu',
       name: 'type',
+      id: 'type',
       choices: [
         { key: 'sine' },
         { key: 'square' },
@@ -50,14 +54,17 @@ const CONTROLS = {
 
 const EFFECTS = [
   {
-    "type": "oscillator"
-  },
-  {
-    "type": "oscillator"
+    "type": "oscillator",
+    "params": {
+      "power": false,
+      "volume": 0,
+      "frequency": 440,
+      "type": "sine"
+    }
   }
 ];
 
-class Core {
+class Config {
   constructor() {
   }
 
@@ -74,4 +81,4 @@ class Core {
   }
 }
 
-export default new Core();
+export default new Config();

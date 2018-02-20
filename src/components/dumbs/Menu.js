@@ -38,11 +38,11 @@ export default class Menu extends React.Component {
   }
 
   onSelect(choice, index) {
+    this.setState({ selected: index });
+
     if (this.props.onSelect) {
       this.props.onSelect(choice, index);
     }
-
-    this.setState({ selected: index });
   }
 
   render() {

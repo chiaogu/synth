@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Panel from '@components/smarts/Panel';
-import Core from '@utils/Core';
+import Config from '@utils/Config';
 
 const Root = styled.div`
   display: flex;
@@ -28,7 +28,7 @@ export default class Playground extends React.Component {
   }
 
   init() {
-    const effects = Core.getEffects();
+    const effects = Config.getEffects();
     this.setState({ effects });
   }
 

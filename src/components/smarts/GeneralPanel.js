@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Range from '@components/dumbs/Range'
 import Menu from '@components/dumbs/Menu'
 import Switch from '@components/dumbs/Switch'
-import Core from '@utils/Core';
+import Config from '@utils/Config';
 
 const Root = styled.div`
   display: flex;
@@ -48,6 +48,7 @@ export default class GeneralPanel extends React.Component {
   }
 
   onChange(name, value) {
+    console.log('onChange', name, value);
   }
 
   controlToComponent(control, index) {
@@ -65,7 +66,7 @@ export default class GeneralPanel extends React.Component {
       case 'switch':
         return  <StyledSwitch
           config={control}
-          onSelect={(choice, index) => this.onChange(control.name, choice.key)}
+          onToggle={selected => this.onChange(control.name, selected)}
         />;
     }
   }
@@ -73,7 +74,7 @@ export default class GeneralPanel extends React.Component {
   render() {
     const { id, effect } = this.props;
 
-    const controls = Core.getControls(effect.type).map((control, index) => {
+    const controls = Config.getControls(effect.type).map((control, index) => {
       const component = this.controlToComponent(control, index);
       return (
         <ControlWrapper key={index}>
