@@ -32,9 +32,14 @@ export default class Menu extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      selected: 0
+    const value = this.props.value;
+    const choices = (this.props.config.choices || []);
+    let selected = choices.findIndex(choice => choice.key === value);
+    if(selected === -1){
+      selected = 0;
     }
+
+    this.state = { selected };
   }
 
   onSelect(choice, index) {

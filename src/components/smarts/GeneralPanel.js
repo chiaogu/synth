@@ -51,21 +51,24 @@ export default class GeneralPanel extends React.Component {
     console.log('onChange', name, value);
   }
 
-  controlToComponent(control, index) {
+  controlToComponent(index, control, param) {
     switch (control.type) {
       case 'range':
         return <StyledRange
           config={control}
+          value={param}
           onChange={value => this.onChange(control.name, value)}
         />;
       case 'menu':
         return <StyledMenu
           config={control}
+          value={param}
           onSelect={(choice, index) => this.onChange(control.name, choice.key)}
         />;
       case 'switch':
-        return  <StyledSwitch
+        return <StyledSwitch
           config={control}
+          value={param}
           onToggle={selected => this.onChange(control.name, selected)}
         />;
     }
@@ -73,9 +76,12 @@ export default class GeneralPanel extends React.Component {
 
   render() {
     const { id, effect } = this.props;
+    const params = effect.params || {};
 
     const controls = Config.getControls(effect.type).map((control, index) => {
-      const component = this.controlToComponent(control, index);
+      const param = params[control.id];
+      const component = this.controlToComponent(index, control, param);
+
       return (
         <ControlWrapper key={index}>
           <ControlName>{control.name}</ControlName>

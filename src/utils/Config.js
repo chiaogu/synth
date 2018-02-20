@@ -56,9 +56,9 @@ const EFFECTS = [
   {
     "type": "oscillator",
     "params": {
-      "power": false,
-      "volume": 0,
-      "frequency": 440,
+      "power": true,
+      "volume": -20,
+      "frequency": 220,
       "type": "sine"
     }
   }

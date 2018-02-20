@@ -16,9 +16,8 @@ export default class Switch extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      selected: true
-    };
+    const selected = this.props.value || false;
+    this.state = { selected };
   }
 
   onToggle() {

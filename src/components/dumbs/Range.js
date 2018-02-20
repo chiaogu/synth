@@ -44,10 +44,11 @@ export default class Range extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      value: 0,
-      ratio: 0
-    }
+    const value = this.props.value || 0;
+
+    const { max, min } = this.props.config;
+    const ratio = (value - min) / (max - min);
+    this.state = { value, ratio };
 
     this.dragFrom = {};
     this.onMouseDown = this.onMouseDown.bind(this);
@@ -73,15 +74,15 @@ export default class Range extends React.Component {
   onMouseMove(e) {
     e.preventDefault();
 
-    let x = e.clientX;
-    let y = e.clientY;
-    let { max, min } = this.props.config;
+    const x = e.clientX;
+    const y = e.clientY;
+    const { max, min } = this.props.config;
 
     let ratio = this.state.ratio;
     ratio += (this.dragFrom.y - y) / DRAG_RANGE;
     ratio = Math.max(0, Math.min(1, ratio));
 
-    let value = min + ratio * (max - min);
+    const value = min + ratio * (max - min);
 
     this.dragFrom = { x, y };
 
