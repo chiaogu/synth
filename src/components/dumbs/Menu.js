@@ -28,6 +28,7 @@ const Item = styled.div`
     align-items: center;
     justify-content: center;
     cursor: default;
+    user-select: none;
 `;
 
 export default class Menu extends React.Component {

@@ -3,6 +3,10 @@ import Tone from 'tone';
 const CONTROLS = {
   "oscillator": [
     {
+      type: 'switch',
+      name: 'power'
+    },
+    {
       type: 'range',
       name: 'volume',
       min: -40,

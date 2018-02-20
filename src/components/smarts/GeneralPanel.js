@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Range from '@components/dumbs/Range'
 import Menu from '@components/dumbs/Menu'
+import Switch from '@components/dumbs/Switch'
 import Core from '@utils/Core';
 
 const Name = styled.div`
@@ -15,6 +16,10 @@ const StyledMenu = styled(Menu) `
 
 const StyledRange = styled(Range) `
   height: 200px;
+  margin-right: 16px;
+`;
+
+const StyledSwitch = styled(Switch) `
   margin-right: 16px;
 `;
 
@@ -52,6 +57,12 @@ export default class GeneralPanel extends React.Component {
             config={item}
             onSelect={(choice, index) => this.onChange(item.name, choice.key)}
           />;
+        case 'switch':
+          return  <StyledSwitch
+          key={index}
+          config={item}
+          onSelect={(choice, index) => this.onChange(item.name, choice.key)}
+        />;
       }
     });
 
