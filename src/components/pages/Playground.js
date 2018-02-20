@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Panel from '@components/smarts/Panel';
 import Config from '@utils/Config';
+import Core from '@utils/Core';
 
 const Root = styled.div`
   display: flex;
@@ -9,7 +10,7 @@ const Root = styled.div`
   position: relative;
 `;
 
-const StyledPanel = styled(Panel) `
+const StyledPanel = styled(Panel)`
   margin: 8px;
 `;
 
@@ -19,7 +20,7 @@ export default class Playground extends React.Component {
     super(props);
 
     this.state = {
-      effects: []
+      modules: []
     }
   }
 
@@ -28,13 +29,15 @@ export default class Playground extends React.Component {
   }
 
   init() {
-    const effects = Config.getEffects();
-    this.setState({ effects });
+    const modules = Config.getModules();
+
+    this.setState({ modules });
+    Core.setModules(modules);
   }
 
   render() {
-    const panels = this.state.effects.map((effect, index) => {
-      return <StyledPanel key={index} id={index} effect={effect} />
+    const panels = this.state.modules.map((module, index) => {
+      return <StyledPanel key={index} id={index} module={module} />
     });
 
     return (

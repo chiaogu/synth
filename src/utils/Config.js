@@ -1,7 +1,5 @@
-import Tone from 'tone';
-
 const CONTROLS = {
-  "oscillator": [
+  "omniOscillator": [
     {
       type: 'switch',
       name: 'power',
@@ -52,9 +50,9 @@ const CONTROLS = {
   ]
 }
 
-const EFFECTS = [
+const MODULES = [
   {
-    "type": "oscillator",
+    "type": "omniOscillator",
     "params": {
       "power": true,
       "volume": -20,
@@ -68,8 +66,8 @@ class Config {
   constructor() {
   }
 
-  getEffects() {
-    return EFFECTS;
+  getModules() {
+    return MODULES;
   }
 
   getControls(type) {

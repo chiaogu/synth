@@ -13,7 +13,7 @@ const Root = styled.div`
   background: #fff;
 `;
 
-const EffectName = styled.div`
+const ModuleName = styled.div`
   margin-right: 16px;
 `;
 
@@ -75,10 +75,10 @@ export default class GeneralPanel extends React.Component {
   }
 
   render() {
-    const { id, effect } = this.props;
-    const params = effect.params || {};
+    const { id, module } = this.props;
+    const params = module.params || {};
 
-    const controls = Config.getControls(effect.type).map((control, index) => {
+    const controls = Config.getControls(module.type).map((control, index) => {
       const param = params[control.id];
       const component = this.controlToComponent(index, control, param);
 
@@ -92,7 +92,7 @@ export default class GeneralPanel extends React.Component {
 
     return (
       <Root className={this.props.className}>
-        <EffectName>{id}<br />{effect.type}</EffectName>
+        <ModuleName>{id}<br />{module.type}</ModuleName>
         {controls}
       </Root>
     );

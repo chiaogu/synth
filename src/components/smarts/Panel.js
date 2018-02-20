@@ -9,12 +9,12 @@ export default class Panel extends React.Component {
   }
 
   render() {
-    const { id, effect } = this.props;
+    const { id, module } = this.props;
 
     let panel;
-    switch (effect.type) {
+    switch (module.type) {
       default:
-        panel = <GeneralPanel key={id} id={id} effect={effect} />
+        panel = <GeneralPanel key={id} id={id} module={module} />
         break;
     }
 
