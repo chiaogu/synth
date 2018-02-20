@@ -5,7 +5,6 @@ import Playground from '@components/pages/Playground'
 
 const Root = styled.div`
   background: #aaa;
-  padding-top: 8px;
   height: 100%;
 `;
 

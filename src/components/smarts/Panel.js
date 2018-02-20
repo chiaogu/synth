@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Range from '@components/dumbs/Range'
 import Menu from '@components/dumbs/Menu'
+import Core from '@utils/Core';
 
 const StyledMenu = styled(Menu) `
     height: 200px;
@@ -28,13 +29,12 @@ export default class Panel extends React.Component {
     }
 
     onChange(name, value) {
-        if (this.props.onChange) {
-            this.props.onChange({ name, value });
-        }
     }
 
     render() {
-        let controls = (this.props.controls || []).map((item, index) => {
+        const { id, effect } = this.props;
+
+        const controls = Core.getControls(effect).map((item, index) => {
             switch(item.type){
                 case 'range':
                     return <StyledRange
@@ -54,6 +54,8 @@ export default class Panel extends React.Component {
         return (
             <Root className={this.props.className}>
                 {controls}
+                {id}
+                {effect}
             </Root>
         );
     }
