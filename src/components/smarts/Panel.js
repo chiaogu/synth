@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import GeneralPanel from '@components/smarts/GeneralPanel';
 
 export default class Panel extends React.Component {
 
@@ -10,11 +11,17 @@ export default class Panel extends React.Component {
   render() {
     const { id, effect } = this.props;
 
+    let panel;
+    switch (effect.type) {
+      default:
+        panel = <GeneralPanel key={id} id={id} effect={effect} />
+        break;
+    }
+
     return (
-      <Root className={this.props.className}>
-        <Name>{id}<br />{effect.type}</Name>
-        {controls}
-      </Root>
-    );
+      <div className={this.props.className}>
+        {panel}
+      </div>
+    )
   }
 }

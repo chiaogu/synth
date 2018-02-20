@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import GeneralPanel from '@components/smarts/GeneralPanel';
+import Panel from '@components/smarts/Panel';
 import Core from '@utils/Core';
 
 const Root = styled.div`
@@ -9,7 +9,7 @@ const Root = styled.div`
   position: relative;
 `;
 
-const StyledGeneralPanel = styled(GeneralPanel) `
+const StyledPanel = styled(Panel) `
   margin: 8px;
 `;
 
@@ -34,7 +34,7 @@ export default class Playground extends React.Component {
 
   render() {
     const panels = this.state.effects.map((effect, index) => {
-      return <StyledGeneralPanel key={index} id={index} effect={effect} />
+      return <StyledPanel key={index} id={index} effect={effect} />
     });
 
     return (
