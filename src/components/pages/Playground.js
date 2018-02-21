@@ -38,13 +38,17 @@ export default class Playground extends React.Component {
         config: module
       })))
       .then(modules => {
-        Core.setModules(modules);
+        try{
+          Core.setModules(modules);
+        }catch(e) {
+          alert(e.message);
+        }
         this.setState({ modules });
       });
   }
 
   onParamChange(index, key, value) {
-    console.log('onParamChange', index, key, value);
+    Core.setParameter(index, key, value);
   }
 
   render() {

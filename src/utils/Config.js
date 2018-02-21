@@ -3,14 +3,14 @@ const MODULES = {
     "id": "master",
     "name": "Master Output",
     "type": "Native",
-    "class": "Master",
+    "className": "Master",
     "controls": []
   },
   "omniOscillator": {
     "id": "omniOscillator",
     "name": "Omni Oscillator",
     "type":"Native",
-    "class":"OmniOscillator",
+    "className":"OmniOscillator",
     "controls": [
       {
         type: 'switch',
@@ -20,14 +20,14 @@ const MODULES = {
       {
         type: 'range',
         name: 'volume',
-        id: 'volume',
+        id: 'volume.value',
         min: -40,
         max: 0
       },
       {
         type: 'range',
         name: 'frequency',
-        id: 'frequency',
+        id: 'frequency.value',
         min: 0,
         max: 440
       },
@@ -70,18 +70,9 @@ const PRESET = {
       "id": "omniOscillator",
       "params": {
         "power": true,
-        "volume": -20,
-        "frequency": 220,
+        "volume.value": -20,
+        "frequency.value": 220,
         "type": "square"
-      }
-    },
-    {
-      "id": "omniOscillator",
-      "params": {
-        "power": false,
-        "volume": 0,
-        "frequency": 120,
-        "type": "triangle"
       }
     },
     {

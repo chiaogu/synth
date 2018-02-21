@@ -58,19 +58,19 @@ export default class GeneralPanel extends React.Component {
         return <StyledRange
           config={control}
           value={param}
-          onChange={value => this.onChange(control.name, value)}
+          onChange={value => this.onChange(control.id, value)}
         />;
       case 'menu':
         return <StyledMenu
           config={control}
           value={param}
-          onSelect={(choice, index) => this.onChange(control.name, choice.key)}
+          onSelect={(choice, index) => this.onChange(control.id, choice.key)}
         />;
       case 'switch':
         return <StyledSwitch
           config={control}
           value={param}
-          onToggle={selected => this.onChange(control.name, selected)}
+          onToggle={selected => this.onChange(control.id, selected)}
         />;
     }
   }

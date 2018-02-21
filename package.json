@@ -20,6 +20,8 @@
     "webpack-dev-server": "^2.9.3"
   },
   "dependencies": {
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "styled-components": "^2.2.1",

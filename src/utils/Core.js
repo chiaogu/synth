@@ -22,8 +22,8 @@ class Core {
   }
 
   setParameter(id, key, value) {
-    const node = this.modules[id];
-    node
+    const module = this.modules[id];
+    module.set(key, value);
   }
 
   callFunction(id, name, param) {
