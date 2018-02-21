@@ -21,13 +21,14 @@ class Core {
     this.modules = [];
   }
 
-  setParameter(id, key, value) {
+  set(id, key, value) {
     const module = this.modules[id];
     module.set(key, value);
   }
 
-  callFunction(id, name, param) {
-
+  call(id, name) {
+    const module = this.modules[id];
+    module.call(name);
   }
 }
 

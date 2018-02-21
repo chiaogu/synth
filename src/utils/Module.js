@@ -25,5 +25,10 @@ export default class Module {
 
   set(key, value) {
     setIn(this.instance, key, value);
+    console.log(key, getIn(this.instance, key));
+  }
+
+  call(name) {
+    console.log(this.instance[name]());
   }
 }

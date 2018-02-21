@@ -15,7 +15,14 @@ const MODULES = {
       {
         type: 'switch',
         name: 'power',
-        id: 'power'
+        id: 'power',
+        action: {
+          type: 'call',
+          functionName: {
+            true: 'start',
+            false: 'stop'
+          }
+        }
       },
       {
         type: 'range',

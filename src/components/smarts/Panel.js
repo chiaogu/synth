@@ -8,12 +8,6 @@ export default class Panel extends React.Component {
     super(props);
   }
 
-  onChange(key, value) {
-    const { onChange } = this.props;
-
-    if(onChange) onChange(key, value);
-  }
-
   getPanel(type) {
     const { index, module } = this.props;
 
@@ -23,7 +17,8 @@ export default class Panel extends React.Component {
           <GeneralPanel
             index={index}
             module={module}
-            onChange={(key, value) => this.onChange(key, value)}
+            onChange={this.props.onChange}
+            onCall={this.props.onCall}
           />
         )
     }

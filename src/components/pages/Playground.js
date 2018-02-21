@@ -10,7 +10,7 @@ const Root = styled.div`
   position: relative;
 `;
 
-const StyledPanel = styled(Panel)`
+const StyledPanel = styled(Panel) `
   margin: 8px;
 `;
 
@@ -38,9 +38,9 @@ export default class Playground extends React.Component {
         config: module
       })))
       .then(modules => {
-        try{
+        try {
           Core.setModules(modules);
-        }catch(e) {
+        } catch (e) {
           alert(e.message);
         }
         this.setState({ modules });
@@ -48,7 +48,11 @@ export default class Playground extends React.Component {
   }
 
   onParamChange(index, key, value) {
-    Core.setParameter(index, key, value);
+    Core.set(index, key, value);
+  }
+
+  onCallFunction(index, name) {
+    Core.call(index, name);
   }
 
   render() {
@@ -59,6 +63,7 @@ export default class Playground extends React.Component {
           index={index}
           module={module}
           onChange={(key, value) => this.onParamChange(index, key, value)}
+          onCall={functionName => this.onCallFunction(index, functionName)}
         />
       )
     });

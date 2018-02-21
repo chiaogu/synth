@@ -46,10 +46,20 @@ export default class GeneralPanel extends React.Component {
     super(props);
   }
 
-  onChange(name, value) {
-    const { onChange } = this.props;
+  onChange(control, value) {
+    const { onCall, onChange } = this.props;
+    const { id, action: { type, functionName } = {} } = control;
 
-    if(onChange) onChange(name, value);
+    if(type === 'call'){
+      if(!onCall) return;
+      if(typeof functionName === 'string'){
+        onCall(functionName);
+      }else {
+        onCall(functionName[value]);
+      }
+    }else {
+      if (onChange) onChange(id, value);
+    }
   }
 
   controlToComponent(control, param) {
@@ -58,19 +68,19 @@ export default class GeneralPanel extends React.Component {
         return <StyledRange
           config={control}
           value={param}
-          onChange={value => this.onChange(control.id, value)}
+          onChange={value => this.onChange(control, value)}
         />;
       case 'menu':
         return <StyledMenu
           config={control}
           value={param}
-          onSelect={(choice, index) => this.onChange(control.id, choice.key)}
+          onSelect={(choice, index) => this.onChange(control, choice.key)}
         />;
       case 'switch':
         return <StyledSwitch
           config={control}
           value={param}
-          onToggle={selected => this.onChange(control.id, selected)}
+          onToggle={selected => this.onChange(control, selected)}
         />;
     }
   }
