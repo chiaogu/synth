@@ -29,15 +29,34 @@ export default class Playground extends React.Component {
   }
 
   init() {
-    const modules = Config.getModules();
+    const preset = Config.getPreset();
+    const ids = preset.modules.map(module => module.id);
 
-    this.setState({ modules });
-    Core.setModules(modules);
+    Config.getModules(ids)
+      .then(modules => modules.map((module, index) => ({
+        params: preset.modules[index].params,
+        config: module
+      })))
+      .then(modules => {
+        Core.setModules(modules);
+        this.setState({ modules });
+      });
+  }
+
+  onParamChange(index, key, value) {
+    console.log('onParamChange', index, key, value);
   }
 
   render() {
     const panels = this.state.modules.map((module, index) => {
-      return <StyledPanel key={index} id={index} module={module} />
+      return (
+        <StyledPanel
+          key={index}
+          index={index}
+          module={module}
+          onChange={(key, value) => this.onParamChange(index, key, value)}
+        />
+      )
     });
 
     return (
@@ -46,5 +65,4 @@ export default class Playground extends React.Component {
       </Root>
     );
   }
-
 }

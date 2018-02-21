@@ -1,18 +1,34 @@
-import Tone from 'tone';
+import Module from '@utils/Module';
 
 class Core {
-    constructor() {}
+  constructor() {
+    this.modules = [];
+  }
 
-    setModules(modules) {
-        // Tone.Master.dispose();
+  setModules(modules) {
+    this.clearModules();
+    this.modules = modules.map(module => new Module(module));
+    this.modules.forEach((module, index) => {
+      if(index === 0) return;
+      this.modules[index - 1].connect(module);
+    });
+  }
 
-        let a = new Tone.OmniOscillator();
-        // a.start();
+  clearModules() {
+    this.modules.forEach(module => {
+      module.dispose();
+    });
+    this.modules = [];
+  }
 
-        Tone.connectSeries(...[
-          a, Tone.Master
-        ]);
-    }
+  setParameter(id, key, value) {
+    const node = this.modules[id];
+    node
+  }
+
+  callFunction(id, name, param) {
+
+  }
 }
 
 export default new Core();

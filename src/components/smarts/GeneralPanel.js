@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Range from '@components/dumbs/Range'
 import Menu from '@components/dumbs/Menu'
 import Switch from '@components/dumbs/Switch'
-import Config from '@utils/Config';
 
 const Root = styled.div`
   display: flex;
@@ -48,10 +47,12 @@ export default class GeneralPanel extends React.Component {
   }
 
   onChange(name, value) {
-    console.log('onChange', name, value);
+    const { onChange } = this.props;
+
+    if(onChange) onChange(name, value);
   }
 
-  controlToComponent(index, control, param) {
+  controlToComponent(control, param) {
     switch (control.type) {
       case 'range':
         return <StyledRange
@@ -75,12 +76,12 @@ export default class GeneralPanel extends React.Component {
   }
 
   render() {
-    const { id, module } = this.props;
-    const params = module.params || {};
+    const { index, module } = this.props;
+    const { params = {}, config } = module;
 
-    const controls = Config.getControls(module.type).map((control, index) => {
+    const controls = config.controls.map((control, index) => {
       const param = params[control.id];
-      const component = this.controlToComponent(index, control, param);
+      const component = this.controlToComponent(control, param);
 
       return (
         <ControlWrapper key={index}>
@@ -92,7 +93,7 @@ export default class GeneralPanel extends React.Component {
 
     return (
       <Root className={this.props.className}>
-        <ModuleName>{id}<br />{module.type}</ModuleName>
+        <ModuleName>{index}<br />{config.name}</ModuleName>
         {controls}
       </Root>
     );

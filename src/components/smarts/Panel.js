@@ -8,19 +8,31 @@ export default class Panel extends React.Component {
     super(props);
   }
 
-  render() {
-    const { id, module } = this.props;
+  onChange(key, value) {
+    const { onChange } = this.props;
 
-    let panel;
+    if(onChange) onChange(key, value);
+  }
+
+  getPanel(type) {
+    const { index, module } = this.props;
+
     switch (module.type) {
       default:
-        panel = <GeneralPanel key={id} id={id} module={module} />
-        break;
+        return (
+          <GeneralPanel
+            index={index}
+            module={module}
+            onChange={(key, value) => this.onChange(key, value)}
+          />
+        )
     }
+  }
 
+  render() {
     return (
       <div className={this.props.className}>
-        {panel}
+        {this.getPanel()}
       </div>
     )
   }
