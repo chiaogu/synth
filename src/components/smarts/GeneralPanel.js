@@ -47,19 +47,10 @@ export default class GeneralPanel extends React.Component {
   }
 
   onChange(control, value) {
-    const { onCall, onChange } = this.props;
-    const { id, action: { type, functionName } = {} } = control;
+    const { onChange } = this.props;
+    const { id } = control;
 
-    if(type === 'call'){
-      if(!onCall) return;
-      if(typeof functionName === 'string'){
-        onCall(functionName);
-      }else {
-        onCall(functionName[value]);
-      }
-    }else {
-      if (onChange) onChange(id, value);
-    }
+    if (onChange) onChange(id, value);
   }
 
   controlToComponent(control, param) {

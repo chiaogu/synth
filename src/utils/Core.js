@@ -25,11 +25,6 @@ class Core {
     const module = this.modules[id];
     module.set(key, value);
   }
-
-  call(id, name) {
-    const module = this.modules[id];
-    module.call(name);
-  }
 }
 
 export default new Core();

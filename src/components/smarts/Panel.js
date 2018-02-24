@@ -18,7 +18,6 @@ export default class Panel extends React.Component {
             index={index}
             module={module}
             onChange={this.props.onChange}
-            onCall={this.props.onCall}
           />
         )
     }

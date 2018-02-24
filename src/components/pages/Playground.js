@@ -47,12 +47,8 @@ export default class Playground extends React.Component {
       });
   }
 
-  onParamChange(index, key, value) {
+  onChange(index, key, value) {
     Core.set(index, key, value);
-  }
-
-  onCallFunction(index, name) {
-    Core.call(index, name);
   }
 
   render() {
@@ -62,8 +58,7 @@ export default class Playground extends React.Component {
           key={index}
           index={index}
           module={module}
-          onChange={(key, value) => this.onParamChange(index, key, value)}
-          onCall={functionName => this.onCallFunction(index, functionName)}
+          onChange={(key, value) => this.onChange(index, key, value)}
         />
       )
     });
