@@ -47,10 +47,6 @@ export default class Playground extends React.Component {
       });
   }
 
-  onChange(index, key, value) {
-    Core.set(index, key, value);
-  }
-
   render() {
     const panels = this.state.modules.map((module, index) => {
       return (
@@ -58,7 +54,6 @@ export default class Playground extends React.Component {
           key={index}
           index={index}
           module={module}
-          onChange={(key, value) => this.onChange(index, key, value)}
         />
       )
     });

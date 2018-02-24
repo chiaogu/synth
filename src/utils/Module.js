@@ -1,7 +1,6 @@
 import Tone from 'tone';
 import getIn from 'lodash.get';
 import setIn from 'lodash.set';
-import { debug } from 'util';
 
 export default class Module {
   constructor(module) {

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Range from '@components/dumbs/Range'
 import Menu from '@components/dumbs/Menu'
 import Switch from '@components/dumbs/Switch'
+import Core from '@utils/Core';
 
 const Root = styled.div`
   display: flex;
@@ -47,10 +48,10 @@ export default class GeneralPanel extends React.Component {
   }
 
   onChange(control, value) {
-    const { onChange } = this.props;
     const { id } = control;
+    const { index } = this.props;
 
-    if (onChange) onChange(id, value);
+    Core.set(index, id, value);
   }
 
   controlToComponent(control, param) {

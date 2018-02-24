@@ -67,6 +67,54 @@ const MODULES = {
         ]
       }
     ]
+  },
+  "amplitudeEnvelope": {
+    "id": "amplitudeEnvelope",
+    "name": "Amplitude Envelope",
+    "type":"Native",
+    "className":"AmplitudeEnvelope",
+    "controls": [
+      {
+        type: 'switch',
+        name: 'button',
+        id: 'button',
+        action: {
+          type: 'call',
+          functionName: {
+            true: 'triggerAttack',
+            false: 'triggerRelease'
+          }
+        }
+      },
+      {
+        type: 'range',
+        name: 'attack',
+        id: 'attack',
+        min: 0,
+        max: 1
+      },
+      {
+        type: 'range',
+        name: 'decay',
+        id: 'decay',
+        min: 0,
+        max: 1
+      },
+      {
+        type: 'range',
+        name: 'sustain',
+        id: 'sustain',
+        min: 0,
+        max: 1
+      },
+      {
+        type: 'range',
+        name: 'release',
+        id: 'release',
+        min: 0,
+        max: 1
+      }
+    ]
   }
 }
 
@@ -80,6 +128,15 @@ const PRESET = {
         "volume.value": -20,
         "frequency.value": 220,
         "type": "square"
+      }
+    },
+    {
+      "id": "amplitudeEnvelope",
+      "params": {
+        "attack": 0.1,
+        "decay": 0.2,
+        "sustain": 1,
+        "release": 0.8
       }
     },
     {

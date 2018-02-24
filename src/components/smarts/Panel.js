@@ -17,7 +17,6 @@ export default class Panel extends React.Component {
           <GeneralPanel
             index={index}
             module={module}
-            onChange={this.props.onChange}
           />
         )
     }
