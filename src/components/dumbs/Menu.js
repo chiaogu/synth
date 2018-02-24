@@ -11,18 +11,20 @@ const List = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
     border: 1px solid #000;
     overflow: auto;
 `;
 
 const Item = styled.div`
-    text-align: center;
-    height: 44px;
-    width: 100%;
-    flex: 0 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 0 0 auto;
+    height: 44px;
+    width: 100%;
+    margin: 0 8px;
+    text-align: center;
     cursor: default;
     user-select: none;
 `;

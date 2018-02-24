@@ -115,6 +115,61 @@ const MODULES = {
         max: 1
       }
     ]
+  },
+  "filter": {
+    "id": "filter",
+    "name": "Filter",
+    "type":"Native",
+    "className":"Filter",
+    "controls": [
+      {
+        type: 'range',
+        name: 'Q',
+        id: 'Q.value',
+        min: 0,
+        max: 100
+      },
+      {
+        type: 'range',
+        name: 'detune',
+        id: 'detune',
+        min: 0,
+        max: 100
+      },
+      {
+        type: 'range',
+        name: 'frequency',
+        id: 'frequency.value',
+        min: 0,
+        max: 880
+      },
+      {
+        type: 'menu',
+        name: 'rolloff',
+        id: 'rolloff',
+        choices: [
+          { key: -12 },
+          { key: -24 },
+          { key: -48 },
+          { key: -96 }
+        ]
+      },
+      {
+        type: 'menu',
+        name: 'type',
+        id: 'type',
+        choices: [
+          { key: 'lowpass' },
+          { key: 'highpass' },
+          { key: 'bandpass' },
+          { key: 'lowshelf' },
+          { key: 'highshelf' },
+          { key: 'notch' },
+          { key: 'allpass' },
+          { key: 'peaking' }
+        ]
+      }
+    ]
   }
 }
 
@@ -138,6 +193,9 @@ const PRESET = {
         "sustain": 1,
         "release": 0.8
       }
+    },
+    {
+      "id": "filter"
     },
     {
       "id": "master"
