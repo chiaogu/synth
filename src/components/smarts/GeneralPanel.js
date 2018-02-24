@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import Range from '@components/dumbs/Range'
-import Menu from '@components/dumbs/Menu'
-import Switch from '@components/dumbs/Switch'
+import Range from '@components/dumbs/Range';
+import Menu from '@components/dumbs/Menu';
+import Switch from '@components/dumbs/Switch';
+import Button from '@components/dumbs/Button';
+import InputButton from '@components/dumbs/InputButton';
 import Core from '@utils/Core';
 
 const Root = styled.div`
@@ -41,6 +43,16 @@ const StyledSwitch = styled(Switch) `
   height: 30px;
 `;
 
+const StyledButton = styled(Button) `
+  width: 30px;
+  height: 30px;
+`;
+
+const StyledInputButton = styled(InputButton) `
+  width: 50px;
+  height: 70px;
+`;
+
 export default class GeneralPanel extends React.Component {
 
   constructor(props) {
@@ -74,14 +86,26 @@ export default class GeneralPanel extends React.Component {
           value={param}
           onToggle={selected => this.onChange(control, selected)}
         />;
+      case 'button':
+        return <StyledButton
+          config={control}
+          value={param}
+          onToggle={pressed => this.onChange(control, pressed)}
+        />;
+      case 'inputButton':
+        return <StyledInputButton
+          config={control}
+          value={param}
+          onToggle={pressed => this.onChange(control, pressed)}
+        />;
     }
   }
 
   render() {
     const { index, module } = this.props;
-    const { params = {}, config } = module;
+    const { params = {}, config: { controls = [], name } } = module;
 
-    const controls = config.controls.map((control, index) => {
+    const components = controls.map((control, index) => {
       const param = params[control.id];
       const component = this.controlToComponent(control, param);
 
@@ -95,8 +119,8 @@ export default class GeneralPanel extends React.Component {
 
     return (
       <Root className={this.props.className}>
-        <ModuleName>{index}<br />{config.name}</ModuleName>
-        {controls}
+        <ModuleName>{index}<br />{name}</ModuleName>
+        {components}
       </Root>
     );
   }

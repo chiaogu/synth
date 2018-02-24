@@ -14,8 +14,8 @@ const MODULES = {
     "controls": [
       {
         type: 'switch',
-        name: 'power',
-        id: 'power',
+        name: 'start',
+        id: 'start',
         action: {
           type: 'call',
           functionName: {
@@ -75,9 +75,9 @@ const MODULES = {
     "className":"AmplitudeEnvelope",
     "controls": [
       {
-        type: 'switch',
-        name: 'button',
-        id: 'button',
+        type: 'button',
+        name: 'trigger',
+        id: 'trigger',
         action: {
           type: 'call',
           functionName: {
@@ -124,7 +124,7 @@ const PRESET = {
     {
       "id": "omniOscillator",
       "params": {
-        "power": true,
+        "start": true,
         "volume.value": -20,
         "frequency.value": 220,
         "type": "square"
