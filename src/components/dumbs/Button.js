@@ -16,9 +16,19 @@ export default class Button extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { 
-      pressed : this.props.value 
-    };
+    this.state = { pressed : false };
+  }
+
+  componentDidMount() {
+    this.mapPropsToState(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.mapPropsToState(nextProps);
+  }
+
+  mapPropsToState({ value = false }) {
+    this.setState({ pressed: value });
   }
 
   onMouseDown() {

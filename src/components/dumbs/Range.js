@@ -61,9 +61,8 @@ export default class Range extends React.Component {
   }
 
   mapPropsToState(props) {
-    const value = props.value || 0;
-
-    const { max, min } = props.config;
+    const { value = 0, config } = props;
+    const { max, min } = config;
     const ratio = (value - min) / (max - min);
     this.setState({ value, ratio });
   }

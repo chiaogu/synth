@@ -88,6 +88,8 @@ export default connect(
           })))
           .then(modules => {
             modules[0].params['volume.value'] = 0
+            modules[0].params['start'] = false
+            modules[0].params['type'] = 'sine'
             loadModulesSuccess(modules)
           })
       }
