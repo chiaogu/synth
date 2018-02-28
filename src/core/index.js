@@ -1,5 +1,5 @@
 import Module from './Module'
-import { TYPES as MODULES } from '@state/modules/actions'
+import { TYPES as MODULES_ACTION } from '@state/modules/actions'
 
 export default class Core {
   constructor() {
@@ -10,7 +10,7 @@ export default class Core {
     return store => next => action => {
       const result = next(action)
       switch(action.type){
-        case MODULES.LOAD_MODULES_SUCCESS:
+        case MODULES_ACTION.LOAD_MODULES_SUCCESS:
           this.onLoadModulesSuccess(store.getState())
       }
       return result

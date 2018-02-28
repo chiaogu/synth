@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import _ from '@utils/lodash'
 import Range from '@components/dumbs/Range'
 import Menu from '@components/dumbs/Menu'
 import Switch from '@components/dumbs/Switch'
@@ -52,15 +53,18 @@ const StyledInputButton = styled(InputButton) `
   height: 70px;
 `
 
-export default class GeneralPanel extends React.Component {
+class GeneralPanel extends React.Component {
 
-  constructor(props) {
-    super(props)
+  shouldComponentUpdate(nextProps, nextState) {
+    const params = this.props.modules[this.props.index].params
+    const nextParams = nextProps.modules[nextProps.index].params
+    return !_.isEqual(params, nextParams)
   }
 
   onChange(control, value) {
     const { id } = control
-    const { index } = this.props
+    const { index, setParameter } = this.props
+    setParameter(index, id, value);
   }
 
   controlToComponent(control, param) {
@@ -99,8 +103,8 @@ export default class GeneralPanel extends React.Component {
   }
 
   render() {
-    const { index, module } = this.props
-    const { params = {}, config: { controls = [], name } } = module
+    const { index, modules } = this.props
+    const { params = {}, config: { controls = [], name } } = modules[index]
 
     const components = controls.map((control, index) => {
       const param = params[control.id]
@@ -122,3 +126,18 @@ export default class GeneralPanel extends React.Component {
     )
   }
 }
+
+
+import { connect } from 'react-redux'
+import { setParameter } from '@state/modules/actions'
+
+export default connect(
+  state => ({
+    modules: state.modules.modules
+  }),
+  dispatch => ({
+    setParameter(moduleIndex, controlName, value) {
+      dispatch(setParameter(moduleIndex, controlName, value))
+    }
+  })
+)(GeneralPanel)

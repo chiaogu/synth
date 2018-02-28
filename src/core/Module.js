@@ -3,8 +3,11 @@ import _ from '@utils/lodash';
 
 export default class Module {
   constructor(module) {
-    this.module = module;
-    const { params = {}, config: { type, className } } = this.module;
+    const { params = {}, config: { type, className, controls } } = module;
+    this.controlMap = controls.reduce((control, result) => {
+      result[control.id] = control
+      return result
+    }, {})
 
     if(type === 'Native'){
       if(className === 'Master'){
@@ -24,18 +27,16 @@ export default class Module {
   }
 
   set(key, value) {
-    const { params = {}, config: { controls } } = this.module;
-    const controlConfig = controls.find(control => control.id === key);
-    if(!controlConfig) return;
+    const controlConfig = this.controlMap[key]
+    if(!controlConfig) return
 
-    const { action: { type, functionName } = {} } = controlConfig;
+    const { action: { type, functionName } = {} } = controlConfig
     if(type === 'call'){
-      const name = typeof functionName === 'object' ? functionName[value] : functionName;
-      this.instance[name]();
+      const name = typeof functionName === 'object' ? functionName[value] : functionName
+      this.instance[name]()
     }else {
-      _.set(this.instance, key, value);
+      _.set(this.instance, key, value)
     }
-    params[key] = value;
   }
 
   dispose(){
