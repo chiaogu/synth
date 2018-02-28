@@ -22,7 +22,6 @@ export default class Core {
   }
 
   setModules(modules) {
-    console.log('setModules', modules);
     this.clearModules()
     this.modules = modules.map(module => new Module(module))
     this.modules.forEach((module, index) => {

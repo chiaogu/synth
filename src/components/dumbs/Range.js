@@ -44,16 +44,28 @@ export default class Range extends React.Component {
   constructor(props) {
     super(props);
 
-    const value = this.props.value || 0;
-
-    const { max, min } = this.props.config;
-    const ratio = (value - min) / (max - min);
-    this.state = { value, ratio };
-
     this.dragFrom = {};
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
+
+    this.state = { value: 0, ratio: 0 };
+  }
+
+  componentDidMount() {
+    this.mapPropsToState(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.mapPropsToState(nextProps);
+  }
+
+  mapPropsToState(props) {
+    const value = props.value || 0;
+
+    const { max, min } = props.config;
+    const ratio = (value - min) / (max - min);
+    this.setState({ value, ratio });
   }
 
   onMouseDown(e) {

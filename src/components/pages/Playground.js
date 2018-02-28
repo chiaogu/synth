@@ -6,6 +6,8 @@ const Root = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  height: 100%;
+  overflow: auto;
 `
 
 const StyledPanel = styled(Panel) `
@@ -85,7 +87,7 @@ export default connect(
             config: module
           })))
           .then(modules => {
-            modules[0].params['volume.value'] = 0;
+            modules[0].params['volume.value'] = 0
             loadModulesSuccess(modules)
           })
       }
