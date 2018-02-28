@@ -22,7 +22,6 @@ class Playground extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const panels = this.props.modules.map((module, index) => {
       return (
         <StyledPanel
@@ -44,7 +43,7 @@ class Playground extends React.Component {
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as ModulesActions from '@core/modules/actions'
+import * as ModulesActions from '@state/modules/actions'
 import Config from '@utils/Config'
 
 export default connect(

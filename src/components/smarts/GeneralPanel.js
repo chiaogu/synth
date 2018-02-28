@@ -5,7 +5,6 @@ import Menu from '@components/dumbs/Menu';
 import Switch from '@components/dumbs/Switch';
 import Button from '@components/dumbs/Button';
 import InputButton from '@components/dumbs/InputButton';
-import Core from '@utils/Core';
 
 const Root = styled.div`
   display: flex;
@@ -62,8 +61,6 @@ export default class GeneralPanel extends React.Component {
   onChange(control, value) {
     const { id } = control;
     const { index } = this.props;
-
-    Core.set(index, id, value);
   }
 
   controlToComponent(control, param) {

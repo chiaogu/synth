@@ -1,8 +1,13 @@
-import Module from '@utils/Module';
+import Module from './Module';
 
-class Core {
-  constructor() {
-    this.modules = [];
+export default class Core {
+  constructor(store) {
+    store.subscribe(e => this.onStateChanged(store.getState()))
+  }
+
+  onStateChanged(state) {
+    const { modules: { modules } } = state;
+    console.log(modules)
   }
 
   setModules(modules) {
@@ -26,5 +31,3 @@ class Core {
     module.set(key, value);
   }
 }
-
-export default new Core();
