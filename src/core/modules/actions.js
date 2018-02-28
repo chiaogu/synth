@@ -5,7 +5,12 @@ export const TYPES = createConstants('MODULES', [
   'LOAD_MODULES_SUCCESS'
 ]);
 
-export const loadModules = id => ({
+export const loadModules = presetId => ({
   type: TYPES.LOAD_MODULES,
-  id
+  presetId
+});
+
+export const loadModulesSuccess = result => ({
+  type: TYPES.LOAD_MODULES_SUCCESS,
+  modules: result
 });

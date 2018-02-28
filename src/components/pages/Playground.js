@@ -1,54 +1,29 @@
-import React from 'react';
-import styled from 'styled-components';
-import Panel from '@components/smarts/Panel';
-import Config from '@utils/Config';
-import Core from '@utils/Core';
+import React from 'react'
+import styled from 'styled-components'
+import Panel from '@components/smarts/Panel'
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-`;
+`
 
 const StyledPanel = styled(Panel) `
   margin: 8px;
-`;
+`
 
-export default class Playground extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      modules: []
-    }
-  }
-
+class Playground extends React.Component {
   componentDidMount() {
-    this.init();
+    this.loadModules(this.props)
   }
 
-  init() {
-    const preset = Config.getPreset();
-    const ids = preset.modules.map(module => module.id);
-
-    Config.getModules(ids)
-      .then(modules => modules.map((module, index) => ({
-        params: preset.modules[index].params,
-        config: module
-      })))
-      .then(modules => {
-        try {
-          Core.setModules(modules);
-        } catch (e) {
-          alert(e.message);
-        }
-        this.setState({ modules });
-      });
+  loadModules({ loadModules }) {
+    loadModules()
   }
 
   render() {
-    const panels = this.state.modules.map((module, index) => {
+    console.log(this.props);
+    const panels = this.props.modules.map((module, index) => {
       return (
         <StyledPanel
           key={index}
@@ -56,12 +31,46 @@ export default class Playground extends React.Component {
           module={module}
         />
       )
-    });
+    })
 
     return (
       <Root>
         {panels}
       </Root>
-    );
+    )
   }
 }
+
+
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as ModulesActions from '@core/modules/actions'
+import Config from '@utils/Config'
+
+export default connect(
+  state => ({
+    modules: state.modules.modules
+  }),
+  dispatch => {
+    const {
+      loadModules,
+      loadModulesSuccess
+    } = bindActionCreators(ModulesActions, dispatch)
+
+    return {
+      loadModules() {
+        const preset = Config.getPreset()
+        loadModules(preset.id)
+        const ids = preset.modules.map(module => module.id)
+        Config.getModules(ids)
+          .then(modules => modules.map((module, index) => ({
+            params: preset.modules[index].params,
+            config: module
+          })))
+          .then(modules => {
+            loadModulesSuccess(modules)
+          })
+      }
+    }
+  }
+)(Playground)

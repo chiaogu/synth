@@ -174,6 +174,7 @@ const MODULES = {
 }
 
 const PRESET = {
+  "id": "0",
   "name": "test",
   "modules": [
     {
@@ -203,13 +204,11 @@ const PRESET = {
   ]
 };
 
-class Config {
-  constructor() {
-  }
 
+export default {
   getPreset() {
     return PRESET;
-  }
+  },
 
   getModule(id) {
     const module = MODULES[id];
@@ -217,7 +216,7 @@ class Config {
       return Promise.reject(`Unsupported id: "${id}"`);
     }
     return Promise.resolve(module);
-  }
+  },
 
   getModules(ids) {
     return Promise.resolve(ids.map(id => {
@@ -228,6 +227,4 @@ class Config {
       return module;
     }));
   }
-}
-
-export default new Config();
+};
