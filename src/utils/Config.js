@@ -204,27 +204,24 @@ const PRESET = {
   ]
 };
 
+export function getPreset() {
+  return PRESET;
+}
 
-export default {
-  getPreset() {
-    return PRESET;
-  },
+export function getModule(id) {
+  const module = MODULES[id];
+  if (module === undefined) {
+    return Promise.reject(`Unsupported id: "${id}"`);
+  }
+  return Promise.resolve(module);
+}
 
-  getModule(id) {
+export function getModules(ids) {
+  return Promise.resolve(ids.map(id => {
     const module = MODULES[id];
     if (module === undefined) {
-      return Promise.reject(`Unsupported id: "${id}"`);
+      throw new Error(`Unsupported id: "${id}"`);
     }
-    return Promise.resolve(module);
-  },
-
-  getModules(ids) {
-    return Promise.resolve(ids.map(id => {
-      const module = MODULES[id];
-      if (module === undefined) {
-        throw new Error(`Unsupported id: "${id}"`);
-      }
-      return module;
-    }));
-  }
-};
+    return module;
+  }));
+}
