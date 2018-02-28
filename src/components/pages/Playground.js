@@ -1,54 +1,33 @@
-import React from 'react';
-import styled from 'styled-components';
-import Panel from '@components/smarts/Panel';
-import Config from '@utils/Config';
-import Core from '@utils/Core';
+import React from 'react'
+import styled from 'styled-components'
+import Panel from '@components/smarts/Panel'
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-`;
+  height: 100%;
+  overflow: auto;
+`
 
 const StyledPanel = styled(Panel) `
   margin: 8px;
-`;
+`
 
-export default class Playground extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      modules: []
-    }
-  }
-
+class Playground extends React.Component {
   componentDidMount() {
-    this.init();
-  }
-
-  init() {
-    const preset = Config.getPreset();
-    const ids = preset.modules.map(module => module.id);
-
-    Config.getModules(ids)
-      .then(modules => modules.map((module, index) => ({
-        params: preset.modules[index].params,
-        config: module
-      })))
-      .then(modules => {
-        try {
-          Core.setModules(modules);
-        } catch (e) {
-          alert(e.message);
-        }
-        this.setState({ modules });
-      });
+    const { loadModules } = this.props
+    loadModules()
   }
 
   render() {
-    const panels = this.state.modules.map((module, index) => {
+    const {
+      modules,
+      loadModules,
+      test
+    } = this.props
+
+    const panels = modules.map((module, index) => {
       return (
         <StyledPanel
           key={index}
@@ -56,12 +35,64 @@ export default class Playground extends React.Component {
           module={module}
         />
       )
-    });
+    })
 
     return (
       <Root>
+        <button onClick={loadModules}>load</button>
+        <button onClick={test}>change</button>
         {panels}
       </Root>
-    );
+    )
   }
 }
+
+
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as ModulesActions from '@state/modules/actions'
+import * as Config from '@utils/Config'
+
+export default connect(
+  state => ({
+    modules: state.modules.modules
+  }),
+  dispatch => {
+    const {
+      loadModules,
+      loadModulesSuccess
+    } = bindActionCreators(ModulesActions, dispatch)
+
+    return {
+      loadModules() {
+        const preset = Config.getPreset()
+        loadModules(preset.id)
+        const ids = preset.modules.map(module => module.id)
+        Config.getModules(ids)
+          .then(modules => modules.map((module, index) => ({
+            params: preset.modules[index].params,
+            config: module
+          })))
+          .then(modules => {
+            loadModulesSuccess(modules)
+          })
+      },
+      test() {
+        const preset = Config.getPreset()
+        loadModules(preset.id)
+        const ids = preset.modules.map(module => module.id)
+        Config.getModules(ids)
+          .then(modules => modules.map((module, index) => ({
+            params: preset.modules[index].params,
+            config: module
+          })))
+          .then(modules => {
+            modules[0].params['volume.value'] = 0
+            modules[0].params['start'] = false
+            modules[0].params['type'] = 'sine'
+            loadModulesSuccess(modules)
+          })
+      }
+    }
+  }
+)(Playground)

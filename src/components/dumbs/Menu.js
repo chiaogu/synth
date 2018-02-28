@@ -34,14 +34,24 @@ export default class Menu extends React.Component {
   constructor(props) {
     super(props);
 
-    const value = this.props.value;
-    const choices = (this.props.config.choices || []);
+    this.state = { selected: undefined };
+  }
+
+  componentDidMount() {
+    this.mapPropsToState(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.mapPropsToState(nextProps);
+  }
+
+  mapPropsToState({ value, config: { choices = []} }) {
     let selected = choices.findIndex(choice => choice.key === value);
     if(selected === -1){
       selected = 0;
     }
 
-    this.state = { selected };
+    this.setState({ selected });
   }
 
   onSelect(choice, index) {

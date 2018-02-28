@@ -18,6 +18,8 @@ module.exports = {
   resolve: {
     alias: {
       '@components': path.join(path.resolve(__dirname, "src"), 'components'),
+      '@state': path.join(path.resolve(__dirname, "src"), 'state'),
+      '@core': path.join(path.resolve(__dirname, "src"), 'core'),
       '@utils': path.join(path.resolve(__dirname, "src"), 'utils')
     },
     modules: [
@@ -30,10 +32,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015', 'react'],
-        },
+        loader: 'babel-loader'
       },
     ],
   },
