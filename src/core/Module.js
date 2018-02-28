@@ -1,6 +1,5 @@
 import Tone from 'tone';
-import getIn from 'lodash.get';
-import setIn from 'lodash.set';
+import _ from '@utils/lodash';
 
 export default class Module {
   constructor(module) {
@@ -34,8 +33,12 @@ export default class Module {
       const name = typeof functionName === 'object' ? functionName[value] : functionName;
       this.instance[name]();
     }else {
-      setIn(this.instance, key, value);
+      _.set(this.instance, key, value);
     }
     params[key] = value;
+  }
+
+  dispose(){
+
   }
 }

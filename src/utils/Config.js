@@ -173,7 +173,7 @@ const MODULES = {
   }
 }
 
-const PRESET = {
+const PRESET = () => ({
   "id": "0",
   "name": "test",
   "modules": [
@@ -202,26 +202,26 @@ const PRESET = {
       "id": "master"
     }
   ]
-};
+})
 
 export function getPreset() {
-  return PRESET;
+  return PRESET()
 }
 
 export function getModule(id) {
-  const module = MODULES[id];
+  const module = MODULES[id]
   if (module === undefined) {
-    return Promise.reject(`Unsupported id: "${id}"`);
+    return Promise.reject(`Unsupported id: "${id}"`)
   }
-  return Promise.resolve(module);
+  return Promise.resolve(module)
 }
 
 export function getModules(ids) {
   return Promise.resolve(ids.map(id => {
-    const module = MODULES[id];
+    const module = MODULES[id]
     if (module === undefined) {
-      throw new Error(`Unsupported id: "${id}"`);
+      throw new Error(`Unsupported id: "${id}"`)
     }
-    return module;
-  }));
+    return module
+  }))
 }

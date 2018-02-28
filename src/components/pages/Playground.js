@@ -14,15 +14,18 @@ const StyledPanel = styled(Panel) `
 
 class Playground extends React.Component {
   componentDidMount() {
-    this.loadModules(this.props)
-  }
-
-  loadModules({ loadModules }) {
+    const { loadModules } = this.props
     loadModules()
   }
 
   render() {
-    const panels = this.props.modules.map((module, index) => {
+    const {
+      modules,
+      loadModules,
+      test
+    } = this.props
+
+    const panels = modules.map((module, index) => {
       return (
         <StyledPanel
           key={index}
@@ -34,6 +37,8 @@ class Playground extends React.Component {
 
     return (
       <Root>
+        <button onClick={loadModules}>load</button>
+        <button onClick={test}>change</button>
         {panels}
       </Root>
     )
@@ -67,6 +72,20 @@ export default connect(
             config: module
           })))
           .then(modules => {
+            loadModulesSuccess(modules)
+          })
+      },
+      test() {
+        const preset = Config.getPreset()
+        loadModules(preset.id)
+        const ids = preset.modules.map(module => module.id)
+        Config.getModules(ids)
+          .then(modules => modules.map((module, index) => ({
+            params: preset.modules[index].params,
+            config: module
+          })))
+          .then(modules => {
+            modules[0].params['volume.value'] = 0;
             loadModulesSuccess(modules)
           })
       }
