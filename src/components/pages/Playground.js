@@ -1,6 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import Panel from '@components/smarts/Panel'
+import Range from '@components/dumbs/Range'
+
+const StyledRange = styled(Range) `
+  height: 200px;
+`
 
 const Root = styled.div`
   display: flex;
@@ -20,11 +25,18 @@ class Playground extends React.Component {
     loadModules()
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const modules = this.props.modules
+    const nextModules = nextProps.modules
+    return modules.length !== nextModules.length
+  }
+
   render() {
     const {
       modules,
       loadModules,
-      test
+      test,
+      set
     } = this.props
 
     const panels = modules.map((module, index) => {
@@ -41,6 +53,16 @@ class Playground extends React.Component {
       <Root>
         <button onClick={loadModules}>load</button>
         <button onClick={test}>change</button>
+        <StyledRange
+          config={{
+            type: 'range',
+            name: 'frequency',
+            id: 'frequency.value',
+            min: 0,
+            max: 440
+          }}
+          onChange={value => set(0, 'frequency.value', value)}
+        />
         {panels}
       </Root>
     )
@@ -60,7 +82,8 @@ export default connect(
   dispatch => {
     const {
       loadModules,
-      loadModulesSuccess
+      loadModulesSuccess,
+      setParameter
     } = bindActionCreators(ModulesActions, dispatch)
 
     return {
@@ -88,10 +111,13 @@ export default connect(
           })))
           .then(modules => {
             modules[0].params['volume.value'] = 0
-            modules[0].params['start'] = false
+            modules[0].params['start'] = true
             modules[0].params['type'] = 'sine'
             loadModulesSuccess(modules)
           })
+      },
+      set(index, name, value) {
+        setParameter(index, name, value)
       }
     }
   }

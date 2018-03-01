@@ -13,12 +13,7 @@ export default class Panel extends React.Component {
 
     switch (module.type) {
       default:
-        return (
-          <GeneralPanel
-            index={index}
-            module={module}
-          />
-        )
+        return <GeneralPanel index={index}/>
     }
   }
 
