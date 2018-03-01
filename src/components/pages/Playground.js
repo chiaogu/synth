@@ -61,7 +61,6 @@ class Playground extends React.Component {
             min: 0,
             max: 440
           }}
-          value={220}
           onChange={value => set(0, 'frequency.value', value)}
         />
         {panels}
@@ -112,7 +111,7 @@ export default connect(
           })))
           .then(modules => {
             modules[0].params['volume.value'] = 0
-            modules[0].params['start'] = false
+            modules[0].params['start'] = true
             modules[0].params['type'] = 'sine'
             loadModulesSuccess(modules)
           })

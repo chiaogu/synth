@@ -3,8 +3,11 @@ import _ from '@utils/lodash';
 
 export default class Module {
   constructor(module) {
-    const { params = {}, config: { type, className, controls } } = module;
-    this.controlMap = controls.reduce((control, result) => {
+    const { params = {}, config } = module
+    const { type, className, controls } = config
+
+    this.config = config
+    this.controlMap = controls.reduce((result, control) => {
       result[control.id] = control
       return result
     }, {})
@@ -40,6 +43,11 @@ export default class Module {
   }
 
   dispose(){
-
+    const { type, className } = this.config
+    if(type === 'Native'){
+      if(className !== 'Master'){
+        this.instance.dispose()
+      }
+    }
   }
 }
