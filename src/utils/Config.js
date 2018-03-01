@@ -9,8 +9,8 @@ const MODULES = {
   "omniOscillator": {
     "id": "omniOscillator",
     "name": "Omni Oscillator",
-    "type":"Native",
-    "className":"OmniOscillator",
+    "type": "Native",
+    "className": "OmniOscillator",
     "controls": [
       {
         type: 'switch',
@@ -71,8 +71,8 @@ const MODULES = {
   "amplitudeEnvelope": {
     "id": "amplitudeEnvelope",
     "name": "Amplitude Envelope",
-    "type":"Native",
-    "className":"AmplitudeEnvelope",
+    "type": "Native",
+    "className": "AmplitudeEnvelope",
     "controls": [
       {
         type: 'button',
@@ -119,8 +119,8 @@ const MODULES = {
   "filter": {
     "id": "filter",
     "name": "Filter",
-    "type":"Native",
-    "className":"Filter",
+    "type": "Native",
+    "className": "Filter",
     "controls": [
       {
         type: 'range',
@@ -174,38 +174,58 @@ const MODULES = {
 }
 
 const PRESET = () => ({
-  "id": "0",
-  "name": "test",
-  "modules": [
-    {
-      "id": "omniOscillator",
-      "params": {
-        "start": true,
-        "volume.value": -20,
-        "frequency.value": 220,
-        "type": "square"
+  "0": {
+    "id": "0",
+    "name": "test",
+    "modules": [
+      {
+        "id": "omniOscillator",
+        "params": {
+          "start": true,
+          "volume.value": -20,
+          "frequency.value": 220,
+          "type": "square"
+        }
+      },
+      {
+        "id": "amplitudeEnvelope",
+        "params": {
+          "attack": 0.1,
+          "decay": 0.2,
+          "sustain": 1,
+          "release": 0.8
+        }
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "master"
       }
-    },
-    {
-      "id": "amplitudeEnvelope",
-      "params": {
-        "attack": 0.1,
-        "decay": 0.2,
-        "sustain": 1,
-        "release": 0.8
+    ]
+  },
+  "1": {
+    "id": "1",
+    "name": "testNo2",
+    "modules": [
+      {
+        "id": "omniOscillator",
+        "params": {
+          "start": true,
+          "volume.value": -20,
+          "frequency.value": 220,
+          "type": "triangle"
+        }
+      },
+      {
+        "id": "master"
       }
-    },
-    {
-      "id": "filter"
-    },
-    {
-      "id": "master"
-    }
-  ]
+    ]
+  }
 })
 
-export function getPreset() {
-  return PRESET()
+export function getPreset(id) {
+  return Promise.resolve(PRESET()[id])
 }
 
 export function getModule(id) {

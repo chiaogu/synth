@@ -1,69 +1,60 @@
 import React from 'react'
 import styled from 'styled-components'
-import Panel from '@components/smarts/Panel'
-import Range from '@components/dumbs/Range'
-
-const StyledRange = styled(Range) `
-  height: 200px;
-`
+import Preset from '@components/smarts/Preset'
 
 const Root = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
   height: 100%;
-  overflow: auto;
 `
 
-const StyledPanel = styled(Panel) `
-  margin: 8px;
+const TopBar = styled.div`
+  display: flex;
+  width: 100%;
+  flex: 0 0 auto;
+`
+
+const PresetSlot = styled.button`
+  width: 50px;
+  height: 50px;
+`
+
+const StyledPreset = styled(Preset) `
+
 `
 
 class Playground extends React.Component {
   componentDidMount() {
-    const { loadModules } = this.props
-    loadModules()
+    this.loadPreset('0')
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const modules = this.props.modules
-    const nextModules = nextProps.modules
-    return modules.length !== nextModules.length
+  loadPreset(id) {
+    const { loadPreset } = this.props
+    loadPreset(id)
+  }
+
+  getPresetComponent(preset) {
+    return !!preset ? <StyledPreset preset={preset} /> : undefined
+  }
+
+  getPresetSlots() {
+    return ['0', '1'].map((id, index) => (
+      <PresetSlot key={index} onClick={e => this.loadPreset(id)} >
+        {id}
+      </PresetSlot>
+    ))
   }
 
   render() {
-    const {
-      modules,
-      loadModules,
-      test,
-      set
-    } = this.props
-
-    const panels = modules.map((module, index) => {
-      return (
-        <StyledPanel
-          key={index}
-          index={index}
-          module={module}
-        />
-      )
-    })
+    const { preset, loadPreset } = this.props
 
     return (
       <Root>
-        <button onClick={loadModules}>load</button>
-        <button onClick={test}>change</button>
-        <StyledRange
-          config={{
-            type: 'range',
-            name: 'frequency',
-            id: 'frequency.value',
-            min: 0,
-            max: 440
-          }}
-          onChange={value => set(0, 'frequency.value', value)}
-        />
-        {panels}
+        <TopBar>
+          {this.getPresetSlots()}
+        </TopBar>
+        {this.getPresetComponent(preset)}
       </Root>
     )
   }
@@ -72,52 +63,25 @@ class Playground extends React.Component {
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as ModulesActions from '@state/modules/actions'
+import * as PresetActions from '@state/preset/actions'
 import * as Config from '@utils/Config'
 
 export default connect(
   state => ({
-    modules: state.modules.modules
+    preset: state.preset.preset
   }),
   dispatch => {
     const {
-      loadModules,
-      loadModulesSuccess,
-      setParameter
-    } = bindActionCreators(ModulesActions, dispatch)
+      loadPreset,
+      loadPresetSuccess
+    } = bindActionCreators(PresetActions, dispatch)
 
     return {
-      loadModules() {
-        const preset = Config.getPreset()
-        loadModules(preset.id)
-        const ids = preset.modules.map(module => module.id)
-        Config.getModules(ids)
-          .then(modules => modules.map((module, index) => ({
-            params: preset.modules[index].params,
-            config: module
-          })))
-          .then(modules => {
-            loadModulesSuccess(modules)
-          })
-      },
-      test() {
-        const preset = Config.getPreset()
-        loadModules(preset.id)
-        const ids = preset.modules.map(module => module.id)
-        Config.getModules(ids)
-          .then(modules => modules.map((module, index) => ({
-            params: preset.modules[index].params,
-            config: module
-          })))
-          .then(modules => {
-            modules[0].params['volume.value'] = 0
-            modules[0].params['start'] = true
-            modules[0].params['type'] = 'sine'
-            loadModulesSuccess(modules)
-          })
-      },
-      set(index, name, value) {
-        setParameter(index, name, value)
+      loadPreset(id) {
+        loadPreset(id)
+        Config.getPreset(id).then(preset => {
+          loadPresetSuccess(preset)
+        })
       }
     }
   }
