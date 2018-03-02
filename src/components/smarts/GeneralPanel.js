@@ -9,10 +9,14 @@ import InputButton from '@components/dumbs/InputButton'
 
 const Root = styled.div`
   display: flex;
+  width: 100%;
+  height: 100%;
   flex-direction: row;
   position: relative;
   padding: 8px;
   background: #fff;
+  overflow: auto;
+  box-sizing: border-box;
 `
 
 const ModuleName = styled.div`
@@ -23,7 +27,7 @@ const ControlWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 16px;
+  margin-right: 12px;
 `
 
 const ControlName = styled.div`
@@ -31,11 +35,11 @@ const ControlName = styled.div`
 `
 
 const StyledMenu = styled(Menu) `
-  height: 200px;
+  height: 100%;
 `
 
 const StyledRange = styled(Range) `
-  height: 200px;
+  height: 100%;
 `
 
 const StyledSwitch = styled(Switch) `

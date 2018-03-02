@@ -10,7 +10,20 @@ const Root = styled.div`
 `
 
 const StyledPanel = styled(Panel) `
+  height: 100%;
+  width: 100%;
+`
+
+const Module = styled.div`
   margin: 8px;
+  transition: width .5s, height .5s;
+  ${({isEditing}) => isEditing ? `
+    width: 100px;
+    height: 100px;
+  ` : `
+    width: calc(100% - 16px);
+    height: 250px;
+  `}
 `
 
 class Preset extends React.Component {
@@ -20,7 +33,8 @@ class Preset extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const modulesChanged = this.props.modules.length !== nextProps.modules.length
-    return modulesChanged
+    const isEditedChanged = this.state.edited !== nextState.edited
+    return modulesChanged || isEditedChanged
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,6 +48,11 @@ class Preset extends React.Component {
     loadModules(preset)
   }
 
+  constructor(props) {
+    super(props)
+    this.state = { edited: false }
+  }
+
   render() {
     const {
       preset = {},
@@ -44,17 +63,23 @@ class Preset extends React.Component {
 
     const panels = modules.map((module, index) => {
       return (
-        <StyledPanel
+        <Module
           key={index}
-          index={index}
-          module={module}
-        />
+          isEditing={this.state.edited}
+          >
+          <StyledPanel
+            index={index}
+            style={{ width: '0' }}
+            module={module}/>
+        </Module>
       )
     })
 
     return (
       <Root>
-        {preset.id}{preset.name}
+        <button onClick={e => this.setState({edited: !this.state.edited})}>
+          {preset.id}{preset.name}{this.state.edited ? 'true':'false'}
+        </button>
         {panels}
       </Root>
     )
