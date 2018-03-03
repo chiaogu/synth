@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Panel from '@components/smarts/Panel'
+import ModuleFinder from '@components/smarts/ModuleFinder'
 
 const EDIT_MODE_TRANSITION = 600
 
@@ -23,7 +24,7 @@ const ModuleList = styled.div`
   `}
 `
 
-const ModuleFinder = styled.div`
+const StyledModuleFinder = styled(ModuleFinder)`
   background: white;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s;
   ${({isEditing}) => isEditing ? `
@@ -46,7 +47,7 @@ const Module = styled.div`
   background: white;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s, height ${EDIT_MODE_TRANSITION / 1000}s;
   ${({isEditing}) => isEditing ? `
-    width: 100px;
+    width: 200px;
     height: 100px;
   ` : `
     width: calc(100% - 16px);
@@ -143,7 +144,7 @@ class Preset extends React.Component {
 
     return (
       <Root className={this.props.className}>
-        <ModuleFinder isEditing={isEditing}/>
+        <StyledModuleFinder isEditing={isEditing}/>
         <ModuleList isEditing={isEditing}>
           <button onClick={e => setEditMode(!isEditing)}>
             {preset.id}{preset.name}

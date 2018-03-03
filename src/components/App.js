@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 import Playground from '@components/pages/Playground'
 
@@ -11,9 +12,11 @@ const Root = styled.div`
 export default class App extends React.Component {
   render() {
     return (
-      <Root>
-          <Playground />
-      </Root>
+      <DragDropContext>
+        <Root>
+            <Playground />
+        </Root>
+      </DragDropContext>
     );
   }
 }
