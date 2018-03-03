@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import Panel from '@components/smarts/Panel'
 
+const EDIT_MODE_TRANSITION = 500
+
 const Root = styled.div`
   display: flex;
   position: relative;
@@ -13,7 +15,7 @@ const ModuleList = styled.div`
   align-items: center;
   position: relative;
   overflow: auto;
-  transition: width .5s;
+  transition: width ${EDIT_MODE_TRANSITION / 1000}s;
   ${({isEditing}) => isEditing ? `
     width: 30%;
   ` : `
@@ -23,7 +25,7 @@ const ModuleList = styled.div`
 
 const ModuleFinder = styled.div`
   background: black;
-  transition: width .5s;
+  transition: width ${EDIT_MODE_TRANSITION / 1000}s;
   ${({isEditing}) => isEditing ? `
     width: 70%;
   ` : `
@@ -38,15 +40,34 @@ const StyledPanel = styled(Panel) `
 
 const Module = styled.div`
   margin: 8px;
+  position: relative;
   flex-shrink: 0;
   background: white;
-  transition: width .5s, height .5s;
+  transition: width ${EDIT_MODE_TRANSITION / 1000}s, height ${EDIT_MODE_TRANSITION / 1000}s;
   ${({isEditing}) => isEditing ? `
     width: 100px;
     height: 100px;
   ` : `
     width: calc(100% - 16px);
     height: 250px;
+  `}
+`
+
+const ModuleName = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  text-align: center;
+  transition: opacity ${EDIT_MODE_TRANSITION / 1000}s;
+  ${({isEditing}) => isEditing ? `
+    opacity: 1;
+  ` : `
+    opacity: 0;
   `}
 `
 
@@ -57,14 +78,21 @@ class Preset extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const modulesChanged = this.props.modules.length !== nextProps.modules.length
-    const isEditedChanged = this.state.edited !== nextState.edited
-    return modulesChanged || isEditedChanged
+    const isEditedChanged = this.props.isEditing !== nextProps.isEditing
+    const isPanelEditing = this.state.isPanelEditing !== nextState.isPanelEditing
+    return modulesChanged || isEditedChanged || isPanelEditing
   }
 
   componentWillReceiveProps(nextProps) {
     const presetChanged = this.props.preset.id !== nextProps.preset.id
-    if(!presetChanged) return
-    this.loadModules(nextProps)
+    if(presetChanged)
+      this.loadModules(nextProps)
+
+    const isEditing = nextProps.isEditing
+    if(isEditing)
+      this.setState({ isPanelEditing: true })
+    else
+      setTimeout(() => this.setState({ isPanelEditing: false }), EDIT_MODE_TRANSITION)
   }
 
   loadModules(props) {
@@ -74,20 +102,25 @@ class Preset extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { edited: false }
+
+    this.state = { isPanelEditing: false }
   }
 
   render() {
     const {
+      isEditing,
       preset = {},
       modules,
       loadPreset,
-      loadModules
+      loadModules,
+      setEditMode
     } = this.props
-    const isEditing = this.state.edited;
+    const {
+      isPanelEditing
+    } = this.state
 
     const panels = modules.map((module, index) => {
-      let panel = isEditing ? undefined :
+      const panel = isPanelEditing ? undefined :
         <StyledPanel
           index={index}
           module={module}/>
@@ -95,8 +128,10 @@ class Preset extends React.Component {
       return (
         <Module
           key={index}
-          isEditing={isEditing}
-          >
+          isEditing={isEditing}>
+          <ModuleName isEditing={isPanelEditing}>
+            {module.config.name}
+          </ModuleName>
           {panel}
         </Module>
       )
@@ -106,7 +141,7 @@ class Preset extends React.Component {
       <Root className={this.props.className}>
         <ModuleFinder isEditing={isEditing}/>
         <ModuleList isEditing={isEditing}>
-          <button onClick={e => this.setState({edited: !isEditing})}>
+          <button onClick={e => setEditMode(!isEditing)}>
             {preset.id}{preset.name}
           </button>
           {panels}
@@ -120,10 +155,13 @@ class Preset extends React.Component {
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as ModulesActions from '@state/modules/actions'
+import * as PresetActions from '@state/preset/actions'
 import * as Config from '@utils/Config'
 
 export default connect(
   state => ({
+    preset: state.preset.preset,
+    isEditing: state.preset.isEditing,
     modules: state.modules.modules
   }),
   dispatch => {
@@ -131,6 +169,10 @@ export default connect(
       loadModules,
       loadModulesSuccess
     } = bindActionCreators(ModulesActions, dispatch)
+    const {
+      startEditPreset,
+      finishEditPreset
+    } = bindActionCreators(PresetActions, dispatch)
 
     return {
       loadModules(preset) {
@@ -144,6 +186,12 @@ export default connect(
           .then(modules => {
             loadModulesSuccess(modules)
           })
+      },
+      setEditMode(isEditing) {
+        if(isEditing)
+          startEditPreset()
+        else
+          finishEditPreset()
       }
     }
   }

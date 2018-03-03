@@ -35,7 +35,7 @@ class Playground extends React.Component {
   }
 
   getPresetComponent(preset) {
-    return !!preset ? <StyledPreset preset={preset} /> : undefined
+    return !!preset ? <StyledPreset/> : undefined
   }
 
   getPresetSlots() {
