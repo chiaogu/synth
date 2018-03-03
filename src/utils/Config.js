@@ -200,6 +200,33 @@ const PRESET = () => ({
         "id": "filter"
       },
       {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
         "id": "master"
       }
     ]

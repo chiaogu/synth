@@ -4,9 +4,31 @@ import Panel from '@components/smarts/Panel'
 
 const Root = styled.div`
   display: flex;
+  position: relative;
+`
+
+const ModuleList = styled.div`
+  display: flex;
   flex-direction: column;
+  align-items: center;
   position: relative;
   overflow: auto;
+  transition: width .5s;
+  ${({isEditing}) => isEditing ? `
+    width: 30%;
+  ` : `
+    width: 100%;
+  `}
+`
+
+const ModuleFinder = styled.div`
+  background: black;
+  transition: width .5s;
+  ${({isEditing}) => isEditing ? `
+    width: 70%;
+  ` : `
+    width: 0;
+  `}
 `
 
 const StyledPanel = styled(Panel) `
@@ -16,6 +38,8 @@ const StyledPanel = styled(Panel) `
 
 const Module = styled.div`
   margin: 8px;
+  flex-shrink: 0;
+  background: white;
   transition: width .5s, height .5s;
   ${({isEditing}) => isEditing ? `
     width: 100px;
@@ -60,27 +84,33 @@ class Preset extends React.Component {
       loadPreset,
       loadModules
     } = this.props
+    const isEditing = this.state.edited;
 
     const panels = modules.map((module, index) => {
+      let panel = isEditing ? undefined :
+        <StyledPanel
+          index={index}
+          module={module}/>
+
       return (
         <Module
           key={index}
-          isEditing={this.state.edited}
+          isEditing={isEditing}
           >
-          <StyledPanel
-            index={index}
-            style={{ width: '0' }}
-            module={module}/>
+          {panel}
         </Module>
       )
     })
 
     return (
-      <Root>
-        <button onClick={e => this.setState({edited: !this.state.edited})}>
-          {preset.id}{preset.name}{this.state.edited ? 'true':'false'}
-        </button>
-        {panels}
+      <Root className={this.props.className}>
+        <ModuleFinder isEditing={isEditing}/>
+        <ModuleList isEditing={isEditing}>
+          <button onClick={e => this.setState({edited: !isEditing})}>
+            {preset.id}{preset.name}
+          </button>
+          {panels}
+        </ModuleList>
       </Root>
     )
   }

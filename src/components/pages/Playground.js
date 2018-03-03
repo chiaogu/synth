@@ -21,7 +21,7 @@ const PresetSlot = styled.button`
 `
 
 const StyledPreset = styled(Preset) `
-
+  flex: 1 1 auto;
 `
 
 class Playground extends React.Component {
