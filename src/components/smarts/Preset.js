@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Panel from '@components/smarts/Panel'
 
-const EDIT_MODE_TRANSITION = 500
+const EDIT_MODE_TRANSITION = 600
 
 const Root = styled.div`
   display: flex;
@@ -17,17 +17,17 @@ const ModuleList = styled.div`
   overflow: auto;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s;
   ${({isEditing}) => isEditing ? `
-    width: 30%;
+    width: 100%;
   ` : `
     width: 100%;
   `}
 `
 
 const ModuleFinder = styled.div`
-  background: black;
+  background: white;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s;
   ${({isEditing}) => isEditing ? `
-    width: 70%;
+    width: 480px;
   ` : `
     width: 0;
   `}
@@ -40,6 +40,7 @@ const StyledPanel = styled(Panel) `
 
 const Module = styled.div`
   margin: 8px;
+  max-width: 720px;
   position: relative;
   flex-shrink: 0;
   background: white;
@@ -61,13 +62,16 @@ const ModuleName = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
+  background: black;
+  color: white;
   text-align: center;
-  transition: opacity ${EDIT_MODE_TRANSITION / 1000}s;
+  pointer-events: none;
+  overflow: hidden;
+  transition: height ${EDIT_MODE_TRANSITION / 1000}s;
   ${({isEditing}) => isEditing ? `
-    opacity: 1;
+    height: 100%;
   ` : `
-    opacity: 0;
+    height: 0;
   `}
 `
 
