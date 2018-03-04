@@ -18,16 +18,27 @@ const ModuleList = styled.div`
   width: 100%;
   position: relative;
   overflow: auto;
-  transition: width ${EDIT_MODE_TRANSITION / 1000}s;
 `
 
-const StyledModuleFinder = styled(ModuleFinder) `
-  background: white;
+const ModuleSpace = styled.div `
   transition: width ${EDIT_MODE_TRANSITION / 1000}s;
   ${({ isEditing }) => isEditing ? `
     width: 480px;
   ` : `
     width: 0;
+  `}
+`
+
+const StyledModuleFinder = styled(ModuleFinder)`
+  width: 200px;
+  height: 100%;
+  position: absolute;
+  background: black;
+  transition: left ${EDIT_MODE_TRANSITION / 1000}s;
+  ${({ isEditing }) => isEditing ? `
+    left: 0;
+  ` : `
+    left: -200px;
   `}
 `
 
@@ -42,7 +53,7 @@ const Module = styled.div`
   position: relative;
   flex-shrink: 0;
   background: white;
-  transition: width ${EDIT_MODE_TRANSITION / 1000}s, height ${EDIT_MODE_TRANSITION / 1000}s;
+  transition: all ${EDIT_MODE_TRANSITION / 1000}s;
   ${({ isEditing }) => isEditing ? `
     width: 100px;
     height: 100px;
@@ -60,8 +71,8 @@ const ModuleName = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: black;
-  color: white;
+  background: white;
+  color: black;
   text-align: center;
   pointer-events: none;
   overflow: hidden;
@@ -108,31 +119,6 @@ class Preset extends React.Component {
     this.state = { isPanelEditing: false }
   }
 
-  onBindView(module, index) {
-    const {
-      isEditing
-    } = this.props
-    const {
-      isPanelEditing
-    } = this.state
-
-    const panel = isPanelEditing ? undefined :
-      <StyledPanel
-        index={index}
-        module={module} />
-
-    return (
-      <Module
-        key={index}
-        isEditing={isEditing}>
-        <ModuleName isEditing={isPanelEditing}>
-          {module.config.name}
-        </ModuleName>
-        {panel}
-      </Module>
-    )
-  }
-
   render() {
     const {
       isEditing,
@@ -148,7 +134,9 @@ class Preset extends React.Component {
 
     return (
       <Root className={this.props.className}>
-        <StyledModuleFinder isEditing={isEditing} />
+        <ModuleSpace isEditing={isEditing} >
+          <StyledModuleFinder isEditing={isEditing} />
+        </ModuleSpace>
         <ModuleList>
           <button onClick={e => setEditMode(!isEditing)}>
             {preset.id}{preset.name}
@@ -156,7 +144,17 @@ class Preset extends React.Component {
           <DndList
             droppableId="PRESET"
             data={modules}
-            onBindView={(data, index) => this.onBindView(data, index)}>
+            isDragDisable={() => !isEditing}
+            onBindView={(module, index) => (
+              <Module key={index} isEditing={isEditing}>
+                <ModuleName isEditing={isPanelEditing}>
+                  {module.config.name}
+                </ModuleName>
+                {isPanelEditing ? null :(
+                  <StyledPanel index={index} module={module} />
+                )}
+              </Module>
+            )}>
           </DndList>
         </ModuleList>
       </Root>

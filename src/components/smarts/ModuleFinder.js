@@ -4,7 +4,6 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import DndList from '@components/dumbs/DndList'
 
 const Root = styled.div`
-  display: flex;
   overflow: auto;
 `
 
@@ -15,8 +14,8 @@ const Module = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: white;
-  background: black;
+  background: white;
+  text-align: center;
 `
 
 const ModuleWrapper = styled.div`
@@ -24,24 +23,68 @@ const ModuleWrapper = styled.div`
   box-sizing: border-box;
 `
 
-export default class ModuleFinder extends React.Component {
-  onBindView(data, i) {
-    return (
-      <ModuleWrapper>
-        <Module>{data}</Module>
-      </ModuleWrapper>
-    )
+class ModuleFinder extends React.Component {
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   const isModulesChanged = nextProps.modules !== this.props.modules
+  //   const isEditingChanged = nextProps.isEditing !== this.props.isEditing
+  //   return isModulesChanged || isEditingChanged
+  // }
+
+  componentWillReceiveProps(nextProps) {
+    const { isEditing, findModules } = nextProps
+    const isEditingChanged = nextProps.isEditing !== this.props.isEditing
+    if(isEditing && isEditingChanged){
+      findModules()
+    }
   }
 
   render() {
+    const {
+      modules,
+      className
+    } = this.props
+
     return (
-      <Root className={this.props.className}>
+      <Root className={className}>
         <DndList
           droppableId="MODULE_FINDER"
-          data={[0,1,2,3,4,5,6,7,8,9]}
-          onBindView={this.onBindView}>
+          data={modules}
+          isDropDisabled={true}
+          onBindView={(module, index) => (
+            <ModuleWrapper>
+              <Module>{module.name}</Module>
+            </ModuleWrapper>
+          )}>
         </DndList>
       </Root>
     );
   }
 }
+
+
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as ModuleFinderActions from '@state/moduleFinder/actions'
+import * as Config from '@utils/Config'
+
+export default connect(
+  state => ({
+    modules: state.moduleFinder.modules,
+    isEditing: state.preset.isEditing
+  }),
+  dispatch => {
+    const {
+      findModules,
+      findModulesSuccess
+    } = bindActionCreators(ModuleFinderActions, dispatch)
+    return {
+      findModules(params) {
+        findModules()
+        Config.findModules(params).then(modules => {
+          findModulesSuccess(modules)
+        })
+      }
+    }
+  }
+)(ModuleFinder)
