@@ -1,4 +1,4 @@
-const MODULES = {
+const MODULES = () => ({
   "master": {
     "id": "master",
     "name": "Master Output",
@@ -171,7 +171,7 @@ const MODULES = {
       }
     ]
   }
-}
+})
 
 const PRESET = () => ({
   "0": {
@@ -195,6 +195,33 @@ const PRESET = () => ({
           "sustain": 1,
           "release": 0.8
         }
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
+      },
+      {
+        "id": "filter"
       },
       {
         "id": "filter"
@@ -229,7 +256,7 @@ export function getPreset(id) {
 }
 
 export function getModule(id) {
-  const module = MODULES[id]
+  const module = MODULES()[id]
   if (module === undefined) {
     return Promise.reject(`Unsupported id: "${id}"`)
   }
@@ -237,11 +264,17 @@ export function getModule(id) {
 }
 
 export function getModules(ids) {
+  const modules = MODULES()
   return Promise.resolve(ids.map(id => {
-    const module = MODULES[id]
+    const module = modules[id]
     if (module === undefined) {
       throw new Error(`Unsupported id: "${id}"`)
     }
     return module
   }))
+}
+
+export function findModules(params) {
+  const modules = Object.values(MODULES())
+  return Promise.resolve(modules)
 }

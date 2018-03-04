@@ -21,7 +21,7 @@ const PresetSlot = styled.button`
 `
 
 const StyledPreset = styled(Preset) `
-
+  flex: 1 1 auto;
 `
 
 class Playground extends React.Component {
@@ -35,7 +35,7 @@ class Playground extends React.Component {
   }
 
   getPresetComponent(preset) {
-    return !!preset ? <StyledPreset preset={preset} /> : undefined
+    return !!preset ? <StyledPreset/> : undefined
   }
 
   getPresetSlots() {
