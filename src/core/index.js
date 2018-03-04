@@ -1,5 +1,6 @@
 import Module from './Module'
 import { TYPES as MODULES_ACTION } from '@state/modules/actions'
+import reduceModuleAction from '@state/modules/reducer'
 
 export default class Core {
   constructor() {
@@ -8,21 +9,30 @@ export default class Core {
 
   middleware() {
     return store => next => action => {
-      const result = next(action)
-      const state = store.getState()
+      const { modules: modulesState } = store.getState()
+      const nextState = reduceModuleAction(modulesState, action)
 
-      switch (action.type) {
-        case MODULES_ACTION.INSERT_MODULE:
-        case MODULES_ACTION.MOVE_MODULE:
-        case MODULES_ACTION.LOAD_MODULES_SUCCESS:
-          return this.setModules(modules)
-
-        case MODULES_ACTION.SET_PARAMETER:
-          const { moduleIndex, controlName, value } = action
-          return this.set(moduleIndex, controlName, value)
+      try{
+        switch (action.type) {
+          case MODULES_ACTION.INSERT_MODULE:
+          case MODULES_ACTION.MOVE_MODULE:
+          case MODULES_ACTION.LOAD_MODULES_SUCCESS:{
+            const { modules } = nextState
+            this.setModules(modules)
+            break
+          }
+          case MODULES_ACTION.SET_PARAMETER:{
+            const { moduleIndex, controlName, value } = action
+            this.set(moduleIndex, controlName, value)
+            break
+          }
+        }
+      }catch(e) {
+        alert(e.message)
+        return
       }
 
-      return result
+      return next(action)
     }
   }
 
