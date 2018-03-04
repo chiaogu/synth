@@ -3,7 +3,9 @@ import createConstants from '@utils/createConstants'
 export const TYPES = createConstants('MODULES', [
   'LOAD_MODULES',
   'LOAD_MODULES_SUCCESS',
-  'SET_PARAMETER'
+  'SET_PARAMETER',
+  'INSERT_MODULE',
+  'MOVE_MODULE'
 ])
 
 export const loadModules = presetId => ({
@@ -21,4 +23,16 @@ export const setParameter = (moduleIndex, controlName, value) => ({
   moduleIndex,
   controlName,
   value
+})
+
+export const insertModule = (module, index) => ({
+  type: TYPES.INSERT_MODULE,
+  module,
+  index
+})
+
+export const moveModule = (from, to) => ({
+  type: TYPES.MOVE_MODULE,
+  from,
+  to
 })

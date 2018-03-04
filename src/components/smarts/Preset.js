@@ -1,8 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
+import _ from '@utils/lodash'
 import Panel from '@components/smarts/Panel'
 import ModuleFinder from '@components/smarts/ModuleFinder'
 import DndList from '@components/dumbs/DndList'
+import { ID } from '@components/smarts/DragDropHandler'
 
 const EDIT_MODE_TRANSITION = 500
 
@@ -90,7 +92,7 @@ class Preset extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const modulesChanged = this.props.modules.length !== nextProps.modules.length
+    const modulesChanged = !_.isEqual(this.props.modules, nextProps.modules)
     const isEditedChanged = this.props.isEditing !== nextProps.isEditing
     const isPanelEditing = this.state.isPanelEditing !== nextState.isPanelEditing
     return modulesChanged || isEditedChanged || isPanelEditing
@@ -142,7 +144,7 @@ class Preset extends React.Component {
             {preset.id}{preset.name}
           </button>
           <DndList
-            droppableId="PRESET"
+            droppableId={ID.PRESET}
             data={modules}
             isDragDisable={() => !isEditing}
             onBindView={(module, index) => (

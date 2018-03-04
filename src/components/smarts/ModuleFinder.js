@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import DndList from '@components/dumbs/DndList'
+import { ID } from '@components/smarts/DragDropHandler'
 
 const Root = styled.div`
   overflow: auto;
@@ -48,7 +49,7 @@ class ModuleFinder extends React.Component {
     return (
       <Root className={className}>
         <DndList
-          droppableId="MODULE_FINDER"
+          droppableId={ID.MODULE_FINDER}
           data={modules}
           isDropDisabled={true}
           onBindView={(module, index) => (

@@ -12,22 +12,18 @@ export default class Core {
       const state = store.getState()
 
       switch (action.type) {
+        case MODULES_ACTION.INSERT_MODULE:
+        case MODULES_ACTION.MOVE_MODULE:
         case MODULES_ACTION.LOAD_MODULES_SUCCESS:
-          return this.onLoadModulesSuccess(state)
+          return this.setModules(modules)
+
         case MODULES_ACTION.SET_PARAMETER:
-          return this.onSetParameter(action)
+          const { moduleIndex, controlName, value } = action
+          return this.set(moduleIndex, controlName, value)
       }
 
       return result
     }
-  }
-
-  onLoadModulesSuccess({ modules: { modules } }) {
-    this.setModules(modules)
-  }
-
-  onSetParameter({ moduleIndex, controlName, value }) {
-    this.set(moduleIndex, controlName, value)
   }
 
   setModules(modules) {
