@@ -2,8 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import Panel from '@components/smarts/Panel'
 import ModuleFinder from '@components/smarts/ModuleFinder'
+import DndList from '@components/dumbs/DndList'
 
-const EDIT_MODE_TRANSITION = 600
+const EDIT_MODE_TRANSITION = 500
 
 const Root = styled.div`
   display: flex;
@@ -14,20 +15,16 @@ const ModuleList = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   position: relative;
   overflow: auto;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s;
-  ${({isEditing}) => isEditing ? `
-    width: 100%;
-  ` : `
-    width: 100%;
-  `}
 `
 
-const StyledModuleFinder = styled(ModuleFinder)`
+const StyledModuleFinder = styled(ModuleFinder) `
   background: white;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s;
-  ${({isEditing}) => isEditing ? `
+  ${({ isEditing }) => isEditing ? `
     width: 480px;
   ` : `
     width: 0;
@@ -41,16 +38,16 @@ const StyledPanel = styled(Panel) `
 
 const Module = styled.div`
   margin: 8px;
-  max-width: 720px;
+  max-width: calc(100%-16px);
   position: relative;
   flex-shrink: 0;
   background: white;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s, height ${EDIT_MODE_TRANSITION / 1000}s;
-  ${({isEditing}) => isEditing ? `
-    width: 200px;
+  ${({ isEditing }) => isEditing ? `
+    width: 100px;
     height: 100px;
   ` : `
-    width: calc(100% - 16px);
+    width: 480px;
     height: 250px;
   `}
 `
@@ -69,7 +66,7 @@ const ModuleName = styled.div`
   pointer-events: none;
   overflow: hidden;
   transition: height ${EDIT_MODE_TRANSITION / 1000}s;
-  ${({isEditing}) => isEditing ? `
+  ${({ isEditing }) => isEditing ? `
     height: 100%;
   ` : `
     height: 0;
@@ -90,11 +87,11 @@ class Preset extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const presetChanged = this.props.preset.id !== nextProps.preset.id
-    if(presetChanged)
+    if (presetChanged)
       this.loadModules(nextProps)
 
     const isEditing = nextProps.isEditing
-    if(isEditing)
+    if (isEditing)
       this.setState({ isPanelEditing: true })
     else
       setTimeout(() => this.setState({ isPanelEditing: false }), EDIT_MODE_TRANSITION)
@@ -111,6 +108,31 @@ class Preset extends React.Component {
     this.state = { isPanelEditing: false }
   }
 
+  onBindView(module, index) {
+    const {
+      isEditing
+    } = this.props
+    const {
+      isPanelEditing
+    } = this.state
+
+    const panel = isPanelEditing ? undefined :
+      <StyledPanel
+        index={index}
+        module={module} />
+
+    return (
+      <Module
+        key={index}
+        isEditing={isEditing}>
+        <ModuleName isEditing={isPanelEditing}>
+          {module.config.name}
+        </ModuleName>
+        {panel}
+      </Module>
+    )
+  }
+
   render() {
     const {
       isEditing,
@@ -124,32 +146,18 @@ class Preset extends React.Component {
       isPanelEditing
     } = this.state
 
-    const panels = modules.map((module, index) => {
-      const panel = isPanelEditing ? undefined :
-        <StyledPanel
-          index={index}
-          module={module}/>
-
-      return (
-        <Module
-          key={index}
-          isEditing={isEditing}>
-          <ModuleName isEditing={isPanelEditing}>
-            {module.config.name}
-          </ModuleName>
-          {panel}
-        </Module>
-      )
-    })
-
     return (
       <Root className={this.props.className}>
-        <StyledModuleFinder isEditing={isEditing}/>
-        <ModuleList isEditing={isEditing}>
+        <StyledModuleFinder isEditing={isEditing} />
+        <ModuleList>
           <button onClick={e => setEditMode(!isEditing)}>
             {preset.id}{preset.name}
           </button>
-          {panels}
+          <DndList
+            droppableId="PRESET"
+            data={modules}
+            onBindView={(data, index) => this.onBindView(data, index)}>
+          </DndList>
         </ModuleList>
       </Root>
     )
@@ -193,7 +201,7 @@ export default connect(
           })
       },
       setEditMode(isEditing) {
-        if(isEditing)
+        if (isEditing)
           startEditPreset()
         else
           finishEditPreset()

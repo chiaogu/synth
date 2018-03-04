@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
+import DndList from '@components/dumbs/DndList'
 
 const Root = styled.div`
   display: flex;
@@ -8,7 +9,7 @@ const Root = styled.div`
 `
 
 const Module = styled.div`
-  width: 200px;
+  width: 100px;
   height: 100px;
   display: flex;
   align-items: center;
@@ -24,38 +25,22 @@ const ModuleWrapper = styled.div`
 `
 
 export default class ModuleFinder extends React.Component {
+  onBindView(data, i) {
+    return (
+      <ModuleWrapper>
+        <Module>{data}</Module>
+      </ModuleWrapper>
+    )
+  }
+
   render() {
     return (
       <Root className={this.props.className}>
-        <Droppable droppableId="droppable-1">
-          {(provided, snapshot) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              style={{height: 'fit-content'}}>
-              {
-                [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => (
-                  <Draggable key={i} draggableId={i} index={i}>
-                    {(provided, snapshot) => (
-                      <div>
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <ModuleWrapper>
-                            <Module>{i}</Module>
-                          </ModuleWrapper>
-                        </div>
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Draggable>
-                ))
-              }
-            </div>
-          )}
-        </Droppable>
+        <DndList
+          droppableId="MODULE_FINDER"
+          data={[0,1,2,3,4,5,6,7,8,9]}
+          onBindView={this.onBindView}>
+        </DndList>
       </Root>
     );
   }
