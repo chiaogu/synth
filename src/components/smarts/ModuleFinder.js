@@ -24,6 +24,16 @@ const ModuleWrapper = styled.div`
   box-sizing: border-box;
 `
 
+const TrashCan = styled.div`
+  width: 100px;
+  height: 100px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: grey;
+`
+
 class ModuleFinder extends React.Component {
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -52,11 +62,22 @@ class ModuleFinder extends React.Component {
           droppableId={ID.MODULE_FINDER}
           data={modules}
           isDropDisabled={true}
-          onBindView={(module, index) => (
-            <ModuleWrapper>
-              <Module>{module.name}</Module>
-            </ModuleWrapper>
-          )}>
+          onBindView={(module, index) => {
+            return index === 0 ? (
+              <Droppable droppableId={ID.TRASH_CAN}>
+                {(provided, snapshot) => (
+                  <div ref={provided.innerRef}
+                    {...provided.droppableProps}>
+                    <TrashCan>TrashCan</TrashCan>
+                  </div>
+                )}
+              </Droppable>
+            ) : (
+              <ModuleWrapper>
+                <Module>{module.name}</Module>
+              </ModuleWrapper>
+            )
+          }}>
         </DndList>
       </Root>
     );

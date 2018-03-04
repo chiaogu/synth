@@ -4,7 +4,8 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 export const ID = {
   PRESET: 'PRESET',
-  MODULE_FINDER: 'MODULE_FINDER'
+  MODULE_FINDER: 'MODULE_FINDER',
+  TRASH_CAN: 'TRASH_CAN',
 }
 export class DragDropHandler extends React.Component {
   onDragStart() {
@@ -17,6 +18,12 @@ export class DragDropHandler extends React.Component {
 
   onDragEnd(event) {
     const {
+      deleteModule,
+      insertModule,
+      moveModule,
+      modules
+    } = this.props
+    const {
       source: { droppableId: fromId, index: fromIndex },
       destination
     } = event
@@ -28,25 +35,17 @@ export class DragDropHandler extends React.Component {
 
     if(fromId === toId){
       if(toId === ID.PRESET){
-        this.moveModule(fromIndex, toIndex)
+        moveModule(fromIndex, toIndex)
       }
     }else {
       if(toId === undefined){
 
       }else if(fromId === ID.MODULE_FINDER && toId === ID.PRESET){
-        this.insertModule(fromIndex, toIndex)
+        insertModule(modules[fromIndex], toIndex)
+      }else if(fromId === ID.PRESET && toId === ID.TRASH_CAN){
+        deleteModule(fromIndex)
       }
     }
-  }
-
-  moveModule(from, to) {
-    const { moveModule } = this.props
-    moveModule(from, to)
-  }
-
-  insertModule(from, to) {
-    const { insertModule, modules } = this.props
-    insertModule(modules[from], to)
   }
 
   render() {
@@ -71,10 +70,12 @@ export default connect(
   }),
   dispatch => {
     const {
+      deleteModule,
       insertModule,
       moveModule
     } = bindActionCreators(ModulesActions, dispatch)
     return {
+      deleteModule,
       insertModule,
       moveModule
     }

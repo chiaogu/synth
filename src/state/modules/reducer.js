@@ -57,6 +57,15 @@ export default (state = INIT_STATE, action) => {
         modules
       }
     }
+    case TYPES.DELETE_MODULE: {
+      const { index } = action
+      const modules = [...state.modules]
+      modules.splice(index, 1)
+      return {
+        ...state,
+        modules
+      }
+    }
     default:
       return state
   }

@@ -5,7 +5,8 @@ export const TYPES = createConstants('MODULES', [
   'LOAD_MODULES_SUCCESS',
   'SET_PARAMETER',
   'INSERT_MODULE',
-  'MOVE_MODULE'
+  'MOVE_MODULE',
+  'DELETE_MODULE'
 ])
 
 export const loadModules = presetId => ({
@@ -35,4 +36,9 @@ export const moveModule = (from, to) => ({
   type: TYPES.MOVE_MODULE,
   from,
   to
+})
+
+export const deleteModule = index => ({
+  type: TYPES.DELETE_MODULE,
+  index
 })
