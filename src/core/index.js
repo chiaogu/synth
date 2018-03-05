@@ -14,6 +14,7 @@ export default class Core {
 
       try{
         switch (action.type) {
+          case MODULES_ACTION.DELETE_MODULE:
           case MODULES_ACTION.INSERT_MODULE:
           case MODULES_ACTION.MOVE_MODULE:
           case MODULES_ACTION.LOAD_MODULES_SUCCESS:{
