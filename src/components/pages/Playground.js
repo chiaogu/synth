@@ -4,14 +4,18 @@ import Preset from '@components/smarts/Preset'
 
 const Root = styled.div`
   display: flex;
+  align-items: center;
   flex-direction: column;
   position: relative;
   height: 100%;
 `
 
 const TopBar = styled.div`
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  bottom: 0;
   display: flex;
-  width: 100%;
   flex: 0 0 auto;
 `
 

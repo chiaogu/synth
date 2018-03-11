@@ -1,47 +1,88 @@
 import React from 'react'
 import styled from 'styled-components'
+import { css } from 'styled-components'
 import _ from '@utils/lodash'
 import Panel from '@components/smarts/Panel'
 import ModuleFinder from '@components/smarts/ModuleFinder'
 import DndList from '@components/dumbs/DndList'
 import { ID } from '@components/smarts/DragDropHandler'
 
-const EDIT_MODE_TRANSITION = 500
+const EDIT_MODE_TRANSITION = 800
 
 const Root = styled.div`
   display: flex;
   position: relative;
+  max-width: 100%;
+  transition: width ${EDIT_MODE_TRANSITION / 1000}s;
+  ${({ isEditing }) => isEditing ? `
+    width: 600px;
+  ` : `
+    width: 100%;
+  `}
 `
 
 const ModuleList = styled.div`
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   align-items: center;
-  width: 100%;
   position: relative;
   overflow: auto;
+  margin-top: 50px;
 `
 
-const ModuleSpace = styled.div `
+const ModuleFinderSpace = styled.div `
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s;
   ${({ isEditing }) => isEditing ? `
-    width: 480px;
+    width: calc(100% - 116px);
   ` : `
     width: 0;
   `}
 `
 
-const StyledModuleFinder = styled(ModuleFinder)`
-  width: 200px;
+const ModuleFinderWrapper = styled.div`
+  width: 484px;
+  max-width: calc(100% - 116px);
   height: 100%;
+  display: flex;
   position: absolute;
-  background: black;
+  z-index: 1;
   transition: left ${EDIT_MODE_TRANSITION / 1000}s;
   ${({ isEditing }) => isEditing ? `
-    left: 0;
+    left: 0px;
   ` : `
-    left: -200px;
+    ${css`
+      @media (max-width: 600px) {
+        left: -241px;
+      }
+      @media (min-width: 601px) {
+        left: -434px;
+      }
+    `}
   `}
+`
+
+const StyledModuleFinder = styled(ModuleFinder)`
+  width: 100%;
+  height: 100%;
+  background: black;
+`
+
+const ModuleFinderToggle = styled.div`
+  width: 50px;
+  height: 50px;
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  color: white;
+  cursor: pointer;
 `
 
 const StyledPanel = styled(Panel) `
@@ -51,7 +92,7 @@ const StyledPanel = styled(Panel) `
 
 const Module = styled.div`
   margin: 8px;
-  max-width: calc(100%-16px);
+  max-width: calc(100vw - 16px);
   position: relative;
   flex-shrink: 0;
   background: white;
@@ -135,14 +176,16 @@ class Preset extends React.Component {
     } = this.state
 
     return (
-      <Root className={this.props.className}>
-        <ModuleSpace isEditing={isEditing} >
+      <Root className={this.props.className} isEditing={isEditing}>
+        <ModuleFinderSpace isEditing={isEditing} />
+        <ModuleFinderWrapper isEditing={isEditing}>
           <StyledModuleFinder isEditing={isEditing} />
-        </ModuleSpace>
+          <ModuleFinderToggle
+            isEditing={isEditing}
+            onClick={e => setEditMode(!isEditing)}
+          >X</ModuleFinderToggle>
+        </ModuleFinderWrapper>
         <ModuleList>
-          <button onClick={e => setEditMode(!isEditing)}>
-            {preset.id}{preset.name}
-          </button>
           <DndList
             droppableId={ID.PRESET}
             data={modules}
