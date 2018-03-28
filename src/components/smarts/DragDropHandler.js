@@ -8,12 +8,15 @@ export const ID = {
   TRASH_CAN: 'TRASH_CAN',
 }
 export class DragDropHandler extends React.Component {
-  onDragStart() {
-
+  onDragStart(event) {
+    const { showTrashCan } = this.props
+    const { source: { droppableId: fromId, index: fromIndex } } = event
+    if(fromId === ID.PRESET) {
+      showTrashCan()
+    }
   }
 
-  onDragUpdate() {
-
+  onDragUpdate(event) {
   }
 
   onDragEnd(event) {
@@ -21,12 +24,15 @@ export class DragDropHandler extends React.Component {
       deleteModule,
       insertModule,
       moveModule,
+      hideTrashCan,
       modules
     } = this.props
     const {
       source: { droppableId: fromId, index: fromIndex },
       destination
     } = event
+
+    hideTrashCan()
 
     if(destination === null){
       return
@@ -61,6 +67,7 @@ export class DragDropHandler extends React.Component {
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as ModulesActions from '@state/modules/actions'
+import * as ModuleFinderActions from '@state/moduleFinder/actions'
 
 export default connect(
   state => ({
@@ -72,10 +79,18 @@ export default connect(
       insertModule,
       moveModule
     } = bindActionCreators(ModulesActions, dispatch)
+
+    const {
+      showTrashCan,
+      hideTrashCan
+    } = bindActionCreators(ModuleFinderActions, dispatch)
+
     return {
       deleteModule,
       insertModule,
-      moveModule
+      moveModule,
+      showTrashCan,
+      hideTrashCan
     }
   }
 )(DragDropHandler)

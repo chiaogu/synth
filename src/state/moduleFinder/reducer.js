@@ -2,6 +2,7 @@ import { TYPES } from './actions';
 import _ from '@utils/lodash';
 
 const INIT_STATE = {
+  isTrashCanVisible: false,
   isFetching: false,
   modules: []
 }
@@ -20,6 +21,18 @@ export default (state = INIT_STATE, action) => {
         ...state,
         isFetching: false,
         modules
+      }
+    }
+    case TYPES.SHOW_TRASH_CAN:{
+      return {
+        ...state,
+        isTrashCanVisible: true
+      }
+    }
+    case TYPES.HIDE_TRASH_CAN:{
+      return {
+        ...state,
+        isTrashCanVisible: false
       }
     }
     default:

@@ -8,6 +8,27 @@ const Root = styled.div`
   overflow: auto;
   display: flex;
   flex-direction: column;
+  position: relative;
+`
+
+const TrashCanWrapper = styled.div`
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
+`
+
+const TrashCan = styled.div`
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #888;
 `
 
 const ModuleGrid = styled.div`
@@ -35,16 +56,6 @@ const Module = styled.div`
   text-align: center;
 `
 
-const TrashCan = styled.div`
-  width: 100px;
-  height: 100px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: grey;
-`
-
 class ModuleFinder extends React.Component {
 
   componentDidMount() {
@@ -55,11 +66,24 @@ class ModuleFinder extends React.Component {
   render() {
     const {
       modules,
-      className
+      className,
+      isTrashCanVisible
     } = this.props
 
     return (
       <Root className={className}>
+        { !isTrashCanVisible ? null : (
+          <TrashCanWrapper>
+            <Droppable droppableId={ID.TRASH_CAN}>
+              {(provided, snapshot) => (
+                <div ref={provided.innerRef}
+                  {...provided.droppableProps}>
+                    <TrashCan>TrashCan</TrashCan>
+                </div>
+              )}
+            </Droppable>
+          </TrashCanWrapper>
+        )}
         <ModuleGrid>
           {modules.map((module, index) => (
             <ModuleWrapper key={index}>
@@ -90,6 +114,7 @@ import * as Config from '@utils/Config'
 export default connect(
   state => ({
     modules: state.moduleFinder.modules,
+    isTrashCanVisible: state.moduleFinder.isTrashCanVisible,
     isEditing: state.preset.isEditing
   }),
   dispatch => {
