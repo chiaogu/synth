@@ -71,7 +71,6 @@ const StyledPanel = styled(Panel) `
 `
 
 const Module = styled.div`
-  margin: 8px;
   max-width: calc(100vw - 32px);
   position: relative;
   flex-shrink: 0;
@@ -178,6 +177,7 @@ class Preset extends React.Component {
         <ModuleList>
           <DndList
             droppableId={ID.PRESET}
+            gap={'8px'}
             data={modules}
             isDragDisable={() => !isEditing}
             onBindView={(module, index) => (

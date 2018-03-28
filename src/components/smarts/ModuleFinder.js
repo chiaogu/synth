@@ -67,6 +67,7 @@ class ModuleFinder extends React.Component {
                 droppableId={`${ID.MODULE_FINDER}.${index}`}
                 data={[module]}
                 isDropDisabled={true}
+                gap={'8px'}
                 getIndex={() => index}
                 onBindView={(module, index) => (
                   <Module>{module.name}</Module>
