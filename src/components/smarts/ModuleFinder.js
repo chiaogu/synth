@@ -6,11 +6,48 @@ import { ID } from '@components/smarts/DragDropHandler'
 
 const Root = styled.div`
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+`
+
+const TrashCanWrapper = styled.div`
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
+`
+
+const TrashCan = styled.div`
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #888;
+`
+
+const ModuleGrid = styled.div`
+  display: grid;
+  grid-gap: 8px;
+  grid-template-columns: repeat(auto-fit, 96px);
+  justify-content: center;
+  margin: 80px 16px 16px 16px;
+  width: calc(100% - 32px);
+`
+
+const ModuleWrapper = styled.div`
+  width: 96px;
+  height: 96px;
 `
 
 const Module = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 96px;
+  height: 96px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,66 +56,50 @@ const Module = styled.div`
   text-align: center;
 `
 
-const ModuleWrapper = styled.div`
-  padding-bottom: 8px;
-  box-sizing: border-box;
-`
-
-const TrashCan = styled.div`
-  width: 100px;
-  height: 100px;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: grey;
-`
-
 class ModuleFinder extends React.Component {
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   const isModulesChanged = nextProps.modules !== this.props.modules
-  //   const isEditingChanged = nextProps.isEditing !== this.props.isEditing
-  //   return isModulesChanged || isEditingChanged
-  // }
-
-  componentWillReceiveProps(nextProps) {
-    const { isEditing, findModules } = nextProps
-    const isEditingChanged = nextProps.isEditing !== this.props.isEditing
-    if(isEditing && isEditingChanged){
-      findModules()
-    }
+  componentDidMount() {
+    const { findModules } = this.props
+    findModules()
   }
 
   render() {
     const {
       modules,
-      className
+      className,
+      isTrashCanVisible
     } = this.props
 
     return (
       <Root className={className}>
-        <DndList
-          droppableId={ID.MODULE_FINDER}
-          data={modules}
-          isDropDisabled={true}
-          onBindView={(module, index) => {
-            return index === 0 ? (
-              <Droppable droppableId={ID.TRASH_CAN}>
-                {(provided, snapshot) => (
-                  <div ref={provided.innerRef}
-                    {...provided.droppableProps}>
+        { !isTrashCanVisible ? null : (
+          <TrashCanWrapper>
+            <Droppable droppableId={ID.TRASH_CAN}>
+              {(provided, snapshot) => (
+                <div ref={provided.innerRef}
+                  {...provided.droppableProps}>
                     <TrashCan>TrashCan</TrashCan>
-                  </div>
-                )}
-              </Droppable>
-            ) : (
-              <ModuleWrapper>
-                <Module>{module.name}</Module>
-              </ModuleWrapper>
-            )
-          }}>
-        </DndList>
+                </div>
+              )}
+            </Droppable>
+          </TrashCanWrapper>
+        )}
+        <ModuleGrid>
+          {modules.map((module, index) => (
+            <ModuleWrapper key={index}>
+              <DndList
+                droppableId={`${ID.MODULE_FINDER}.${index}`}
+                data={[module]}
+                isDropDisabled={true}
+                gap={'8px'}
+                getIndex={() => index}
+                onBindView={(module, index) => (
+                  <Module>{module.name}</Module>
+                )}>
+              </DndList>
+            </ModuleWrapper>
+          ))}
+        </ModuleGrid>
       </Root>
     );
   }
@@ -93,6 +114,7 @@ import * as Config from '@utils/Config'
 export default connect(
   state => ({
     modules: state.moduleFinder.modules,
+    isTrashCanVisible: state.moduleFinder.isTrashCanVisible,
     isEditing: state.preset.isEditing
   }),
   dispatch => {
