@@ -1,47 +1,68 @@
 import React from 'react'
 import styled from 'styled-components'
+import { css } from 'styled-components'
 import _ from '@utils/lodash'
 import Panel from '@components/smarts/Panel'
 import ModuleFinder from '@components/smarts/ModuleFinder'
 import DndList from '@components/dumbs/DndList'
 import { ID } from '@components/smarts/DragDropHandler'
 
-const EDIT_MODE_TRANSITION = 500
+const EDIT_MODE_TRANSITION = 600
 
 const Root = styled.div`
   display: flex;
   position: relative;
+  width: 100%;
+  transition: width ${EDIT_MODE_TRANSITION / 1000}s;
 `
 
 const ModuleList = styled.div`
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   align-items: center;
-  width: 100%;
   position: relative;
   overflow: auto;
+  padding-top: 66px;
 `
 
-const ModuleSpace = styled.div `
+const ModuleFinderSpace = styled.div `
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s;
   ${({ isEditing }) => isEditing ? `
     width: 480px;
+    @media screen and (max-width: 960px) {
+      width: 67%;
+    }
   ` : `
     width: 0;
   `}
 `
 
 const StyledModuleFinder = styled(ModuleFinder)`
-  width: 200px;
+  width: 100%;
   height: 100%;
-  position: absolute;
   background: black;
-  transition: left ${EDIT_MODE_TRANSITION / 1000}s;
-  ${({ isEditing }) => isEditing ? `
-    left: 0;
-  ` : `
-    left: -200px;
-  `}
+`
+
+const ModuleFinderToggle = styled.div`
+  position: absolute;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  margin: 16px 0 0 16px;
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  color: white;
+  cursor: pointer;
 `
 
 const StyledPanel = styled(Panel) `
@@ -50,15 +71,14 @@ const StyledPanel = styled(Panel) `
 `
 
 const Module = styled.div`
-  margin: 8px;
-  max-width: calc(100%-16px);
+  max-width: calc(100vw - 32px);
   position: relative;
   flex-shrink: 0;
   background: white;
   transition: all ${EDIT_MODE_TRANSITION / 1000}s;
   ${({ isEditing }) => isEditing ? `
-    width: 100px;
-    height: 100px;
+    width: 96px;
+    height: 96px;
   ` : `
     width: 480px;
     height: 250px;
@@ -94,8 +114,9 @@ class Preset extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     const modulesChanged = !_.isEqual(this.props.modules, nextProps.modules)
     const isEditedChanged = this.props.isEditing !== nextProps.isEditing
-    const isPanelEditing = this.state.isPanelEditing !== nextState.isPanelEditing
-    return modulesChanged || isEditedChanged || isPanelEditing
+    const isPanelEditingChanged = this.state.isPanelEditing !== nextState.isPanelEditing
+    const isModuleFinderShownChanged = this.state.isModuleFinderShown !== nextState.isModuleFinderShown
+    return modulesChanged || isEditedChanged || isPanelEditingChanged || isModuleFinderShownChanged
   }
 
   componentWillReceiveProps(nextProps) {
@@ -104,10 +125,13 @@ class Preset extends React.Component {
       this.loadModules(nextProps)
 
     const isEditing = nextProps.isEditing
-    if (isEditing)
+    if (isEditing){
       this.setState({ isPanelEditing: true })
-    else
+      setTimeout(() => this.setState({ isModuleFinderShown: true }), EDIT_MODE_TRANSITION)
+    }else{
+      this.setState({ isModuleFinderShown: false })
       setTimeout(() => this.setState({ isPanelEditing: false }), EDIT_MODE_TRANSITION)
+    }
   }
 
   loadModules(props) {
@@ -118,7 +142,10 @@ class Preset extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { isPanelEditing: false }
+    this.state = {
+      isPanelEditing: false,
+      isModuleFinderShown: false
+    }
   }
 
   render() {
@@ -131,20 +158,26 @@ class Preset extends React.Component {
       setEditMode
     } = this.props
     const {
-      isPanelEditing
+      isPanelEditing,
+      isModuleFinderShown
     } = this.state
 
     return (
-      <Root className={this.props.className}>
-        <ModuleSpace isEditing={isEditing} >
-          <StyledModuleFinder isEditing={isEditing} />
-        </ModuleSpace>
+      <Root className={this.props.className} isEditing={isEditing}>
+        <ModuleFinderSpace isEditing={isEditing} >
+          {!isModuleFinderShown ? null : (
+            <StyledModuleFinder/>
+          )}
+        </ModuleFinderSpace>
+
+        <ModuleFinderToggle
+          isEditing={isEditing}
+          onClick={e => setEditMode(!isEditing)}
+        >X</ModuleFinderToggle>
         <ModuleList>
-          <button onClick={e => setEditMode(!isEditing)}>
-            {preset.id}{preset.name}
-          </button>
           <DndList
             droppableId={ID.PRESET}
+            gap={'8px'}
             data={modules}
             isDragDisable={() => !isEditing}
             onBindView={(module, index) => (
