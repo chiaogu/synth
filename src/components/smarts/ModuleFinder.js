@@ -42,12 +42,9 @@ class ModuleFinder extends React.Component {
   //   return isModulesChanged || isEditingChanged
   // }
 
-  componentWillReceiveProps(nextProps) {
-    const { isEditing, findModules } = nextProps
-    const isEditingChanged = nextProps.isEditing !== this.props.isEditing
-    if(isEditing && isEditingChanged){
-      findModules()
-    }
+  componentDidMount() {
+    const { isEditing, findModules } = this.props
+    findModules()
   }
 
   render() {
