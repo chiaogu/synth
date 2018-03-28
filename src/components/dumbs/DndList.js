@@ -7,6 +7,7 @@ export default class DndList extends React.Component {
       droppableId,
       data,
       onBindView,
+      getIndex = index => index,
       isDragDisable = () => false,
       isDropDisabled = false
     } = this.props
@@ -25,7 +26,7 @@ export default class DndList extends React.Component {
               data.map((item, index) => (
                 <Draggable
                   key={index}
-                  index={index}
+                  index={getIndex(index)}
                   isDragDisabled={isDragDisable(item, index)}
                   draggableId={`${droppableId}-${index}`}>
                   {(provided, snapshot) => (

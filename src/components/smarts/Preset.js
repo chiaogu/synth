@@ -149,11 +149,6 @@ class Preset extends React.Component {
     }
   }
 
-  get(isModuleFinderShown) {
-    console.log('isModuleFinderShown', isModuleFinderShown)
-    return
-  }
-
   render() {
     const {
       isEditing,
@@ -171,7 +166,9 @@ class Preset extends React.Component {
     return (
       <Root className={this.props.className} isEditing={isEditing}>
         <ModuleFinderSpace isEditing={isEditing} >
-          {isModuleFinderShown ? <StyledModuleFinder/> : undefined}
+          {!isModuleFinderShown ? null : (
+            <StyledModuleFinder/>
+          )}
         </ModuleFinderSpace>
 
         <ModuleFinderToggle

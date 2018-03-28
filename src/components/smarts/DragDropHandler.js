@@ -38,9 +38,7 @@ export class DragDropHandler extends React.Component {
         moveModule(fromIndex, toIndex)
       }
     }else {
-      if(toId === undefined){
-
-      }else if(fromId === ID.MODULE_FINDER && toId === ID.PRESET){
+      if(fromId.indexOf(ID.MODULE_FINDER) !== -1 && toId === ID.PRESET){
         insertModule(modules[fromIndex], toIndex)
       }else if(fromId === ID.PRESET && toId === ID.TRASH_CAN){
         deleteModule(fromIndex)

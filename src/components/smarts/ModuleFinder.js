@@ -6,22 +6,33 @@ import { ID } from '@components/smarts/DragDropHandler'
 
 const Root = styled.div`
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+`
+
+const ModuleGrid = styled.div`
+  display: grid;
+  grid-gap: 8px;
+  grid-template-columns: repeat(auto-fit, 96px);
+  justify-content: center;
+  margin: 80px 16px 16px 16px;
+  width: calc(100% - 32px);
+`
+
+const ModuleWrapper = styled.div`
+  width: 96px;
+  height: 96px;
 `
 
 const Module = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 96px;
+  height: 96px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   background: white;
   text-align: center;
-`
-
-const ModuleWrapper = styled.div`
-  padding-bottom: 8px;
-  box-sizing: border-box;
 `
 
 const TrashCan = styled.div`
@@ -36,14 +47,8 @@ const TrashCan = styled.div`
 
 class ModuleFinder extends React.Component {
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   const isModulesChanged = nextProps.modules !== this.props.modules
-  //   const isEditingChanged = nextProps.isEditing !== this.props.isEditing
-  //   return isModulesChanged || isEditingChanged
-  // }
-
   componentDidMount() {
-    const { isEditing, findModules } = this.props
+    const { findModules } = this.props
     findModules()
   }
 
@@ -55,27 +60,21 @@ class ModuleFinder extends React.Component {
 
     return (
       <Root className={className}>
-        <DndList
-          droppableId={ID.MODULE_FINDER}
-          data={modules}
-          isDropDisabled={true}
-          onBindView={(module, index) => {
-            return index === 0 ? (
-              <Droppable droppableId={ID.TRASH_CAN}>
-                {(provided, snapshot) => (
-                  <div ref={provided.innerRef}
-                    {...provided.droppableProps}>
-                    <TrashCan>TrashCan</TrashCan>
-                  </div>
-                )}
-              </Droppable>
-            ) : (
-              <ModuleWrapper>
-                <Module>{module.name}</Module>
-              </ModuleWrapper>
-            )
-          }}>
-        </DndList>
+        <ModuleGrid>
+          {modules.map((module, index) => (
+            <ModuleWrapper key={index}>
+              <DndList
+                droppableId={`${ID.MODULE_FINDER}.${index}`}
+                data={[module]}
+                isDropDisabled={true}
+                getIndex={() => index}
+                onBindView={(module, index) => (
+                  <Module>{module.name}</Module>
+                )}>
+              </DndList>
+            </ModuleWrapper>
+          ))}
+        </ModuleGrid>
       </Root>
     );
   }
