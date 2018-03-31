@@ -10,7 +10,7 @@ export default class DndList extends React.Component {
       getIndex = index => index,
       isDragDisable = () => false,
       isDropDisabled = false,
-      gap = '0px'
+      getItemStyle = index => ({})
     } = this.props
 
     return (
@@ -37,7 +37,7 @@ export default class DndList extends React.Component {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         style={{
-                          margin: `0 0 ${gap} 0`,
+                          ...getItemStyle(index),
                           ...provided.draggableProps.style
                         }}
                       >
