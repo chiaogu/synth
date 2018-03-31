@@ -25,7 +25,7 @@ const ModuleList = styled.div`
   align-items: center;
   position: relative;
   overflow: auto;
-  padding-top: 80px;
+  padding-top: 68px;
 `
 
 const ModuleFinderSpace = styled.div `
@@ -34,7 +34,7 @@ const ModuleFinderSpace = styled.div `
   display: flex;
   align-items: center;
   justify-content: center;
-  background: black;
+  background: #333;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s;
   transition-timing-function: ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
@@ -50,22 +50,26 @@ const ModuleFinderSpace = styled.div `
 const StyledModuleFinder = styled(ModuleFinder)`
   width: 100%;
   height: 100%;
-  background: black;
+  background: #333;
 `
 
 const ModuleFinderToggle = styled.div`
   position: absolute;
   z-index: 2;
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   margin: 16px 0 0 16px;
   flex: 0 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: black;
+  background: #333;
   color: white;
   cursor: pointer;
+  ${({ isEditing }) => isEditing ? `
+  ` : `
+    box-shadow: 0px 10px 27px -8px rgba(0,0,0,1);
+  `}
 `
 
 const StyledPanel = styled(Panel) `
@@ -85,7 +89,7 @@ const Module = styled.div`
     height: 96px;
   ` : `
     width: 480px;
-    height: 250px;
+    height: 270px;
   `}
 `
 
@@ -182,12 +186,16 @@ class Preset extends React.Component {
         <ModuleList>
           <DndList
             droppableId={ID.PRESET}
-            gap={'8px'}
+            getItemStyle={() => ({
+              transition: 'all 0.6s',
+              margin: '0 0 8px 0',
+              boxShadow: isEditing ? '0px 10px 44px -8px rgba(0,0,0,1)' : '0px 0px 150px -34px rgba(0,0,0,0.75)'
+            })}
             data={modules}
             isDragDisable={() => !isEditing}
             onBindView={(module, index) => (
               <Module key={index} isEditing={isEditing}>
-                <ModuleName isEditing={isPanelEditing}>
+                <ModuleName isEditing={isEditing}>
                   {module.config.name}
                 </ModuleName>
                 {isPanelEditing ? null :(

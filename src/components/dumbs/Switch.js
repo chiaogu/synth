@@ -6,7 +6,7 @@ const Root = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid #000;
+  box-shadow: 0px 2px 15px -5px rgba(0,0,0,0.6);
   cursor: default;
   user-select: none;
 `;

@@ -5,7 +5,7 @@ const DRAG_RANGE = 200;
 
 const Root = styled.div`
   position: relative;
-  border: 1px solid #000;
+  box-shadow: 0px 2px 15px -5px rgba(0,0,0,0.6);
 `;
 
 const Background = styled.div`

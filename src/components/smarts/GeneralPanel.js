@@ -27,23 +27,34 @@ const ModuleName = styled.div`
   justify-contens: center;
 `
 
+const ControlListPadding = styled.div`
+  width: 16px;
+  flex-shrink: 0;
+`
+
 const ControlList = styled.div`
-  width: 100%;
+  max-width: 100%;
+  padding: 8px 0 16px 0;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
   flex: 1 1 auto;
+  overflow-x: auto;
 `
 
 const ControlWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 12px;
+  margin-right: 8px;
 `
 
 const ControlName = styled.div`
-  margin-bottom: 8px;
+  height: 24px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 const StyledMenu = styled(Menu) `
@@ -138,7 +149,9 @@ class GeneralPanel extends React.Component {
       <Root className={this.props.className}>
         <ModuleName>{name}</ModuleName>
         <ControlList>
-          {components}
+          <ControlListPadding/>
+            {components}
+          <ControlListPadding/>
         </ControlList>
       </Root>
     )
