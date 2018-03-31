@@ -28,9 +28,10 @@ const ModuleName = styled.div`
 `
 
 const ControlList = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: row;
-  justify-contents: center;
+  justify-content: space-evenly;
   flex: 1 1 auto;
 `
 

@@ -25,7 +25,7 @@ const ModuleList = styled.div`
   align-items: center;
   position: relative;
   overflow: auto;
-  padding-top: 66px;
+  padding-top: 80px;
 `
 
 const ModuleFinderSpace = styled.div `

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.babel.js",
+    "start": "webpack-dev-server --config ./webpack.babel.js --host 0.0.0.0",
     "build": "webpack --config ./webpack.babel.js"
   },
   "author": "",
@@ -27,7 +27,7 @@
     "lodash.isequal": "^4.5.0",
     "lodash.set": "^4.3.2",
     "react": "^16.0.0",
-    "react-beautiful-dnd": "^5.0.0",
+    "react-beautiful-dnd": "^6.0.1",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
