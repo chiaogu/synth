@@ -8,6 +8,8 @@ import DndList from '@components/dumbs/DndList'
 import { ID } from '@components/smarts/DragDropHandler'
 
 const EDIT_MODE_TRANSITION = 600
+const TRANSITION_TIMEING_FUNC_IN = 'cubic-bezier(0.190, 1.000, 0.220, 1.000)';
+const TRANSITION_TIMEING_FUNC_OUT = 'cubic-bezier(0.950, 0.050, 0.795, 0.035)';
 
 const Root = styled.div`
   display: flex;
@@ -34,6 +36,7 @@ const ModuleFinderSpace = styled.div `
   justify-content: center;
   background: black;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s;
+  transition-timing-function: ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
     width: 480px;
     @media screen and (max-width: 960px) {
@@ -76,6 +79,7 @@ const Module = styled.div`
   flex-shrink: 0;
   background: white;
   transition: all ${EDIT_MODE_TRANSITION / 1000}s;
+  transition-timing-function: ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
     width: 96px;
     height: 96px;
@@ -99,10 +103,11 @@ const ModuleName = styled.div`
   pointer-events: none;
   overflow: hidden;
   transition: height ${EDIT_MODE_TRANSITION / 1000}s;
+  transition-timing-function: ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
     height: 100%;
   ` : `
-    height: 0;
+    height: 48px;
   `}
 `
 

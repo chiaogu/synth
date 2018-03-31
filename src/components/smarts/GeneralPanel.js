@@ -8,19 +8,30 @@ import Button from '@components/dumbs/Button'
 import InputButton from '@components/dumbs/InputButton'
 
 const Root = styled.div`
-  display: flex;
   width: 100%;
   height: 100%;
-  flex-direction: row;
   position: relative;
-  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: #fff;
   overflow: auto;
   box-sizing: border-box;
 `
 
 const ModuleName = styled.div`
-  margin-right: 16px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-contens: center;
+`
+
+const ControlList = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-contents: center;
+  flex: 1 1 auto;
 `
 
 const ControlWrapper = styled.div`
@@ -116,16 +127,18 @@ class GeneralPanel extends React.Component {
 
       return (
         <ControlWrapper key={index}>
-          <ControlName>{control.name}</ControlName>
           {component}
+          <ControlName>{control.name}</ControlName>
         </ControlWrapper>
       )
     })
 
     return (
       <Root className={this.props.className}>
-        <ModuleName>{index}<br />{name}</ModuleName>
-        {components}
+        <ModuleName>{name}</ModuleName>
+        <ControlList>
+          {components}
+        </ControlList>
       </Root>
     )
   }
