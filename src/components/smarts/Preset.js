@@ -66,6 +66,7 @@ const ModuleFinderToggle = styled.div`
   background: #333;
   color: white;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   ${({ isEditing }) => isEditing ? `
   ` : `
     box-shadow: 0px 10px 27px -8px rgba(0,0,0,1);

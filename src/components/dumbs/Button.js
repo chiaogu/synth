@@ -59,8 +59,10 @@ export default class Button extends React.Component {
       <Root
         style={style}
         className={this.props.className}
-        onMouseDown ={e => this.onMouseDown()}
-        onMouseUp ={e => this.onMouseUp()}>
+        onTouchStart={e => this.onMouseDown()}
+        onTouchEnd={e => this.onMouseUp()}
+        onMouseDown={e => this.onMouseDown()}
+        onMouseUp={e => this.onMouseUp()}>
         {state}
       </Root>
     );
