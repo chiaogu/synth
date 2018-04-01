@@ -8,30 +8,55 @@ import Button from '@components/dumbs/Button'
 import InputButton from '@components/dumbs/InputButton'
 
 const Root = styled.div`
-  display: flex;
   width: 100%;
   height: 100%;
-  flex-direction: row;
   position: relative;
-  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: #fff;
   overflow: auto;
   box-sizing: border-box;
 `
 
 const ModuleName = styled.div`
-  margin-right: 16px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-contens: center;
+  font-size: 18px;
+`
+
+const ControlListPadding = styled.div`
+  width: 16px;
+  flex-shrink: 0;
+`
+
+const ControlList = styled.div`
+  max-width: 100%;
+  padding: 8px 0 16px 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 auto;
+  overflow-x: auto;
 `
 
 const ControlWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 12px;
+  margin-right: 8px;
 `
 
 const ControlName = styled.div`
-  margin-bottom: 8px;
+  height: 24px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
 `
 
 const StyledMenu = styled(Menu) `
@@ -43,13 +68,13 @@ const StyledRange = styled(Range) `
 `
 
 const StyledSwitch = styled(Switch) `
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
 `
 
 const StyledButton = styled(Button) `
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
 `
 
 const StyledInputButton = styled(InputButton) `
@@ -116,16 +141,20 @@ class GeneralPanel extends React.Component {
 
       return (
         <ControlWrapper key={index}>
-          <ControlName>{control.name}</ControlName>
           {component}
+          <ControlName>{control.name}</ControlName>
         </ControlWrapper>
       )
     })
 
     return (
       <Root className={this.props.className}>
-        <ModuleName>{index}<br />{name}</ModuleName>
-        {components}
+        <ModuleName>{name}</ModuleName>
+        <ControlList>
+          <ControlListPadding/>
+            {components}
+          <ControlListPadding/>
+        </ControlList>
       </Root>
     )
   }

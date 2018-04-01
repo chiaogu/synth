@@ -19,7 +19,7 @@ const TrashCanWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: black;
+  background: #333;
 `
 
 const TrashCan = styled.div`
@@ -36,7 +36,7 @@ const ModuleGrid = styled.div`
   grid-gap: 8px;
   grid-template-columns: repeat(auto-fit, 96px);
   justify-content: center;
-  margin: 80px 16px 16px 16px;
+  margin: 68px 16px 16px 16px;
   width: calc(100% - 32px);
 `
 
@@ -54,6 +54,8 @@ const Module = styled.div`
   flex-shrink: 0;
   background: white;
   text-align: center;
+  font-size: 16px;
+  user-select: none;
 `
 
 class ModuleFinder extends React.Component {
@@ -91,7 +93,10 @@ class ModuleFinder extends React.Component {
                 droppableId={`${ID.MODULE_FINDER}.${index}`}
                 data={[module]}
                 isDropDisabled={true}
-                gap={'8px'}
+                getItemStyle={() => ({
+                  margin: '0 0 8px 0',
+                  boxShadow: '0px 10px 44px -8px rgba(0,0,0,1)'
+                })}
                 getIndex={() => index}
                 onBindView={(module, index) => (
                   <Module>{module.name}</Module>

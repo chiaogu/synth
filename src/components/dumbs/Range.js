@@ -1,27 +1,27 @@
-import React from 'react';
-import styled from 'styled-components';
-
-const DRAG_RANGE = 200;
+import React from 'react'
+import styled from 'styled-components'
+import Hammer from 'react-hammerjs'
 
 const Root = styled.div`
   position: relative;
-  border: 1px solid #000;
+  box-shadow: 0px 2px 15px -5px rgba(0,0,0,0.6);
 `;
 
-const Background = styled.div`
+const Background = styled(Hammer)`
   background: #fff;
   position: relative;
   cursor: arrow;
   flex: 1 1 auto;
-  width: 30px;
+  width: 36px;
   height: 100%;
+  cursor: pointer;
 `;
 
 const Progress = styled.div`
   background: #000;
   position: absolute;
   bottom: 0;
-  width: 30px;
+  width: 36px;
   pointer-events: none;
 `;
 
@@ -39,15 +39,11 @@ const Value = styled.div`
   mix-blend-mode: difference;
 `;
 
+
 export default class Range extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.dragFrom = {};
-    this.onMouseDown = this.onMouseDown.bind(this);
-    this.onMouseMove = this.onMouseMove.bind(this);
-    this.onMouseUp = this.onMouseUp.bind(this);
 
     this.state = { value: 0, ratio: 0 };
   }
@@ -67,49 +63,31 @@ export default class Range extends React.Component {
     this.setState({ value, ratio });
   }
 
-  onMouseDown(e) {
-    this.dragFrom = {
-      x: e.clientX,
-      y: e.clientY
-    };
-
-    window.addEventListener("mousemove", this.onMouseMove);
-    window.addEventListener("mouseup", this.onMouseUp);
-  }
-
-  onMouseUp(e) {
-    window.removeEventListener("mousemove", this.onMouseMove);
-    window.removeEventListener("mouseup", this.onMouseUp);
-  }
-
-  onMouseMove(e) {
-    e.preventDefault();
-
-    const x = e.clientX;
-    const y = e.clientY;
+  onPan(e) {
     const { max, min } = this.props.config;
+    const acceleration = Math.max(0.1, Math.min(2, (e.deltaX + 100) / 100))
 
-    let ratio = this.state.ratio;
-    ratio += (this.dragFrom.y - y) / DRAG_RANGE;
-    ratio = Math.max(0, Math.min(1, ratio));
+    let ratio = this.state.ratio
+    ratio += (-e.velocityY) / 9 * acceleration
+    ratio = Math.max(0, Math.min(1, ratio))
 
-    const value = min + ratio * (max - min);
+    const value = min + ratio * (max - min)
 
-    this.dragFrom = { x, y };
-
-    this.setState({ value, ratio });
+    this.setState({ value, ratio })
 
     if (this.props.onChange) {
-      this.props.onChange(value);
+      this.props.onChange(value)
     }
   }
 
   render() {
     return (
       <Root className={this.props.className}>
-        <Background onMouseDown={this.onMouseDown}>
-          <Progress style={{ height: this.state.ratio * 100 + '%' }} />
-          <Value>{this.state.value.toFixed()}</Value>
+        <Background direction={'DIRECTION_ALL'} onPan={e => this.onPan(e)}>
+          <div>
+            <Progress style={{ height: this.state.ratio * 100 + '%' }} />
+            <Value>{this.state.value.toFixed()}</Value>
+          </div>
         </Background>
       </Root>
     );

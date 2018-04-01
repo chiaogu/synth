@@ -6,8 +6,8 @@ const Root = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid #000;
-  cursor: default;
+  box-shadow: 0px 2px 15px -5px rgba(0,0,0,0.6);
+  cursor: pointer;
   user-select: none;
 `;
 
@@ -51,7 +51,9 @@ export default class Switch extends React.Component {
       <Root
         style={style}
         className={this.props.className}
-        onClick={e => this.onToggle()}>
+        onTouchStart={e => e.preventDefault()}
+        onTouchEnd={e => this.onToggle()}
+        onMouseUp={e => this.onToggle()}>
         {state}
       </Root>
     );
