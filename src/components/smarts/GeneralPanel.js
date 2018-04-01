@@ -66,13 +66,13 @@ const StyledRange = styled(Range) `
 `
 
 const StyledSwitch = styled(Switch) `
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
 `
 
 const StyledButton = styled(Button) `
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
 `
 
 const StyledInputButton = styled(InputButton) `

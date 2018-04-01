@@ -7,8 +7,9 @@ const Root = styled.div`
   align-items: center;
   justify-content: center;
   box-shadow: 0px 2px 15px -5px rgba(0,0,0,0.6);
-  cursor: default;
+  cursor: pointer;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 `;
 
 export default class Button extends React.Component {
@@ -31,7 +32,8 @@ export default class Button extends React.Component {
     this.setState({ pressed: value });
   }
 
-  onMouseDown() {
+  onMouseDown(e) {
+    e.preventDefault()
     this.toggle(true);
   }
 
@@ -59,8 +61,10 @@ export default class Button extends React.Component {
       <Root
         style={style}
         className={this.props.className}
-        onMouseDown ={e => this.onMouseDown()}
-        onMouseUp ={e => this.onMouseUp()}>
+        onTouchStart={e => this.onMouseDown(e)}
+        onTouchEnd={e => this.onMouseUp()}
+        onMouseDown={e => this.onMouseDown(e)}
+        onMouseUp={e => this.onMouseUp()}>
         {state}
       </Root>
     );
