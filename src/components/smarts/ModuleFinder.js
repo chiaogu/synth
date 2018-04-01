@@ -54,6 +54,8 @@ const Module = styled.div`
   flex-shrink: 0;
   background: white;
   text-align: center;
+  font-size: 16px;
+  user-select: none;
 `
 
 class ModuleFinder extends React.Component {

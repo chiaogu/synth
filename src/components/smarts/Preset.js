@@ -107,11 +107,12 @@ const ModuleName = styled.div`
   text-align: center;
   pointer-events: none;
   overflow: hidden;
+  user-select: none;
   transition: all ${EDIT_MODE_TRANSITION / 1000}s;
   transition-timing-function: ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
     height: 100%;
-    font-size: 14px;
+    font-size: 16px;
   ` : `
     height: 48px;
     font-size: 18px;
