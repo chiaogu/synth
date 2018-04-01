@@ -6,6 +6,7 @@ import DragDropHandler from '@components/smarts/DragDropHandler'
 
 const Root = styled.div`
   height: 100%;
+  font-family: 'Regular';
 `;
 
 export default class App extends React.Component {

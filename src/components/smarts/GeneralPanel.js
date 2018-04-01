@@ -25,6 +25,7 @@ const ModuleName = styled.div`
   display: flex;
   align-items: center;
   justify-contens: center;
+  font-size: 18px;
 `
 
 const ControlListPadding = styled.div`
@@ -55,6 +56,7 @@ const ControlName = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 14px;
 `
 
 const StyledMenu = styled(Menu) `

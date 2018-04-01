@@ -8,8 +8,7 @@ import DndList from '@components/dumbs/DndList'
 import { ID } from '@components/smarts/DragDropHandler'
 
 const EDIT_MODE_TRANSITION = 600
-const TRANSITION_TIMEING_FUNC_IN = 'cubic-bezier(0.190, 1.000, 0.220, 1.000)';
-const TRANSITION_TIMEING_FUNC_OUT = 'cubic-bezier(0.950, 0.050, 0.795, 0.035)';
+const TRANSITION_TIMEING_FUNC_IN = 'cubic-bezier(0.86, 0, 0.07, 1)';
 
 const Root = styled.div`
   display: flex;
@@ -25,7 +24,8 @@ const ModuleList = styled.div`
   align-items: center;
   position: relative;
   overflow: auto;
-  padding-top: 68px;
+  padding: 68px 0 8px 0;
+  -webkit-overflow-scrolling: touch;
 `
 
 const ModuleFinderSpace = styled.div `
@@ -107,12 +107,14 @@ const ModuleName = styled.div`
   text-align: center;
   pointer-events: none;
   overflow: hidden;
-  transition: height ${EDIT_MODE_TRANSITION / 1000}s;
+  transition: all ${EDIT_MODE_TRANSITION / 1000}s;
   transition-timing-function: ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
     height: 100%;
+    font-size: 14px;
   ` : `
     height: 48px;
+    font-size: 18px;
   `}
 `
 

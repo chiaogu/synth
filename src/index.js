@@ -6,6 +6,7 @@ import { createStore, applyMiddleware } from 'redux'
 import reducers from '@state/reducers'
 import App from '@components/App'
 import Core from '@core'
+import './styles'
 
 const core = new Core();
 const store = createStore(

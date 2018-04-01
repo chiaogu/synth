@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.babel.js --host 0.0.0.0",
-    "build": "webpack --config ./webpack.babel.js"
+    "build:dev": "webpack --config ./webpack.babel.js",
+    "build:prod": "webpack --config ./webpack.babel.js --env.prod=true"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +18,8 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.19",
+    "file-loader": "^1.1.11",
     "html-webpack-plugin": "^2.30.1",
     "path": "^0.12.7",
     "webpack": "^3.8.1",

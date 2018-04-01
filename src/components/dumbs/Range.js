@@ -2,8 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import Hammer from 'react-hammerjs'
 
-const DRAG_RANGE = 200;
-
 const Root = styled.div`
   position: relative;
   box-shadow: 0px 2px 15px -5px rgba(0,0,0,0.6);
@@ -14,15 +12,16 @@ const Background = styled(Hammer)`
   position: relative;
   cursor: arrow;
   flex: 1 1 auto;
-  width: 30px;
+  width: 36px;
   height: 100%;
+  cursor: pointer;
 `;
 
 const Progress = styled.div`
   background: #000;
   position: absolute;
   bottom: 0;
-  width: 30px;
+  width: 36px;
   pointer-events: none;
 `;
 

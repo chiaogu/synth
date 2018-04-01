@@ -27,6 +27,7 @@ const Item = styled.div`
     text-align: center;
     cursor: default;
     user-select: none;
+    font-size: 16px;
 `;
 
 export default class Menu extends React.Component {
