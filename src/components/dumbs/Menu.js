@@ -46,10 +46,11 @@ export default class Menu extends React.Component {
     this.mapPropsToState(nextProps);
   }
 
-  mapPropsToState({ value, config: { choices = []} }) {
-    let selected = choices.findIndex(choice => choice.key === value);
+  mapPropsToState({ value, config: { defaultValue, choices = []} }) {
+    if(value === undefined) value = defaultValue
+    let selected = choices.findIndex(choice => choice.key === value)
     if(selected === -1){
-      selected = 0;
+      selected = 0
     }
 
     this.setState({ selected });

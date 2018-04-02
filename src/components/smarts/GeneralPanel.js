@@ -85,9 +85,9 @@ const StyledInputButton = styled(InputButton) `
 class GeneralPanel extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
-    const params = this.props.modules[this.props.index].params
-    const nextParams = nextProps.modules[nextProps.index].params
-    return !_.isEqual(params, nextParams)
+    const module = this.props.modules[this.props.index]
+    const nextModule = nextProps.modules[nextProps.index]
+    return !_.isEqual(module.params, nextModule.params) || !_.isEqual(module.config, nextModule.config)
   }
 
   onChange(control, value) {
