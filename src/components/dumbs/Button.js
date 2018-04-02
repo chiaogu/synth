@@ -28,9 +28,11 @@ export default class Button extends React.Component {
     this.mapPropsToState(nextProps);
   }
 
-  mapPropsToState({ value = false }) {
+  mapPropsToState({ value, config: { defaultValue } }) {
+    if(value === undefined) value = defaultValue
     this.setState({ pressed: value });
   }
+
 
   onMouseDown(e) {
     e.preventDefault()

@@ -57,10 +57,12 @@ export default class Range extends React.Component {
   }
 
   mapPropsToState(props) {
-    const { value = 0, config } = props;
-    const { max, min } = config;
-    const ratio = (value - min) / (max - min);
-    this.setState({ value, ratio });
+    let { value, config } = props
+    const { max, min, defaultValue } = config
+    if(value === undefined) value = defaultValue
+
+    const ratio = (value - min) / (max - min)
+    this.setState({ value, ratio })
   }
 
   onPan(e) {

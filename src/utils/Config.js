@@ -1,9 +1,32 @@
 import modules from '@assets/data/modules.json'
 
+const MODULES = () => JSON.parse(JSON.stringify(modules))
+
 const PRESET = () => ({
   "0": {
     "id": "0",
     "name": "test",
+    "modules": [
+      {
+        "id": "omniOscillator",
+        "params": {
+          "start": true,
+          "volume.value": 0,
+          "frequency.value": 220,
+          "type": "triangle"
+        }
+      },
+      {
+        "id": "freeverb"
+      },
+      {
+        "id": "master"
+      }
+    ]
+  },
+  "1": {
+    "id": "1",
+    "name": "testNo2",
     "modules": [
       {
         "id": "omniOscillator",
@@ -27,33 +50,6 @@ const PRESET = () => ({
         "id": "filter"
       },
       {
-        "id": "filter"
-      },
-      {
-        "id": "filter"
-      },
-      {
-        "id": "filter"
-      },
-      {
-        "id": "master"
-      }
-    ]
-  },
-  "1": {
-    "id": "1",
-    "name": "testNo2",
-    "modules": [
-      {
-        "id": "omniOscillator",
-        "params": {
-          "start": true,
-          "volume.value": -20,
-          "frequency.value": 220,
-          "type": "triangle"
-        }
-      },
-      {
         "id": "master"
       }
     ]
@@ -65,7 +61,7 @@ export function getPreset(id) {
 }
 
 export function getModule(id) {
-  const module = modules[id]
+  const module = MODULES()[id]
   if (module === undefined) {
     return Promise.reject(`Unsupported id: "${id}"`)
   }
@@ -74,7 +70,7 @@ export function getModule(id) {
 
 export function getModules(ids) {
   return Promise.resolve(ids.map(id => {
-    const module = modules[id]
+    const module = MODULES()[id]
     if (module === undefined) {
       throw new Error(`Unsupported id: "${id}"`)
     }
@@ -83,5 +79,5 @@ export function getModules(ids) {
 }
 
 export function findModules(params) {
-  return Promise.resolve(Object.values(modules))
+  return Promise.resolve(Object.values(MODULES()))
 }

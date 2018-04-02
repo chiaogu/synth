@@ -27,7 +27,8 @@ export default class Switch extends React.Component {
     this.mapPropsToState(nextProps);
   }
 
-  mapPropsToState({ value = false }) {
+  mapPropsToState({ value, config: { defaultValue } }) {
+    if(value === undefined) value = defaultValue
     this.setState({ selected: value });
   }
 
