@@ -11,22 +11,13 @@ const PRESET = () => ({
         "id": "omniOscillator",
         "params": {
           "start": true,
-          "volume.value": -20,
+          "volume.value": 0,
           "frequency.value": 220,
-          "type": "square"
+          "type": "triangle"
         }
       },
       {
-        "id": "amplitudeEnvelope",
-        "params": {
-          "attack": 0.1,
-          "decay": 0.2,
-          "sustain": 1,
-          "release": 0.8
-        }
-      },
-      {
-        "id": "filter"
+        "id": "freeverb"
       },
       {
         "id": "master"
@@ -43,7 +34,16 @@ const PRESET = () => ({
           "start": true,
           "volume.value": -20,
           "frequency.value": 220,
-          "type": "triangle"
+          "type": "square"
+        }
+      },
+      {
+        "id": "amplitudeEnvelope",
+        "params": {
+          "attack": 0.1,
+          "decay": 0.2,
+          "sustain": 1,
+          "release": 0.8
         }
       },
       {

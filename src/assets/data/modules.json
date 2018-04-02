@@ -186,9 +186,131 @@
     ]
   },
   "compressor": {
-
+    "id": "compressor",
+    "name": "Compressor",
+    "type": "Native",
+    "className": "Compressor",
+    "controls": [
+      {
+        "type": "range",
+        "name": "ratio",
+        "id": "ratio.value",
+        "min": 1,
+        "max": 20,
+        "defaultValue": 12
+      },
+      {
+        "type": "range",
+        "name": "threshold",
+        "id": "threshold.value",
+        "min": -40,
+        "max": 0,
+        "defaultValue": -24
+      },
+      {
+        "type": "range",
+        "name": "release",
+        "id": "release.value",
+        "min": 0,
+        "max": 1,
+        "defaultValue": 0.25
+      },
+      {
+        "type": "range",
+        "name": "attack",
+        "id": "attack.value",
+        "min": 0,
+        "max": 1,
+        "defaultValue": 0.003
+      },
+      {
+        "type": "range",
+        "name": "knee",
+        "id": "knee.value",
+        "min": 0,
+        "max": 40,
+        "defaultValue": 30
+      }
+    ]
   },
   "eq3": {
-
+    "id": "eq3",
+    "name": "EQ3",
+    "type": "Native",
+    "className": "EQ3",
+    "controls": [
+      {
+        "type": "range",
+        "name": "low",
+        "id": "low.value",
+        "min": -20,
+        "max": 20,
+        "defaultValue": 0
+      },
+      {
+        "type": "range",
+        "name": "mid",
+        "id": "mid.value",
+        "min": -20,
+        "max": 20,
+        "defaultValue": 0
+      },
+      {
+        "type": "range",
+        "name": "high",
+        "id": "high.value",
+        "min": -20,
+        "max": 20,
+        "defaultValue": 0
+      },
+      {
+        "type": "range",
+        "name": "lowFrequency",
+        "id": "lowFrequency.value",
+        "min": 0,
+        "max": 800,
+        "defaultValue": 400
+      },
+      {
+        "type": "range",
+        "name": "highFrequency",
+        "id": "highFrequency.value",
+        "min": 0,
+        "max": 5000,
+        "defaultValue": 2500
+      }
+    ]
+  },
+  "freeverb": {
+    "id": "freeverb",
+    "name": "Freeverb",
+    "type": "Native",
+    "className": "Freeverb",
+    "controls": [
+      {
+        "type": "range",
+        "name": "roomSize",
+        "id": "roomSize.value",
+        "min": 0,
+        "max": 1,
+        "defaultValue": 0.7
+      },
+      {
+        "type": "range",
+        "name": "dampening",
+        "id": "dampening.value",
+        "min": 0,
+        "max": 6000,
+        "defaultValue": 3000
+      },
+      {
+        "type": "range",
+        "name": "wet",
+        "id": "wet.value",
+        "min": 0,
+        "max": 1,
+        "defaultValue": 1
+      }
+    ]
   }
 }
