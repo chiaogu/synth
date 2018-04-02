@@ -22,21 +22,24 @@
             "true": "start",
             "false": "stop"
           }
-        }
+        },
+        "defaultValue": false
       },
       {
         "type": "range",
         "name": "volume",
         "id": "volume.value",
         "min": -40,
-        "max": 0
+        "max": 0,
+        "defaultValue": -20
       },
       {
         "type": "range",
         "name": "frequency",
         "id": "frequency.value",
         "min": 0,
-        "max": 440
+        "max": 880,
+        "defaultValue": 440
       },
       {
         "type": "menu",
@@ -64,7 +67,8 @@
           { "key": "pulsetriangle" },
           { "key": "pulsesawtooth" },
           { "key": "pwm" }
-        ]
+        ],
+        "defaultValue": "sine"
       }
     ]
   },
@@ -84,35 +88,40 @@
             "true": "triggerAttack",
             "false": "triggerRelease"
           }
-        }
+        },
+        "defaultValue": false
       },
       {
         "type": "range",
         "name": "attack",
         "id": "attack",
         "min": 0,
-        "max": 1
+        "max": 1,
+        "defaultValue": 0.01
       },
       {
         "type": "range",
         "name": "decay",
         "id": "decay",
         "min": 0,
-        "max": 1
+        "max": 1,
+        "defaultValue": 0.1
       },
       {
         "type": "range",
         "name": "sustain",
         "id": "sustain",
         "min": 0,
-        "max": 1
+        "max": 1,
+        "defaultValue": 0.5
       },
       {
         "type": "range",
         "name": "release",
         "id": "release",
         "min": 0,
-        "max": 1
+        "max": 1,
+        "defaultValue": 1
       }
     ]
   },
@@ -127,21 +136,24 @@
         "name": "Q",
         "id": "Q.value",
         "min": 0,
-        "max": 100
+        "max": 100,
+        "defaultValue": 1
       },
       {
         "type": "range",
         "name": "detune",
         "id": "detune",
         "min": 0,
-        "max": 100
+        "max": 100,
+        "defaultValue": 0
       },
       {
         "type": "range",
         "name": "frequency",
         "id": "frequency.value",
         "min": 0,
-        "max": 880
+        "max": 880,
+        "defaultValue": 350
       },
       {
         "type": "menu",
@@ -152,7 +164,8 @@
           { "key": -24 },
           { "key": -48 },
           { "key": -96 }
-        ]
+        ],
+        "defaultValue": -12
       },
       {
         "type": "menu",
@@ -167,7 +180,136 @@
           { "key": "notch" },
           { "key": "allpass" },
           { "key": "peaking" }
-        ]
+        ],
+        "defaultValue": "lowpass"
+      }
+    ]
+  },
+  "compressor": {
+    "id": "compressor",
+    "name": "Compressor",
+    "type": "Native",
+    "className": "Compressor",
+    "controls": [
+      {
+        "type": "range",
+        "name": "ratio",
+        "id": "ratio.value",
+        "min": 1,
+        "max": 20,
+        "defaultValue": 12
+      },
+      {
+        "type": "range",
+        "name": "threshold",
+        "id": "threshold.value",
+        "min": -40,
+        "max": 0,
+        "defaultValue": -24
+      },
+      {
+        "type": "range",
+        "name": "release",
+        "id": "release.value",
+        "min": 0,
+        "max": 1,
+        "defaultValue": 0.25
+      },
+      {
+        "type": "range",
+        "name": "attack",
+        "id": "attack.value",
+        "min": 0,
+        "max": 1,
+        "defaultValue": 0.003
+      },
+      {
+        "type": "range",
+        "name": "knee",
+        "id": "knee.value",
+        "min": 0,
+        "max": 40,
+        "defaultValue": 30
+      }
+    ]
+  },
+  "eq3": {
+    "id": "eq3",
+    "name": "EQ3",
+    "type": "Native",
+    "className": "EQ3",
+    "controls": [
+      {
+        "type": "range",
+        "name": "low",
+        "id": "low.value",
+        "min": -20,
+        "max": 20,
+        "defaultValue": 0
+      },
+      {
+        "type": "range",
+        "name": "mid",
+        "id": "mid.value",
+        "min": -20,
+        "max": 20,
+        "defaultValue": 0
+      },
+      {
+        "type": "range",
+        "name": "high",
+        "id": "high.value",
+        "min": -20,
+        "max": 20,
+        "defaultValue": 0
+      },
+      {
+        "type": "range",
+        "name": "lowFrequency",
+        "id": "lowFrequency.value",
+        "min": 0,
+        "max": 800,
+        "defaultValue": 400
+      },
+      {
+        "type": "range",
+        "name": "highFrequency",
+        "id": "highFrequency.value",
+        "min": 0,
+        "max": 5000,
+        "defaultValue": 2500
+      }
+    ]
+  },
+  "freeverb": {
+    "id": "freeverb",
+    "name": "Freeverb",
+    "type": "Native",
+    "className": "Freeverb",
+    "controls": [
+      {
+        "type": "range",
+        "name": "roomSize",
+        "id": "roomSize.value",
+        "min": 0,
+        "max": 1,
+        "defaultValue": 0.7
+      },
+      {
+        "type": "range",
+        "name": "dampening",
+        "id": "dampening.value",
+        "min": 0,
+        "max": 6000,
+        "defaultValue": 3000
+      },
+      {
+        "type": "range",
+        "name": "wet",
+        "id": "wet.value",
+        "min": 0,
+        "max": 1,
+        "defaultValue": 1
       }
     ]
   }
