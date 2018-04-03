@@ -127,6 +127,35 @@ const ModuleName = styled.div`
   `}
 `
 
+const CustomPanelWrapper = styled.div`
+  position: relative;
+  max-width: calc(100vw - 32px);
+  margin-bottom: 8px;
+  flex-shrink: 0;
+  transition: all ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
+  ${({ isEditing }) => isEditing ? `
+    height: 96px;
+    width: 96px;
+  ` : `
+    height calc(100vh - 76px);
+    width: 480px;
+  `}
+`
+
+const CustomPanel = styled.div`
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  background: #fff;
+  transition: all ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
+  ${({ isEditing }) => isEditing ? `
+    box-shadow: 0px 10px 44px -8px rgba(0,0,0,1);
+  ` : `
+    box-shadow: 0px 0px 150px -34px rgba(0,0,0,0.75);
+  `}
+`
+
 class Preset extends React.Component {
   componentDidMount() {
     this.loadModules(this.props)
@@ -198,6 +227,9 @@ class Preset extends React.Component {
           )}
         </ModuleFinderSpace>
         <ModuleList>
+          <CustomPanelWrapper isEditing={isEditing}>
+            <CustomPanel isEditing={isEditing}/>
+          </CustomPanelWrapper>
           <DndList
             droppableId={ID.PRESET}
             getItemStyle={() => ({
