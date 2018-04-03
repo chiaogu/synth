@@ -113,7 +113,7 @@ class ModuleFinder extends React.Component {
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as ModuleFinderActions from '@state/moduleFinder/actions'
+import * as ModuleFinderActions from '@flow/moduleFinder/actions'
 import * as Config from '@utils/Config'
 
 export default connect(

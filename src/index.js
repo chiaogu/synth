@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 
-import reducers from '@state/reducers'
+import reducers from '@flow/reducers'
 import App from '@components/App'
 import Core from '@core'
 import './styles'

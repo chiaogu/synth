@@ -67,7 +67,7 @@ class Playground extends React.Component {
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as PresetActions from '@state/preset/actions'
+import * as PresetActions from '@flow/preset/actions'
 import * as Config from '@utils/Config'
 
 export default connect(

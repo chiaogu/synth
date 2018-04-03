@@ -1,6 +1,6 @@
 import Module from './Module'
-import { TYPES as MODULES_ACTION } from '@state/modules/actions'
-import reduceModuleAction from '@state/modules/reducer'
+import { TYPES as MODULES_ACTION } from '@flow/modules/actions'
+import reduceModuleAction from '@flow/modules/reducer'
 
 export default class Core {
   constructor() {

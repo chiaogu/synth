@@ -66,8 +66,8 @@ export class DragDropHandler extends React.Component {
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as ModulesActions from '@state/modules/actions'
-import * as ModuleFinderActions from '@state/moduleFinder/actions'
+import * as ModulesActions from '@flow/modules/actions'
+import * as ModuleFinderActions from '@flow/moduleFinder/actions'
 
 export default connect(
   state => ({
