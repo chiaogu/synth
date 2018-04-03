@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Preset from '@components/smarts/Preset'
+import Preset from '@components/pages/Preset'
 
 const Root = styled.div`
   display: flex;

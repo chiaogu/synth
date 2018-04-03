@@ -19,7 +19,7 @@ const TrashCanWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #333;
+  background: #000;
 `
 
 const TrashCan = styled.div`

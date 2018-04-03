@@ -34,7 +34,7 @@ const ModuleFinderSpace = styled.div `
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #333;
+  background: #000;
   transition: width ${EDIT_MODE_TRANSITION / 1000}s;
   transition-timing-function: ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
@@ -50,27 +50,35 @@ const ModuleFinderSpace = styled.div `
 const StyledModuleFinder = styled(ModuleFinder)`
   width: 100%;
   height: 100%;
-  background: #333;
+  background: #000;
 `
 
-const ModuleFinderToggle = styled.div`
+const TopBarButton = styled.div`
   position: absolute;
+  top: 16px;
   z-index: 2;
   width: 36px;
   height: 36px;
-  margin: 16px 0 0 16px;
-  flex: 0 0 auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #333;
+  background: #000;
   color: white;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+`
+
+const ModuleFinderToggle = TopBarButton.extend`
+  left: 68px;
   ${({ isEditing }) => isEditing ? `
   ` : `
     box-shadow: 0px 10px 27px -8px rgba(0,0,0,1);
   `}
+`
+
+const BackButton = TopBarButton.extend`
+  left: 16px;
+  box-shadow: 0px 10px 27px -8px rgba(0,0,0,1);
 `
 
 const StyledPanel = styled(Panel) `
@@ -177,16 +185,18 @@ class Preset extends React.Component {
 
     return (
       <Root className={this.props.className} isEditing={isEditing}>
+        <ModuleFinderToggle
+          isEditing={isEditing}
+          onClick={e => setEditMode(!isEditing)}
+        >
+          { isModuleFinderShown ? '←' : '→'}
+        </ModuleFinderToggle>
+        <BackButton>↑</BackButton>
         <ModuleFinderSpace isEditing={isEditing} >
           {!isModuleFinderShown ? null : (
             <StyledModuleFinder/>
           )}
         </ModuleFinderSpace>
-
-        <ModuleFinderToggle
-          isEditing={isEditing}
-          onClick={e => setEditMode(!isEditing)}
-        >X</ModuleFinderToggle>
         <ModuleList>
           <DndList
             droppableId={ID.PRESET}
