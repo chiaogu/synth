@@ -6,6 +6,7 @@ import Panel from '@components/smarts/Panel'
 import ModuleFinder from '@components/smarts/ModuleFinder'
 import DndList from '@components/dumbs/DndList'
 import { ID } from '@components/smarts/DragDropHandler'
+import CustomPanel from '@components/smarts/CustomPanel'
 
 const EDIT_MODE_TRANSITION = 600
 const TRANSITION_TIMEING_FUNC_IN = 'cubic-bezier(0.86, 0, 0.07, 1)';
@@ -137,23 +138,17 @@ const CustomPanelWrapper = styled.div`
     height: 96px;
     width: 96px;
   ` : `
-    height calc(100vh - 76px);
+    height: calc(100vh - 76px);
     width: 480px;
   `}
 `
 
-const CustomPanel = styled.div`
+const StyledCustomPanel = styled(CustomPanel)`
   position: absolute;
   z-index: 1;
   height: 100%;
   width: 100%;
-  background: #fff;
   transition: all ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
-  ${({ isEditing }) => isEditing ? `
-    box-shadow: 0px 10px 44px -8px rgba(0,0,0,1);
-  ` : `
-    box-shadow: 0px 0px 150px -34px rgba(0,0,0,0.75);
-  `}
 `
 
 class Preset extends React.Component {
@@ -228,7 +223,7 @@ class Preset extends React.Component {
         </ModuleFinderSpace>
         <ModuleList>
           <CustomPanelWrapper isEditing={isEditing}>
-            <CustomPanel isEditing={isEditing}/>
+            <StyledCustomPanel isEditing={isEditing}/>
           </CustomPanelWrapper>
           <DndList
             droppableId={ID.PRESET}
