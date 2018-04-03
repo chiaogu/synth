@@ -39,7 +39,7 @@ export default class Module {
       this.instance[name]()
     }else {
       _.set(this.instance, key, value)
-      console.log(_.get(this.instance, key))
+      // console.log(_.get(this.instance, key))
     }
   }
 

@@ -46,6 +46,7 @@ const ModuleWrapper = styled.div`
 `
 
 const Module = styled.div`
+  position: absolute;
   width: 96px;
   height: 96px;
   display: flex;
@@ -94,6 +95,8 @@ class ModuleFinder extends React.Component {
                 data={[module]}
                 isDropDisabled={true}
                 getItemStyle={() => ({
+                  width: '96px',
+                  height: '96px',
                   margin: '0 0 8px 0',
                   boxShadow: '0px 10px 44px -8px rgba(0,0,0,1)'
                 })}
