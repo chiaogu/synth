@@ -14,7 +14,7 @@ export default ({ prod } = {}) => ({
   resolve: {
     alias: {
       '@components': path.join(path.resolve(__dirname, "src"), 'components'),
-      '@state': path.join(path.resolve(__dirname, "src"), 'state'),
+      '@flow': path.join(path.resolve(__dirname, "src"), 'flow'),
       '@core': path.join(path.resolve(__dirname, "src"), 'core'),
       '@utils': path.join(path.resolve(__dirname, "src"), 'utils'),
       '@assets': path.join(path.resolve(__dirname, "src"), 'assets')

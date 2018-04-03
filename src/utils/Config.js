@@ -17,6 +17,9 @@ const PRESET = () => ({
         }
       },
       {
+        "id": "amplitudeEnvelope",
+      },
+      {
         "id": "freeverb"
       },
       {

@@ -162,7 +162,7 @@ class GeneralPanel extends React.Component {
 
 
 import { connect } from 'react-redux'
-import { setParameter } from '@state/modules/actions'
+import { setParameter } from '@flow/modules/actions'
 
 export default connect(
   state => ({

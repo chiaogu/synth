@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Preset from '@components/smarts/Preset'
+import Preset from '@components/pages/Preset'
 
 const Root = styled.div`
   display: flex;
@@ -67,7 +67,7 @@ class Playground extends React.Component {
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as PresetActions from '@state/preset/actions'
+import * as PresetActions from '@flow/preset/actions'
 import * as Config from '@utils/Config'
 
 export default connect(
