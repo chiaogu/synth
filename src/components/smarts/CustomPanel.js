@@ -4,55 +4,51 @@ import Button from '@components/dumbs/Button'
 import { noteToFrequency } from '@utils/converter'
 
 const Root = styled.div`
+  position: relative;
   overflow: auto;
 `
 
-const Grid = styled.div`
-  margin: 16px;
-  display: grid;
-  grid-gap: 8px;
-  grid-template-columns: repeat(auto-fit, 64px);
-  justify-content: center;
+const StyledButton = styled(Button)`
+  position: absolute;
 `
-
-const Pad = styled(Button)`
-  width: 64px;
-  height: 64px;
-`
-
-const NOTES = [
-  'C3', 'D3', 'E3', 'F3',
-  'G3', 'A3', 'B3', 'C4',
-  'D4', 'E4', 'F4', 'G4',
-  'A4', 'B4', 'C5', 'D5',
-  'E5', 'F5', 'G5', 'A5',
-  'B5', 'C6', 'D6', 'E6'
-]
 
 export class CustomPanel extends React.Component {
 
-  onChange(freq, pressed) {
+  onChange({ actions = [] }, pressed) {
     const { setParameter } = this.props
-    if(pressed){
-      setParameter(0, 'frequency.value', freq)
+    actions.forEach(({ index, id, params }) => {
+      let value = pressed
+      if(params === undefined){
+        setParameter(index, id, value)
+        console.log('setParameter', index, id, value)
+      }else {
+        value = params[value]
+        if(value !== undefined) {
+          setParameter(index, id, value)
+          console.log('setParameter', index, id, value)
+        }
+      }
+    });
+  }
+
+  controlToComponent(index, control) {
+    switch (control.type) {
+      case 'button':
+        return <StyledButton
+          key={index}
+          style={control.style}
+          onToggle={pressed => this.onChange(control, pressed)}
+        />
     }
-    setParameter(1, 'trigger', pressed)
   }
 
   render() {
+    const { preset: { panels: [ panel ] = [] } } = this.props
+    const { controls } = panel
+    console.log(controls)
     return (
       <Root className={this.props.className}>
-        <Grid>
-          {NOTES
-            .map(note => ({note, freq: noteToFrequency(note)}))
-            .map(({note, freq}, index) => (
-              <Pad
-                key={index}
-                config={{ defaultValue: false }}
-                onToggle={pressed => this.onChange(freq, pressed)}
-              />
-          ))}
-        </Grid>
+        {controls.map((control, index) => this.controlToComponent(index, control))}
       </Root>
     )
   }
@@ -62,7 +58,9 @@ import { connect } from 'react-redux'
 import { setParameter } from '@flow/modules/actions'
 
 export default connect(
-  state => ({}),
+  state => ({
+    preset: state.preset.preset,
+  }),
   dispatch => ({
     setParameter(moduleIndex, controlName, value) {
       dispatch(setParameter(moduleIndex, controlName, value))

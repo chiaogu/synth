@@ -29,7 +29,47 @@ const PRESET = () => ({
     "panels": [
       {
         "controls": [
-
+          {
+            "type": "button",
+            "style": {
+              "width": '200px',
+              "height": '50px',
+              "left": '116px',
+              "top": 0
+            },
+            "actions": [
+              {
+                "index": 1,
+                "id": "trigger"
+              },
+              {
+                "index": 0,
+                "id": "frequency.value",
+                "params": {
+                  "true": 880
+                }
+              }
+            ]
+          },
+          {
+            "type": "button",
+            "style": {
+              "width": '100px',
+              "height": '100px',
+              "left": '8px',
+              "top": '0'
+            },
+            "actions": [
+              {
+                "index": 2,
+                "id": "wet.value",
+                "params": {
+                  "true": 0,
+                  "false": 1
+                }
+              }
+            ]
+          }
         ]
       }
     ]
