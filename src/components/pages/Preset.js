@@ -130,16 +130,16 @@ const ModuleName = styled.div`
 
 const CustomPanelWrapper = styled.div`
   position: relative;
-  max-width: calc(100vw - 32px);
-  margin-bottom: 8px;
   flex-shrink: 0;
   transition: all ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
-    height: 96px;
+    height: 0;
     width: 96px;
+    margin-bottom: 0;
   ` : `
     height: calc(100vh - 76px);
-    width: 480px;
+    width: calc(100vw - 32px);
+    margin-bottom: 8px;
   `}
 `
 
@@ -223,7 +223,9 @@ class Preset extends React.Component {
         </ModuleFinderSpace>
         <ModuleList>
           <CustomPanelWrapper isEditing={isEditing}>
-            <StyledCustomPanel isEditing={isEditing}/>
+            {isPanelEditing ? null : (
+              <StyledCustomPanel/>
+            )}
           </CustomPanelWrapper>
           <DndList
             droppableId={ID.PRESET}

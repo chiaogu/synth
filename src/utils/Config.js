@@ -25,6 +25,13 @@ const PRESET = () => ({
       {
         "id": "master"
       }
+    ],
+    "panels": [
+      {
+        "controls": [
+
+        ]
+      }
     ]
   },
   "1": {

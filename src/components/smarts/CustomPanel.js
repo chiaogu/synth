@@ -4,8 +4,7 @@ import Button from '@components/dumbs/Button'
 import { noteToFrequency } from '@utils/converter'
 
 const Root = styled.div`
-  background: #fff;
-  overflow: hidden;
+  overflow: auto;
 `
 
 const Grid = styled.div`
