@@ -62,6 +62,26 @@ const PRESET = () => ({
                 }
               }
             ]
+          },
+          {
+            "type": "slider",
+            "style": {
+              "width": '100px',
+              "height": '300px',
+              "left": '8px',
+              "top": '108px'
+            },
+            "config": {
+              "max": 880,
+              "min": 0,
+              "defaultValue": 220
+            },
+            "actions": [
+              {
+                "index": 0,
+                "id": "frequency.value"
+              }
+            ]
           }
         ]
       }

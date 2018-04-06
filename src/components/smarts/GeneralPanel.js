@@ -64,6 +64,7 @@ const StyledMenu = styled(Menu) `
 `
 
 const StyledSlider = styled(Slider) `
+  width: 36px;
   height: 100%;
 `
 

@@ -12,7 +12,7 @@ const Background = styled(Hammer)`
   position: relative;
   cursor: arrow;
   flex: 1 1 auto;
-  width: 36px;
+  width: 100%;
   height: 100%;
   cursor: pointer;
 `;
@@ -21,7 +21,7 @@ const Progress = styled.div`
   background: #000;
   position: absolute;
   bottom: 0;
-  width: 36px;
+  width: 100%;
   pointer-events: none;
 `;
 
@@ -83,8 +83,9 @@ export default class Slider extends React.Component {
   }
 
   render() {
+    const { style } = this.props;
     return (
-      <Root className={this.props.className}>
+      <Root className={this.props.className} style={style} >
         <Background direction={'DIRECTION_ALL'} onPan={e => this.onPan(e)}>
           <div>
             <Progress style={{ height: this.state.ratio * 100 + '%' }} />
