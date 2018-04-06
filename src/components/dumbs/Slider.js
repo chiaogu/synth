@@ -40,7 +40,7 @@ const Value = styled.div`
 `;
 
 
-export default class Range extends React.Component {
+export default class Slider extends React.Component {
 
   constructor(props) {
     super(props);

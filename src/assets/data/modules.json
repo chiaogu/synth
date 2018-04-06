@@ -26,7 +26,7 @@
         "defaultValue": false
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "volume",
         "id": "volume.value",
         "min": -40,
@@ -34,7 +34,7 @@
         "defaultValue": -20
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "frequency",
         "id": "frequency.value",
         "min": 0,
@@ -92,7 +92,7 @@
         "defaultValue": false
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "attack",
         "id": "attack",
         "min": 0,
@@ -100,7 +100,7 @@
         "defaultValue": 0.01
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "decay",
         "id": "decay",
         "min": 0,
@@ -108,7 +108,7 @@
         "defaultValue": 0.1
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "sustain",
         "id": "sustain",
         "min": 0,
@@ -116,7 +116,7 @@
         "defaultValue": 0.5
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "release",
         "id": "release",
         "min": 0,
@@ -132,7 +132,7 @@
     "className": "Filter",
     "controls": [
       {
-        "type": "range",
+        "type": "slider",
         "name": "Q",
         "id": "Q.value",
         "min": 0,
@@ -140,7 +140,7 @@
         "defaultValue": 1
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "detune",
         "id": "detune",
         "min": 0,
@@ -148,7 +148,7 @@
         "defaultValue": 0
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "frequency",
         "id": "frequency.value",
         "min": 0,
@@ -192,7 +192,7 @@
     "className": "Compressor",
     "controls": [
       {
-        "type": "range",
+        "type": "slider",
         "name": "ratio",
         "id": "ratio.value",
         "min": 1,
@@ -200,7 +200,7 @@
         "defaultValue": 12
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "threshold",
         "id": "threshold.value",
         "min": -40,
@@ -208,7 +208,7 @@
         "defaultValue": -24
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "release",
         "id": "release.value",
         "min": 0,
@@ -216,7 +216,7 @@
         "defaultValue": 0.25
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "attack",
         "id": "attack.value",
         "min": 0,
@@ -224,7 +224,7 @@
         "defaultValue": 0.003
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "knee",
         "id": "knee.value",
         "min": 0,
@@ -240,7 +240,7 @@
     "className": "EQ3",
     "controls": [
       {
-        "type": "range",
+        "type": "slider",
         "name": "low",
         "id": "low.value",
         "min": -20,
@@ -248,7 +248,7 @@
         "defaultValue": 0
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "mid",
         "id": "mid.value",
         "min": -20,
@@ -256,7 +256,7 @@
         "defaultValue": 0
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "high",
         "id": "high.value",
         "min": -20,
@@ -264,7 +264,7 @@
         "defaultValue": 0
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "lowFrequency",
         "id": "lowFrequency.value",
         "min": 0,
@@ -272,7 +272,7 @@
         "defaultValue": 400
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "highFrequency",
         "id": "highFrequency.value",
         "min": 0,
@@ -288,7 +288,7 @@
     "className": "Freeverb",
     "controls": [
       {
-        "type": "range",
+        "type": "slider",
         "name": "roomSize",
         "id": "roomSize.value",
         "min": 0,
@@ -296,7 +296,7 @@
         "defaultValue": 0.7
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "dampening",
         "id": "dampening.value",
         "min": 0,
@@ -304,7 +304,7 @@
         "defaultValue": 3000
       },
       {
-        "type": "range",
+        "type": "slider",
         "name": "wet",
         "id": "wet.value",
         "min": 0,
