@@ -27,7 +27,7 @@ export default class Switch extends React.Component {
     this.mapPropsToState(nextProps);
   }
 
-  mapPropsToState({ value, config: { defaultValue } }) {
+  mapPropsToState({ value, config: { defaultValue } = {} }) {
     if(value === undefined) value = defaultValue
     this.setState({ selected: value });
   }
@@ -42,11 +42,14 @@ export default class Switch extends React.Component {
   }
 
   render() {
-    const state = this.state.selected ? 'on' : 'off';
+    const { style: propsStyle } = this.props
+    const { selected } = this.state
+    const state = selected ? 'on' : 'off'
     const style = {
-      background: this.state.selected ? '#000' : '#fff',
-      color: this.state.selected ? '#fff' : '#000'
-    };
+      background: selected ? '#000' : '#fff',
+      color: selected ? '#fff' : '#000',
+      ...propsStyle
+    }
 
     return (
       <Root

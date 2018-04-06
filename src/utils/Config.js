@@ -41,18 +41,11 @@ const PRESET = () => ({
               {
                 "index": 1,
                 "id": "trigger"
-              },
-              {
-                "index": 0,
-                "id": "frequency.value",
-                "params": {
-                  "true": 880
-                }
               }
             ]
           },
           {
-            "type": "button",
+            "type": "switch",
             "style": {
               "width": '100px',
               "height": '100px',
@@ -61,11 +54,11 @@ const PRESET = () => ({
             },
             "actions": [
               {
-                "index": 2,
-                "id": "wet.value",
+                "index": 0,
+                "id": "type",
                 "params": {
-                  "true": 0,
-                  "false": 1
+                  "true": 'square',
+                  "false": 'sawtooth'
                 }
               }
             ]

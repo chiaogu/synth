@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Button from '@components/dumbs/Button'
+import Switch from '@components/dumbs/Switch'
 import { noteToFrequency } from '@utils/converter'
 
 const Root = styled.div`
@@ -12,6 +13,10 @@ const StyledButton = styled(Button)`
   position: absolute;
 `
 
+const StyledSwitch = styled(Switch)`
+  position: absolute;
+`
+
 export class CustomPanel extends React.Component {
 
   onChange({ actions = [] }, pressed) {
@@ -20,12 +25,10 @@ export class CustomPanel extends React.Component {
       let value = pressed
       if(params === undefined){
         setParameter(index, id, value)
-        console.log('setParameter', index, id, value)
       }else {
         value = params[value]
         if(value !== undefined) {
           setParameter(index, id, value)
-          console.log('setParameter', index, id, value)
         }
       }
     });
@@ -38,6 +41,12 @@ export class CustomPanel extends React.Component {
           key={index}
           style={control.style}
           onToggle={pressed => this.onChange(control, pressed)}
+        />
+      case 'switch':
+        return <StyledSwitch
+          key={index}
+          style={control.style}
+          onToggle={selected => this.onChange(control, selected)}
         />
     }
   }
