@@ -63,8 +63,8 @@ export class CustomPanel extends React.Component {
   }
 
   render() {
-    const { preset: { panels: [ panel ] = [] } } = this.props
-    const { controls } = panel
+    const { preset: { panels: [ panel = {} ] = [] } = {} } = this.props
+    const { controls = [] } = panel
     console.log(controls)
     return (
       <Root className={this.props.className}>
