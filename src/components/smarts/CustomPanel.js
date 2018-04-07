@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { DragSource } from 'react-dnd';
 import Button from '@components/dumbs/Button'
 import Switch from '@components/dumbs/Switch'
 import Slider from '@components/dumbs/Slider'
@@ -21,6 +22,33 @@ const StyledSwitch = styled(Switch)`
 const StyledSlider = styled(Slider)`
   position: absolute;
 `
+
+const Draggable = DragSource('CONTROL', {
+  beginDrag({ children }) {
+    return children;
+  },
+  endDrag(props, monitor, component) {
+    if (!monitor.didDrop()) {
+      return;
+    }
+    const item = monitor.getItem();
+    const dropResult = monitor.getDropResult();
+  }
+}, (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging()
+}))((props) => {
+  const { connectDragSource, isDragging, children } = props
+  return connectDragSource(
+    <div style={{
+      display: isDragging ? 'none' : 'block',
+      cursor: '-webkit-grab',
+      userSelect: 'none'
+    }}>
+      {children}
+    </div>
+  )
+})
 
 export class CustomPanel extends React.Component {
 
@@ -65,10 +93,14 @@ export class CustomPanel extends React.Component {
   render() {
     const { preset: { panels: [ panel = {} ] = [] } = {} } = this.props
     const { controls = [] } = panel
-    console.log(controls)
+
     return (
       <Root className={this.props.className}>
-        {controls.map((control, index) => this.controlToComponent(index, control))}
+        {controls.map((control, index) => (
+          <Draggable key={index}>
+            {this.controlToComponent(index, control)}
+          </Draggable>
+        ))}
       </Root>
     )
   }
