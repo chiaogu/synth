@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { DragSource } from 'react-dnd';
 import Button from '@components/dumbs/Button'
 import Switch from '@components/dumbs/Switch'
 import Slider from '@components/dumbs/Slider'
+import Draggable from '@components/smarts/Draggable'
+import Droppable from '@components/smarts/Droppable'
 import { noteToFrequency } from '@utils/converter'
 
 const Root = styled.div`
@@ -12,43 +13,36 @@ const Root = styled.div`
 `
 
 const StyledButton = styled(Button)`
-  position: absolute;
+  width: 100%;
+  height: 100%;
+  ${({ isEditingPanel }) => isEditingPanel ? `
+    pointer-events: none;
+  ` : ``}
 `
 
 const StyledSwitch = styled(Switch)`
-  position: absolute;
+  width: 100%;
+  height: 100%;
+  ${({ isEditingPanel }) => isEditingPanel ? `
+    pointer-events: none;
+  ` : ``}
 `
 
 const StyledSlider = styled(Slider)`
+  width: 100%;
+  height: 100%;
+  ${({ isEditingPanel }) => isEditingPanel ? `
+    pointer-events: none;
+  ` : ``}
+`
+
+const ControlWrapper = styled.div`
   position: absolute;
 `
 
-const Draggable = DragSource('CONTROL', {
-  beginDrag({ children }) {
-    return children;
-  },
-  endDrag(props, monitor, component) {
-    if (!monitor.didDrop()) {
-      return;
-    }
-    const item = monitor.getItem();
-    const dropResult = monitor.getDropResult();
-  }
-}, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging()
-}))((props) => {
-  const { connectDragSource, isDragging, children } = props
-  return connectDragSource(
-    <div style={{
-      display: isDragging ? 'none' : 'block',
-      cursor: '-webkit-grab',
-      userSelect: 'none'
-    }}>
-      {children}
-    </div>
-  )
-})
+const StyledDroppable = styled(Droppable)`
+  height: 100%;
+`
 
 export class CustomPanel extends React.Component {
 
@@ -67,41 +61,49 @@ export class CustomPanel extends React.Component {
     });
   }
 
-  controlToComponent(index, control) {
+  controlToComponent(index, control, isEditingPanel) {
     switch (control.type) {
       case 'button':
         return <StyledButton
           key={index}
-          style={control.style}
+          isEditingPanel={isEditingPanel}
           onToggle={pressed => this.onChange(control, pressed)}/>
 
       case 'switch':
         return <StyledSwitch
           key={index}
-          style={control.style}
+          isEditingPanel={isEditingPanel}
           onToggle={selected => this.onChange(control, selected)}/>
 
       case 'slider':
         return <StyledSlider
           key={index}
-          style={control.style}
           config={control.config}
+          isEditingPanel={isEditingPanel}
           onChange={value => this.onChange(control, value)}/>
     }
   }
 
   render() {
-    const { preset: { panels: [ panel = {} ] = [] } = {} } = this.props
+    const {
+      preset: { panels: [ panel = {} ] = [] } = {},
+      isEditingPanel
+    } = this.props
+
     const { controls = [] } = panel
 
     return (
-      <Root className={this.props.className}>
-        {controls.map((control, index) => (
-          <Draggable key={index}>
-            {this.controlToComponent(index, control)}
-          </Draggable>
-        ))}
-      </Root>
+      <StyledDroppable>
+        <Root className={this.props.className}>
+          {controls.map((control, index) => (
+            <Draggable key={index} canDrag={() => isEditingPanel}>
+              <ControlWrapper style={control.style}>
+                {this.controlToComponent(index, control, isEditingPanel)}
+              </ControlWrapper>
+            </Draggable>
+          ))}
+        </Root>
+      </StyledDroppable>
     )
   }
 }
@@ -112,6 +114,7 @@ import { setParameter } from '@flow/modules/actions'
 export default connect(
   state => ({
     preset: state.preset.preset,
+    isEditingPanel:  state.preset.isEditingPanel
   }),
   dispatch => ({
     setParameter(moduleIndex, controlName, value) {

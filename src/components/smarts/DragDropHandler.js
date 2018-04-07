@@ -1,8 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import { DragDropContext as BeautifulDnDContext } from 'react-beautiful-dnd';
-import TouchBackend from 'react-dnd-touch-backend';
-import { DragDropContext } from 'react-dnd';
+import React from 'react'
+import styled from 'styled-components'
+import { DragDropContext as BeautifulDnDContext } from 'react-beautiful-dnd'
+import TouchBackend from 'react-dnd-touch-backend'
+import { DragDropContext } from 'react-dnd'
 import DragLayer from '@components/smarts/DragLayer'
 
 const Root = styled.div`

@@ -256,17 +256,13 @@ class Preset extends React.Component {
           </ControlFinderSpace>
           <Row>
             <ModuleFinderSpace isEditing={isEditing} >
-              {!isModuleFinderShown ? null : (
-                <StyledModuleFinder/>
-              )}
+              {isModuleFinderShown && <StyledModuleFinder/>}
             </ModuleFinderSpace>
             <ModuleList
               isEditingPanel={isEditingPanel}
               isTrashCanVisible={isTrashCanVisible}>
               <CustomPanelWrapper isEditing={isEditing}>
-                {isPanelHide ? null : (
-                  <StyledCustomPanel/>
-                )}
+                {!isPanelHide && <StyledCustomPanel/>}
               </CustomPanelWrapper>
               <DndList
                 droppableId={ID.PRESET}
@@ -282,9 +278,7 @@ class Preset extends React.Component {
                     <ModuleName isEditing={isEditing}>
                       {module.config.name}
                     </ModuleName>
-                    {isPanelHide ? null :(
-                      <StyledPanel index={index} module={module} />
-                    )}
+                    {!isPanelHide && <StyledPanel index={index} module={module} />}
                   </Module>
                 )}>
               </DndList>
