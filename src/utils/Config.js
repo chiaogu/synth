@@ -25,6 +25,66 @@ const PRESET = () => ({
       {
         "id": "master"
       }
+    ],
+    "panels": [
+      {
+        "controls": [
+          {
+            "type": "button",
+            "style": {
+              "width": 200,
+              "height": 50,
+              "left": 116,
+              "top": 0
+            },
+            "actions": [
+              {
+                "index": 1,
+                "id": "trigger"
+              }
+            ]
+          },
+          {
+            "type": "switch",
+            "style": {
+              "width": 100,
+              "height": 100,
+              "left": 8,
+              "top": 0
+            },
+            "actions": [
+              {
+                "index": 0,
+                "id": "type",
+                "params": {
+                  "true": 'square',
+                  "false": 'sawtooth'
+                }
+              }
+            ]
+          },
+          {
+            "type": "slider",
+            "style": {
+              "width": 100,
+              "height": 300,
+              "left": 8,
+              "top": 108
+            },
+            "config": {
+              "max": 880,
+              "min": 0,
+              "defaultValue": 220
+            },
+            "actions": [
+              {
+                "index": 0,
+                "id": "frequency.value"
+              }
+            ]
+          }
+        ]
+      }
     ]
   },
   "1": {

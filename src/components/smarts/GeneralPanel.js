@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import _ from '@utils/lodash'
-import Range from '@components/dumbs/Range'
+import Slider from '@components/dumbs/Slider'
 import Menu from '@components/dumbs/Menu'
 import Switch from '@components/dumbs/Switch'
 import Button from '@components/dumbs/Button'
@@ -63,7 +63,8 @@ const StyledMenu = styled(Menu) `
   height: 100%;
 `
 
-const StyledRange = styled(Range) `
+const StyledSlider = styled(Slider) `
+  width: 36px;
   height: 100%;
 `
 
@@ -98,8 +99,8 @@ class GeneralPanel extends React.Component {
 
   controlToComponent(control, param) {
     switch (control.type) {
-      case 'range':
-        return <StyledRange
+      case 'slider':
+        return <StyledSlider
           config={control}
           value={param}
           onChange={value => this.onChange(control, value)}

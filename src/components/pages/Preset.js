@@ -15,7 +15,6 @@ const Root = styled.div`
   display: flex;
   position: relative;
   width: 100%;
-  transition: width ${EDIT_MODE_TRANSITION / 1000}s;
 `
 
 const ModuleList = styled.div`
@@ -25,8 +24,16 @@ const ModuleList = styled.div`
   align-items: center;
   position: relative;
   overflow: auto;
-  padding: 68px 0 8px 0;
-  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+  transition: padding ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
+  ${({ isEditing }) => isEditing ? `
+    padding-top: 68px;
+  ` : `
+    padding-top: 0;
+  `}
+  ${({ isTrashCanVisible }) => isTrashCanVisible ? `` : `
+    -webkit-overflow-scrolling: touch;
+  `}
 `
 
 const ModuleFinderSpace = styled.div `
@@ -36,8 +43,7 @@ const ModuleFinderSpace = styled.div `
   align-items: center;
   justify-content: center;
   background: #000;
-  transition: width ${EDIT_MODE_TRANSITION / 1000}s;
-  transition-timing-function: ${TRANSITION_TIMEING_FUNC_IN};
+  transition: width ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
     width: 480px;
     @media screen and (max-width: 960px) {
@@ -92,8 +98,7 @@ const Module = styled.div`
   position: relative;
   flex-shrink: 0;
   background: white;
-  transition: all ${EDIT_MODE_TRANSITION / 1000}s;
-  transition-timing-function: ${TRANSITION_TIMEING_FUNC_IN};
+  transition: all ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
     width: 96px;
     height: 96px;
@@ -117,8 +122,7 @@ const ModuleName = styled.div`
   pointer-events: none;
   overflow: hidden;
   user-select: none;
-  transition: all ${EDIT_MODE_TRANSITION / 1000}s;
-  transition-timing-function: ${TRANSITION_TIMEING_FUNC_IN};
+  transition: all ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
     height: 100%;
     font-size: 16px;
@@ -130,16 +134,16 @@ const ModuleName = styled.div`
 
 const CustomPanelWrapper = styled.div`
   position: relative;
-  max-width: calc(100vw - 32px);
-  margin-bottom: 8px;
   flex-shrink: 0;
   transition: all ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditing }) => isEditing ? `
-    height: 96px;
+    height: 0;
     width: 96px;
+    margin-bottom: 0;
   ` : `
-    height: calc(100vh - 76px);
-    width: 480px;
+    height: 100vh;
+    width: 100vw;
+    margin-bottom: 8px;
   `}
 `
 
@@ -151,6 +155,28 @@ const StyledCustomPanel = styled(CustomPanel)`
   transition: all ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
 `
 
+const Column = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
+const Row = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+`
+
+const ControlFinderSpace = styled.div`
+  background: #000;
+  transition: height ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
+  ${({ isEditingPanel }) => isEditingPanel ? `
+    height: 480px;
+  ` : `
+    height: 0
+  `}
+`
+
 class Preset extends React.Component {
   componentDidMount() {
     this.loadModules(this.props)
@@ -159,9 +185,13 @@ class Preset extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     const modulesChanged = !_.isEqual(this.props.modules, nextProps.modules)
     const isEditedChanged = this.props.isEditing !== nextProps.isEditing
-    const isPanelEditingChanged = this.state.isPanelEditing !== nextState.isPanelEditing
+    const isEditingPanelChanged = this.props.isEditingPanel !== nextProps.isEditingPanel
+    const isPanelHideChanged = this.state.isPanelHide !== nextState.isPanelHide
     const isModuleFinderShownChanged = this.state.isModuleFinderShown !== nextState.isModuleFinderShown
-    return modulesChanged || isEditedChanged || isPanelEditingChanged || isModuleFinderShownChanged
+    const isTrashCanVisibleChanged = this.props.isTrashCanVisible !== nextProps.isTrashCanVisible
+    return modulesChanged || isEditedChanged || isPanelHideChanged
+      ||isModuleFinderShownChanged || isEditingPanelChanged
+      || isTrashCanVisibleChanged
   }
 
   componentWillReceiveProps(nextProps) {
@@ -171,11 +201,11 @@ class Preset extends React.Component {
 
     const isEditing = nextProps.isEditing
     if (isEditing){
-      this.setState({ isPanelEditing: true })
+      this.setState({ isPanelHide: true })
       setTimeout(() => this.setState({ isModuleFinderShown: true }), EDIT_MODE_TRANSITION)
     }else{
       this.setState({ isModuleFinderShown: false })
-      setTimeout(() => this.setState({ isPanelEditing: false }), EDIT_MODE_TRANSITION)
+      setTimeout(() => this.setState({ isPanelHide: false }), EDIT_MODE_TRANSITION)
     }
   }
 
@@ -188,7 +218,7 @@ class Preset extends React.Component {
     super(props)
 
     this.state = {
-      isPanelEditing: false,
+      isPanelHide: false,
       isModuleFinderShown: false
     }
   }
@@ -196,14 +226,17 @@ class Preset extends React.Component {
   render() {
     const {
       isEditing,
+      isEditingPanel,
+      isTrashCanVisible,
       preset = {},
       modules,
       loadPreset,
       loadModules,
-      setEditMode
+      setEditMode,
+      setEditPanel
     } = this.props
     const {
-      isPanelEditing,
+      isPanelHide,
       isModuleFinderShown
     } = this.state
 
@@ -211,41 +244,47 @@ class Preset extends React.Component {
       <Root className={this.props.className} isEditing={isEditing}>
         <ModuleFinderToggle
           isEditing={isEditing}
-          onClick={e => setEditMode(!isEditing)}
-        >
+          onClick={e => setEditMode(!isEditing)}>
           { isModuleFinderShown ? '←' : '→'}
         </ModuleFinderToggle>
-        <BackButton>↑</BackButton>
-        <ModuleFinderSpace isEditing={isEditing} >
-          {!isModuleFinderShown ? null : (
-            <StyledModuleFinder/>
-          )}
-        </ModuleFinderSpace>
-        <ModuleList>
-          <CustomPanelWrapper isEditing={isEditing}>
-            <StyledCustomPanel isEditing={isEditing}/>
-          </CustomPanelWrapper>
-          <DndList
-            droppableId={ID.PRESET}
-            getItemStyle={() => ({
-              transition: 'all 0.6s',
-              margin: '0 0 8px 0',
-              boxShadow: isEditing ? '0px 10px 44px -8px rgba(0,0,0,1)' : '0px 0px 150px -34px rgba(0,0,0,0.75)'
-            })}
-            data={modules}
-            isDragDisable={() => !isEditing}
-            onBindView={(module, index) => (
-              <Module key={index} isEditing={isEditing}>
-                <ModuleName isEditing={isEditing}>
-                  {module.config.name}
-                </ModuleName>
-                {isPanelEditing ? null :(
-                  <StyledPanel index={index} module={module} />
-                )}
-              </Module>
-            )}>
-          </DndList>
-        </ModuleList>
+        <BackButton
+          onClick={e => setEditPanel(!isEditingPanel)}>
+          { isEditingPanel ? '↑' : '↓'}
+        </BackButton>
+        <Column>
+          <ControlFinderSpace>
+          </ControlFinderSpace>
+          <Row>
+            <ModuleFinderSpace isEditing={isEditing} >
+              {isModuleFinderShown && <StyledModuleFinder/>}
+            </ModuleFinderSpace>
+            <ModuleList
+              isEditing={isEditing}
+              isTrashCanVisible={isTrashCanVisible}>
+              <CustomPanelWrapper isEditing={isEditing}>
+                {!isPanelHide && <StyledCustomPanel/>}
+              </CustomPanelWrapper>
+              <DndList
+                droppableId={ID.PRESET}
+                getItemStyle={() => ({
+                  transition: 'all 0.6s',
+                  margin: '0 0 8px 0',
+                  boxShadow: isEditing ? '0px 10px 44px -8px rgba(0,0,0,1)' : '0px 0px 150px -34px rgba(0,0,0,0.75)'
+                })}
+                data={modules}
+                isDragDisable={() => !isEditing}
+                onBindView={(module, index) => (
+                  <Module key={index} isEditing={isEditing}>
+                    <ModuleName isEditing={isEditing}>
+                      {module.config.name}
+                    </ModuleName>
+                    {!isPanelHide && <StyledPanel index={index} module={module} />}
+                  </Module>
+                )}>
+              </DndList>
+            </ModuleList>
+          </Row>
+        </Column>
       </Root>
     )
   }
@@ -262,6 +301,8 @@ export default connect(
   state => ({
     preset: state.preset.preset,
     isEditing: state.preset.isEditing,
+    isEditingPanel:  state.preset.isEditingPanel,
+    isTrashCanVisible: state.moduleFinder.isTrashCanVisible,
     modules: state.modules.modules
   }),
   dispatch => {
@@ -271,7 +312,9 @@ export default connect(
     } = bindActionCreators(ModulesActions, dispatch)
     const {
       startEditPreset,
-      finishEditPreset
+      finishEditPreset,
+      startEditPresetPanel,
+      finishEditPresetPanel
     } = bindActionCreators(PresetActions, dispatch)
 
     return {
@@ -292,7 +335,13 @@ export default connect(
           startEditPreset()
         else
           finishEditPreset()
-      }
+      },
+      setEditPanel(isEditing) {
+        if (isEditing)
+          startEditPresetPanel()
+        else
+          finishEditPresetPanel()
+      },
     }
   }
 )(Preset)

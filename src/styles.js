@@ -7,4 +7,17 @@ injectGlobal`
     font-family: 'Regular';
     src: url(${NovaRound});
   }
+
+  body {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    background: #eee;
+    font-family: 'Regular';
+  }
+
+  #app {
+    height: 100%;
+  }
 `
