@@ -27,9 +27,9 @@ const ModuleList = styled.div`
   padding-bottom: 8px;
   transition: padding ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditingPanel }) => isEditingPanel ? `
-    padding-top: 16px;
+    padding-top: 0;
   ` : `
-    padding-top: 68px;
+    padding-top: 0;
   `}
   ${({ isTrashCanVisible }) => isTrashCanVisible ? `` : `
     -webkit-overflow-scrolling: touch;
@@ -141,8 +141,8 @@ const CustomPanelWrapper = styled.div`
     width: 96px;
     margin-bottom: 0;
   ` : `
-    height: calc(100vh - 76px);
-    width: calc(100vw - 32px);
+    height: 100vh;
+    width: 100vw;
     margin-bottom: 8px;
   `}
 `

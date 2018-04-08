@@ -36,8 +36,40 @@ const StyledSlider = styled(Slider) `
   ` : ``}
 `
 
-const ControlWrapper = styled.div`
+const Resizable = styled.div`
   position: absolute;
+`
+
+const ResizeHandle = styled.div`
+  position: absolute;
+  z-index: 6;
+  width: 10px;
+  height: 10px;
+  background: black;
+  ${({ index }) => {
+    switch(index) {
+      case 0:
+        return`
+          left: -5px;
+          top: -5px;
+        `
+      case 1:
+        return`
+          right: -5px;
+          top: -5px;
+        `
+      case 2:
+        return`
+          right: -5px;
+          bottom: -5px;
+        `
+      case 3:
+        return`
+          left: -5px;
+          bottom: -5px;
+        `
+    }
+  }}
 `
 
 const StyledDroppable = styled(Droppable) `
@@ -114,9 +146,12 @@ export class CustomPanel extends React.Component {
                 key={index}
                 canDrag={isEditingPanel}
                 item={{ control, index }}>
-                <ControlWrapper style={controlStyleToCss(control.style)}>
+                <Resizable style={controlStyleToCss(control.style)}>
+                  {isEditingPanel && [0,1,2,3].map((item, index) => (
+                    <ResizeHandle key={index} index={index}/>
+                  ))}
                   {this.controlToComponent(index, control, isEditingPanel)}
-                </ControlWrapper>
+                </Resizable>
               </Draggable>
             )
           })}
