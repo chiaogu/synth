@@ -28,7 +28,7 @@ export default class Button extends React.Component {
     this.mapPropsToState(nextProps);
   }
 
-  mapPropsToState({ value, config: { defaultValue } }) {
+  mapPropsToState({ value, config: { defaultValue } = {} }) {
     if(value === undefined) value = defaultValue
     this.setState({ pressed: value });
   }
@@ -52,12 +52,14 @@ export default class Button extends React.Component {
   }
 
   render() {
-    const { pressed } = this.state;
-    const state = pressed ? 'on' : 'off';
+    const { style: propsStyle } = this.props
+    const { pressed } = this.state
+    const state = pressed ? 'on' : 'off'
     const style = {
       background: pressed ? '#000' : '#fff',
-      color: pressed ? '#fff' : '#000'
-    };
+      color: pressed ? '#fff' : '#000',
+      ...propsStyle
+    }
 
     return (
       <Root
