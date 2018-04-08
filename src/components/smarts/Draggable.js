@@ -2,21 +2,19 @@ import React from 'react'
 import { DragSource } from 'react-dnd'
 
 export default DragSource('DEFAULT', {
-  beginDrag({ children }) {
-    return children;
-  },
   canDrag({ canDrag = true }) {
     if (typeof canDrag === 'function') {
       return canDrag()
     }
     return canDrag
   },
+  beginDrag({ children, item }) {
+    return { children, item }
+  },
   endDrag(props, monitor, component) {
     if (!monitor.didDrop()) {
-      return;
+      return
     }
-    const item = monitor.getItem();
-    const dropResult = monitor.getDropResult();
   }
 }, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),

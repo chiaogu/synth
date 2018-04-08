@@ -32,9 +32,9 @@ const PRESET = () => ({
           {
             "type": "button",
             "style": {
-              "width": '200px',
-              "height": '50px',
-              "left": '116px',
+              "width": 200,
+              "height": 50,
+              "left": 116,
               "top": 0
             },
             "actions": [
@@ -47,10 +47,10 @@ const PRESET = () => ({
           {
             "type": "switch",
             "style": {
-              "width": '100px',
-              "height": '100px',
-              "left": '8px',
-              "top": '0'
+              "width": 100,
+              "height": 100,
+              "left": 8,
+              "top": 0
             },
             "actions": [
               {
@@ -66,10 +66,10 @@ const PRESET = () => ({
           {
             "type": "slider",
             "style": {
-              "width": '100px',
-              "height": '300px',
-              "left": '8px',
-              "top": '108px'
+              "width": 100,
+              "height": 300,
+              "left": 8,
+              "top": 108
             },
             "config": {
               "max": 880,

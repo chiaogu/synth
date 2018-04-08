@@ -28,7 +28,7 @@ class ItemPreview extends React.Component {
 }
 
 export default DragLayer(monitor => ({
-  children: monitor.getItem(),
+  children: monitor.getItem() && monitor.getItem().children,
   currentOffset: monitor.getSourceClientOffset(),
   isDragging: monitor.isDragging()
 }))(ItemPreview);

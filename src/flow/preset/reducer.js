@@ -9,14 +9,14 @@ const INIT_STATE = {
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
-    case TYPES.LOAD_PRESET:{
+    case TYPES.LOAD_PRESET: {
       const { id } = action
       return {
         ...state,
         isFetching: true
       }
     }
-    case TYPES.LOAD_PRESET_SUCCESS:{
+    case TYPES.LOAD_PRESET_SUCCESS: {
       const { preset } = action
       return {
         ...state,
@@ -24,28 +24,38 @@ export default (state = INIT_STATE, action) => {
         preset
       }
     }
-    case TYPES.START_EDIT_PRESET:{
+    case TYPES.START_EDIT_PRESET: {
       return {
         ...state,
         isEditing: true
       }
     }
-    case TYPES.FINISH_EDIT_PRESET:{
+    case TYPES.FINISH_EDIT_PRESET: {
       return {
         ...state,
         isEditing: false
       }
     }
-    case TYPES.START_EDIT_PRESET_PANEL:{
+    case TYPES.START_EDIT_PRESET_PANEL: {
       return {
         ...state,
         isEditingPanel: true
       }
     }
-    case TYPES.FINISH_EDIT_PRESET_PANEL:{
+    case TYPES.FINISH_EDIT_PRESET_PANEL: {
       return {
         ...state,
         isEditingPanel: false
+      }
+    }
+    case TYPES.EDIT_CUSTOM_PANEL_CONTROL: {
+      const { preset } = state
+      const { control, index } = action
+      preset.panels[0].controls[index] = control
+
+      return {
+        ...state,
+        preset: {...preset}
       }
     }
     default:

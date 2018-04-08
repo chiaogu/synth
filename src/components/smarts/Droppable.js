@@ -4,8 +4,10 @@ import { DropTarget } from 'react-dnd'
 export default DropTarget('DEFAULT', {
   // canDrop(props, monitor) {},
   // hover(props, monitor, component) {},
-  drop(props, monitor, component) {
-    console.log('drop')
+  drop({ onDrop }, monitor, component) {
+    const diff = monitor.getDifferenceFromInitialOffset()
+    const item = monitor.getItem().item
+    if (onDrop) onDrop({ diff, item })
   }
 }, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
