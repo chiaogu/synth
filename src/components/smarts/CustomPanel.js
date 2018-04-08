@@ -111,12 +111,33 @@ export class CustomPanel extends React.Component {
     editCustomPanelControl(control, index)
   }
 
-  onResize({ velocityX: x, velocityY: y }, { control, index }) {
-    //TODO: Use transform to preview the size and only invoke action when onPanEnd
-    console.log(x, y)
+
+  onResizeStart(e, { control: { style } }) {
+    this.sizeBeforeResize = { ...style }
+  }
+
+  onResize({ deltaX: x, deltaY: y }, { control, index }, handleIndex) {
     const { editCustomPanelControl } = this.props
-    control.style.width += x * 9
-    control.style.height += y * 9
+    const current = control.style
+    const previous = this.sizeBeforeResize
+    if (handleIndex === 0) {
+      current.width = previous.width - x
+      current.height = previous.height - y
+      current.left = previous.left + x
+      current.top = previous.top + y
+    }else if (handleIndex === 1) {
+      current.width = previous.width + x
+      current.height = previous.height - y
+      current.top = previous.top + y
+    }else if (handleIndex === 2) {
+      current.width = previous.width + x
+      current.height = previous.height + y
+    }else if (handleIndex === 3) {
+      current.width = previous.width - x
+      current.height = previous.height + y
+      current.left = previous.left + x
+    }
+
     editCustomPanelControl(control, index)
   }
 
@@ -168,7 +189,8 @@ export class CustomPanel extends React.Component {
                       direction={'DIRECTION_ALL'}
                       onMouseDown={e => e.stopPropagation()}
                       onTouchStart={e => e.stopPropagation()}
-                      onPan={e => this.onResize(e, { control, index })}>
+                      onPan={e => this.onResize(e, { control, index }, item)}
+                      onPanStart={e => this.onResizeStart(e, { control, index })}>
                       <div></div>
                     </ResizeHandle>
                   ))}
