@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Hammer from 'react-hammerjs'
 import Button from '@components/dumbs/Button'
 import Switch from '@components/dumbs/Switch'
 import Slider from '@components/dumbs/Slider'
@@ -40,33 +41,37 @@ const Resizable = styled.div`
   position: absolute;
 `
 
-const ResizeHandle = styled.div`
+const ResizeHandle = styled(Hammer) `
   position: absolute;
   z-index: 6;
   width: 10px;
   height: 10px;
   background: black;
   ${({ index }) => {
-    switch(index) {
+    switch (index) {
       case 0:
-        return`
+        return `
           left: -5px;
           top: -5px;
+          cursor: nwse-resize;
         `
       case 1:
-        return`
+        return `
           right: -5px;
           top: -5px;
+          cursor: nesw-resize;
         `
       case 2:
-        return`
+        return `
           right: -5px;
           bottom: -5px;
+          cursor: nwse-resize;
         `
       case 3:
-        return`
+        return `
           left: -5px;
           bottom: -5px;
+          cursor: nesw-resize;
         `
     }
   }}
@@ -103,6 +108,15 @@ export class CustomPanel extends React.Component {
     const { editCustomPanelControl } = this.props
     control.style.left += x
     control.style.top += y
+    editCustomPanelControl(control, index)
+  }
+
+  onResize({ velocityX: x, velocityY: y }, { control, index }) {
+    //TODO: Use transform to preview the size and only invoke action when onPanEnd
+    console.log(x, y)
+    const { editCustomPanelControl } = this.props
+    control.style.width += x * 9
+    control.style.height += y * 9
     editCustomPanelControl(control, index)
   }
 
@@ -147,8 +161,16 @@ export class CustomPanel extends React.Component {
                 canDrag={isEditingPanel}
                 item={{ control, index }}>
                 <Resizable style={controlStyleToCss(control.style)}>
-                  {isEditingPanel && [0,1,2,3].map((item, index) => (
-                    <ResizeHandle key={index} index={index}/>
+                  {isEditingPanel && [0, 1, 2, 3].map(item => (
+                    <ResizeHandle
+                      key={item}
+                      index={item}
+                      direction={'DIRECTION_ALL'}
+                      onMouseDown={e => e.stopPropagation()}
+                      onTouchStart={e => e.stopPropagation()}
+                      onPan={e => this.onResize(e, { control, index })}>
+                      <div></div>
+                    </ResizeHandle>
                   ))}
                   {this.controlToComponent(index, control, isEditingPanel)}
                 </Resizable>
