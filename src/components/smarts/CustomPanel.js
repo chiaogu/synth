@@ -8,6 +8,9 @@ import Draggable from '@components/smarts/Draggable'
 import Droppable from '@components/smarts/Droppable'
 import { noteToFrequency } from '@utils/converter'
 
+const RESIZE_HANDLE_SIZE = 16
+const MINIMUN_CONTROL_SIZE = 28
+
 const Root = styled.div`
   position: relative;
   overflow: auto;
@@ -39,38 +42,39 @@ const StyledSlider = styled(Slider) `
 
 const Resizable = styled.div`
   position: absolute;
+  z-index: 1;
 `
 
 const ResizeHandle = styled(Hammer) `
   position: absolute;
-  z-index: 6;
-  width: 10px;
-  height: 10px;
+  z-index: 2;
+  width: ${RESIZE_HANDLE_SIZE}px;
+  height: ${RESIZE_HANDLE_SIZE}px;
   background: black;
   ${({ index }) => {
     switch (index) {
       case 0:
         return `
-          left: -5px;
-          top: -5px;
+          left: -${RESIZE_HANDLE_SIZE / 2}px;
+          top: -${RESIZE_HANDLE_SIZE / 2}px;
           cursor: nwse-resize;
         `
       case 1:
         return `
-          right: -5px;
-          top: -5px;
+          right: -${RESIZE_HANDLE_SIZE / 2}px;
+          top: -${RESIZE_HANDLE_SIZE / 2}px;
           cursor: nesw-resize;
         `
       case 2:
         return `
-          right: -5px;
-          bottom: -5px;
+          right: -${RESIZE_HANDLE_SIZE / 2}px;
+          bottom: -${RESIZE_HANDLE_SIZE / 2}px;
           cursor: nwse-resize;
         `
       case 3:
         return `
-          left: -5px;
-          bottom: -5px;
+          left: -${RESIZE_HANDLE_SIZE / 2}px;
+          bottom: -${RESIZE_HANDLE_SIZE / 2}px;
           cursor: nesw-resize;
         `
     }
@@ -89,6 +93,14 @@ function controlStyleToCss(style) {
 }
 
 export class CustomPanel extends React.Component {
+
+  constructor() {
+    super()
+    this.state = {
+      isResizing: false
+    }
+  }
+
   onChange({ actions = [] }, pressed) {
     const { setParameter } = this.props
     actions.forEach(({ index, id, params }) => {
@@ -123,22 +135,46 @@ export class CustomPanel extends React.Component {
     if (handleIndex === 0) {
       current.width = previous.width - x
       current.height = previous.height - y
-      current.left = previous.left + x
-      current.top = previous.top + y
-    }else if (handleIndex === 1) {
+      if(current.width >= MINIMUN_CONTROL_SIZE){
+        current.left = previous.left + x
+      }
+      if(current.height >= MINIMUN_CONTROL_SIZE){
+        current.top = previous.top + y
+      }
+    } else if (handleIndex === 1) {
       current.width = previous.width + x
       current.height = previous.height - y
-      current.top = previous.top + y
-    }else if (handleIndex === 2) {
+      if(current.height >= MINIMUN_CONTROL_SIZE){
+        current.top = previous.top + y
+      }
+    } else if (handleIndex === 2) {
       current.width = previous.width + x
       current.height = previous.height + y
-    }else if (handleIndex === 3) {
+    } else if (handleIndex === 3) {
       current.width = previous.width - x
       current.height = previous.height + y
-      current.left = previous.left + x
+      if(current.width >= MINIMUN_CONTROL_SIZE){
+        current.left = previous.left + x
+      }
     }
 
+    current.width = Math.max(current.width, MINIMUN_CONTROL_SIZE)
+    current.height = Math.max(current.height, MINIMUN_CONTROL_SIZE)
+
     editCustomPanelControl(control, index)
+  }
+
+  onResizeHandleTouchDown(e) {
+    this.setState({ isResizing: true })
+  }
+
+  onResizeHandleTouchUp(e) {
+    e.stopPropagation()
+    this.setState({ isResizing: false })
+  }
+
+  onSelectControl(control, index) {
+    console.log('onSelectControl', control, index)
   }
 
   controlToComponent(index, control, isEditingPanel) {
@@ -169,6 +205,7 @@ export class CustomPanel extends React.Component {
       preset: { panels: [panel = {}] = [] } = {},
       isEditingPanel
     } = this.props
+    const { isResizing } = this.state
 
     const { controls = [] } = panel
 
@@ -179,16 +216,22 @@ export class CustomPanel extends React.Component {
             return (
               <Draggable
                 key={index}
-                canDrag={isEditingPanel}
+                canDrag={isEditingPanel && !isResizing}
                 item={{ control, index }}>
-                <Resizable style={controlStyleToCss(control.style)}>
+                <Resizable
+                  style={controlStyleToCss(control.style)}
+                  onTouchEnd={e => this.onSelectControl(control, index)}
+                  onMouseUp={e => this.onSelectControl(control, index)}>
                   {isEditingPanel && [0, 1, 2, 3].map(item => (
                     <ResizeHandle
                       key={item}
                       index={item}
                       direction={'DIRECTION_ALL'}
-                      onMouseDown={e => e.stopPropagation()}
-                      onTouchStart={e => e.stopPropagation()}
+                      onMouseDown={e => this.onResizeHandleTouchDown(e)}
+                      onMouseUp={e => this.onResizeHandleTouchUp(e)}
+                      onTouchStart={e => this.onResizeHandleTouchDown(e)}
+                      onTouchEnd={e => this.onResizeHandleTouchUp(e)}
+                      onTouchCancel={e => this.onResizeHandleTouchUp(e)}
                       onPan={e => this.onResize(e, { control, index }, item)}
                       onPanStart={e => this.onResizeStart(e, { control, index })}>
                       <div></div>

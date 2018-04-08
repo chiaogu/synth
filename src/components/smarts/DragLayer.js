@@ -5,7 +5,7 @@ import { DragLayer } from 'react-dnd'
 const PreviewWrapper = styled.div`
   position: absolute;
   top: 0;
-  z-index: 5;
+  z-index: 1;
   cursor: -webkit-grabbing;
 `
 

@@ -26,8 +26,8 @@ const ModuleList = styled.div`
   overflow: auto;
   padding-bottom: 8px;
   transition: padding ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
-  ${({ isEditingPanel }) => isEditingPanel ? `
-    padding-top: 0;
+  ${({ isEditing }) => isEditing ? `
+    padding-top: 68px;
   ` : `
     padding-top: 0;
   `}
@@ -252,14 +252,14 @@ class Preset extends React.Component {
           { isEditingPanel ? '↑' : '↓'}
         </BackButton>
         <Column>
-          <ControlFinderSpace isEditingPanel={isEditingPanel}>
+          <ControlFinderSpace>
           </ControlFinderSpace>
           <Row>
             <ModuleFinderSpace isEditing={isEditing} >
               {isModuleFinderShown && <StyledModuleFinder/>}
             </ModuleFinderSpace>
             <ModuleList
-              isEditingPanel={isEditingPanel}
+              isEditing={isEditing}
               isTrashCanVisible={isTrashCanVisible}>
               <CustomPanelWrapper isEditing={isEditing}>
                 {!isPanelHide && <StyledCustomPanel/>}
