@@ -135,16 +135,16 @@ export class CustomPanel extends React.Component {
     if (handleIndex === 0) {
       current.width = previous.width - x
       current.height = previous.height - y
-      if(current.width >= MINIMUN_CONTROL_SIZE){
+      if (current.width >= MINIMUN_CONTROL_SIZE) {
         current.left = previous.left + x
       }
-      if(current.height >= MINIMUN_CONTROL_SIZE){
+      if (current.height >= MINIMUN_CONTROL_SIZE) {
         current.top = previous.top + y
       }
     } else if (handleIndex === 1) {
       current.width = previous.width + x
       current.height = previous.height - y
-      if(current.height >= MINIMUN_CONTROL_SIZE){
+      if (current.height >= MINIMUN_CONTROL_SIZE) {
         current.top = previous.top + y
       }
     } else if (handleIndex === 2) {
@@ -153,7 +153,7 @@ export class CustomPanel extends React.Component {
     } else if (handleIndex === 3) {
       current.width = previous.width - x
       current.height = previous.height + y
-      if(current.width >= MINIMUN_CONTROL_SIZE){
+      if (current.width >= MINIMUN_CONTROL_SIZE) {
         current.left = previous.left + x
       }
     }
@@ -174,7 +174,12 @@ export class CustomPanel extends React.Component {
   }
 
   onSelectControl(control, index) {
-    console.log('onSelectControl', control, index)
+    const { setEditControl, isEditingPanel, isEditingControl } = this.props
+    if(!isEditingPanel){
+      return
+    }
+    console.log('onSelectControl', isEditingControl)
+    setEditControl(!isEditingControl)
   }
 
   controlToComponent(index, control, isEditingPanel) {
@@ -249,20 +254,34 @@ export class CustomPanel extends React.Component {
 }
 
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { setParameter } from '@flow/modules/actions'
-import { editCustomPanelControl } from '@flow/preset/actions'
+import * as PresetActions from '@flow/preset/actions'
 
 export default connect(
   state => ({
     preset: state.preset.preset,
-    isEditingPanel: state.preset.isEditingPanel
+    isEditingPanel: state.preset.isEditingPanel,
+    isEditingControl: state.preset.isEditingControl
   }),
-  dispatch => ({
-    setParameter(moduleIndex, controlName, value) {
-      dispatch(setParameter(moduleIndex, controlName, value))
-    },
-    editCustomPanelControl(control, index) {
-      dispatch(editCustomPanelControl(control, index))
+  dispatch => {
+    const {
+      editCustomPanelControl,
+      startEditControl,
+      finishEditControl
+    } = bindActionCreators(PresetActions, dispatch)
+
+    return {
+      setParameter(moduleIndex, controlName, value) {
+        dispatch(setParameter(moduleIndex, controlName, value))
+      },
+      editCustomPanelControl,
+      setEditControl(isEditing) {
+        if (isEditing)
+          startEditControl()
+        else
+          finishEditControl()
+      }
     }
-  })
+  }
 )(CustomPanel)

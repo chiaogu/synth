@@ -36,7 +36,7 @@ const ModuleList = styled.div`
   `}
 `
 
-const ModuleFinderSpace = styled.div `
+const ModuleFinderSpace = styled.div`
   position: relative;
   flex: 0 0 auto;
   display: flex;
@@ -54,7 +54,7 @@ const ModuleFinderSpace = styled.div `
   `}
 `
 
-const StyledModuleFinder = styled(ModuleFinder)`
+const StyledModuleFinder = styled(ModuleFinder) `
   width: 100%;
   height: 100%;
   background: #000;
@@ -147,7 +147,7 @@ const CustomPanelWrapper = styled.div`
   `}
 `
 
-const StyledCustomPanel = styled(CustomPanel)`
+const StyledCustomPanel = styled(CustomPanel) `
   position: absolute;
   z-index: 1;
   height: 100%;
@@ -170,7 +170,7 @@ const Row = styled.div`
 const ControlFinderSpace = styled.div`
   background: #000;
   transition: height ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
-  ${({ isEditingPanel }) => isEditingPanel ? `
+  ${({ isEditingControl }) => isEditingControl ? `
     height: 480px;
   ` : `
     height: 0
@@ -189,9 +189,10 @@ class Preset extends React.Component {
     const isPanelHideChanged = this.state.isPanelHide !== nextState.isPanelHide
     const isModuleFinderShownChanged = this.state.isModuleFinderShown !== nextState.isModuleFinderShown
     const isTrashCanVisibleChanged = this.props.isTrashCanVisible !== nextProps.isTrashCanVisible
+    const isEditingControlChanged = this.props.isEditingControl !== nextProps.isEditingControl
     return modulesChanged || isEditedChanged || isPanelHideChanged
-      ||isModuleFinderShownChanged || isEditingPanelChanged
-      || isTrashCanVisibleChanged
+      || isModuleFinderShownChanged || isEditingPanelChanged
+      || isTrashCanVisibleChanged || isEditingControlChanged
   }
 
   componentWillReceiveProps(nextProps) {
@@ -200,10 +201,10 @@ class Preset extends React.Component {
       this.loadModules(nextProps)
 
     const isEditing = nextProps.isEditing
-    if (isEditing){
+    if (isEditing) {
       this.setState({ isPanelHide: true })
       setTimeout(() => this.setState({ isModuleFinderShown: true }), EDIT_MODE_TRANSITION)
-    }else{
+    } else {
       this.setState({ isModuleFinderShown: false })
       setTimeout(() => this.setState({ isPanelHide: false }), EDIT_MODE_TRANSITION)
     }
@@ -227,6 +228,7 @@ class Preset extends React.Component {
     const {
       isEditing,
       isEditingPanel,
+      isEditingControl,
       isTrashCanVisible,
       preset = {},
       modules,
@@ -245,24 +247,24 @@ class Preset extends React.Component {
         <ModuleFinderToggle
           isEditing={isEditing}
           onClick={e => setEditMode(!isEditing)}>
-          { isModuleFinderShown ? '←' : '→'}
+          {isModuleFinderShown ? '←' : '→'}
         </ModuleFinderToggle>
         <BackButton
           onClick={e => setEditPanel(!isEditingPanel)}>
-          { isEditingPanel ? '↑' : '↓'}
+          {isEditingPanel ? '↑' : '↓'}
         </BackButton>
         <Column>
-          <ControlFinderSpace>
+          <ControlFinderSpace isEditingControl={isEditingControl}>
           </ControlFinderSpace>
           <Row>
             <ModuleFinderSpace isEditing={isEditing} >
-              {isModuleFinderShown && <StyledModuleFinder/>}
+              {isModuleFinderShown && <StyledModuleFinder />}
             </ModuleFinderSpace>
             <ModuleList
               isEditing={isEditing}
               isTrashCanVisible={isTrashCanVisible}>
               <CustomPanelWrapper isEditing={isEditing}>
-                {!isPanelHide && <StyledCustomPanel/>}
+                {!isPanelHide && <StyledCustomPanel />}
               </CustomPanelWrapper>
               <DndList
                 droppableId={ID.PRESET}
@@ -301,7 +303,8 @@ export default connect(
   state => ({
     preset: state.preset.preset,
     isEditing: state.preset.isEditing,
-    isEditingPanel:  state.preset.isEditingPanel,
+    isEditingPanel: state.preset.isEditingPanel,
+    isEditingControl: state.preset.isEditingControl,
     isTrashCanVisible: state.moduleFinder.isTrashCanVisible,
     modules: state.modules.modules
   }),
@@ -314,7 +317,8 @@ export default connect(
       startEditPreset,
       finishEditPreset,
       startEditPresetPanel,
-      finishEditPresetPanel
+      finishEditPresetPanel,
+      finishEditControl
     } = bindActionCreators(PresetActions, dispatch)
 
     return {
@@ -341,7 +345,8 @@ export default connect(
           startEditPresetPanel()
         else
           finishEditPresetPanel()
-      },
+          finishEditControl()
+      }
     }
   }
 )(Preset)

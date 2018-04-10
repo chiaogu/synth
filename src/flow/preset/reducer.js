@@ -4,6 +4,7 @@ const INIT_STATE = {
   isFetching: false,
   isEditing: false,
   isEditingPanel: false,
+  isEditingControl: false,
   preset: undefined
 }
 
@@ -56,6 +57,18 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
         preset: {...preset}
+      }
+    }
+    case TYPES.START_EDIT_CONTROL: {
+      return {
+        ...state,
+        isEditingControl: true
+      }
+    }
+    case TYPES.FINISH_EDIT_CONTROL: {
+      return {
+        ...state,
+        isEditingControl: false
       }
     }
     default:
