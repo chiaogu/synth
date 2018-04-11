@@ -7,6 +7,7 @@ import ModuleFinder from '@components/smarts/ModuleFinder'
 import DndList from '@components/dumbs/DndList'
 import { ID } from '@components/smarts/DragDropHandler'
 import CustomPanel from '@components/smarts/CustomPanel'
+import ControlEditor from '@components/smarts/ControlEditor'
 
 const EDIT_MODE_TRANSITION = 600
 const TRANSITION_TIMEING_FUNC_IN = 'cubic-bezier(0.86, 0, 0.07, 1)';
@@ -183,16 +184,19 @@ class Preset extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const modulesChanged = !_.isEqual(this.props.modules, nextProps.modules)
-    const isEditedChanged = this.props.isEditing !== nextProps.isEditing
-    const isEditingPanelChanged = this.props.isEditingPanel !== nextProps.isEditingPanel
-    const isPanelHideChanged = this.state.isPanelHide !== nextState.isPanelHide
-    const isModuleFinderShownChanged = this.state.isModuleFinderShown !== nextState.isModuleFinderShown
-    const isTrashCanVisibleChanged = this.props.isTrashCanVisible !== nextProps.isTrashCanVisible
-    const isEditingControlChanged = this.props.isEditingControl !== nextProps.isEditingControl
-    return modulesChanged || isEditedChanged || isPanelHideChanged
-      || isModuleFinderShownChanged || isEditingPanelChanged
-      || isTrashCanVisibleChanged || isEditingControlChanged
+    // const modulesChanged = !_.isEqual(this.props.modules, nextProps.modules)
+    // const isEditedChanged = this.props.isEditing !== nextProps.isEditing
+    // const isEditingPanelChanged = this.props.isEditingPanel !== nextProps.isEditingPanel
+    // const isPanelHideChanged = this.state.isPanelHide !== nextState.isPanelHide
+    // const isModuleFinderShownChanged = this.state.isModuleFinderShown !== nextState.isModuleFinderShown
+    // const isTrashCanVisibleChanged = this.props.isTrashCanVisible !== nextProps.isTrashCanVisible
+    // const isEditingControlChanged = this.props.isEditingControl !== nextProps.isEditingControl
+    // const isControlEditorShownChanged = this.props.isControlEditorShown !== nextProps.isControlEditorShown
+    // return modulesChanged || isEditedChanged || isPanelHideChanged
+    //   || isModuleFinderShownChanged || isEditingPanelChanged
+    //   || isTrashCanVisibleChanged || isEditingControlChanged
+    //   || isControlEditorShownChanged
+    return true
   }
 
   componentWillReceiveProps(nextProps) {
@@ -200,13 +204,20 @@ class Preset extends React.Component {
     if (presetChanged)
       this.loadModules(nextProps)
 
-    const isEditing = nextProps.isEditing
+    const { isEditing, isEditingControl } = nextProps
+
     if (isEditing) {
       this.setState({ isPanelHide: true })
       setTimeout(() => this.setState({ isModuleFinderShown: true }), EDIT_MODE_TRANSITION)
     } else {
       this.setState({ isModuleFinderShown: false })
       setTimeout(() => this.setState({ isPanelHide: false }), EDIT_MODE_TRANSITION)
+    }
+
+    if(isEditingControl){
+      setTimeout(() => this.setState({ isControlEditorShown: true }), EDIT_MODE_TRANSITION)
+    }else {
+      this.setState({ isControlEditorShown: false })
     }
   }
 
@@ -220,7 +231,8 @@ class Preset extends React.Component {
 
     this.state = {
       isPanelHide: false,
-      isModuleFinderShown: false
+      isModuleFinderShown: false,
+      isControlEditorShown: false
     }
   }
 
@@ -239,7 +251,8 @@ class Preset extends React.Component {
     } = this.props
     const {
       isPanelHide,
-      isModuleFinderShown
+      isModuleFinderShown,
+      isControlEditorShown
     } = this.state
 
     return (
@@ -255,6 +268,7 @@ class Preset extends React.Component {
         </BackButton>
         <Column>
           <ControlFinderSpace isEditingControl={isEditingControl}>
+            {isControlEditorShown && <ControlEditor />}
           </ControlFinderSpace>
           <Row>
             <ModuleFinderSpace isEditing={isEditing} >
@@ -345,7 +359,7 @@ export default connect(
           startEditPresetPanel()
         else
           finishEditPresetPanel()
-          finishEditControl()
+        finishEditControl()
       }
     }
   }

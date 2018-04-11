@@ -117,10 +117,10 @@ export class CustomPanel extends React.Component {
   }
 
   onDrop({ diff: { x, y }, item: { control, index } }) {
-    const { editCustomPanelControl } = this.props
+    const { updateCustomPanelControl } = this.props
     control.style.left += x
     control.style.top += y
-    editCustomPanelControl(control, index)
+    updateCustomPanelControl(control, index)
   }
 
 
@@ -129,7 +129,7 @@ export class CustomPanel extends React.Component {
   }
 
   onResize({ deltaX: x, deltaY: y }, { control, index }, handleIndex) {
-    const { editCustomPanelControl } = this.props
+    const { updateCustomPanelControl } = this.props
     const current = control.style
     const previous = this.sizeBeforeResize
     if (handleIndex === 0) {
@@ -161,7 +161,7 @@ export class CustomPanel extends React.Component {
     current.width = Math.max(current.width, MINIMUN_CONTROL_SIZE)
     current.height = Math.max(current.height, MINIMUN_CONTROL_SIZE)
 
-    editCustomPanelControl(control, index)
+    updateCustomPanelControl(control, index)
   }
 
   onResizeHandleTouchDown(e) {
@@ -175,11 +175,10 @@ export class CustomPanel extends React.Component {
 
   onSelectControl(control, index) {
     const { setEditControl, isEditingPanel, isEditingControl } = this.props
-    if(!isEditingPanel){
+    if (!isEditingPanel) {
       return
     }
-    console.log('onSelectControl', isEditingControl)
-    setEditControl(!isEditingControl)
+    setEditControl(true, index)
   }
 
   controlToComponent(index, control, isEditingPanel) {
@@ -259,14 +258,14 @@ import { setParameter } from '@flow/modules/actions'
 import * as PresetActions from '@flow/preset/actions'
 
 export default connect(
-  state => ({
-    preset: state.preset.preset,
-    isEditingPanel: state.preset.isEditingPanel,
-    isEditingControl: state.preset.isEditingControl
+  ({ preset: {
+    preset, isEditingPanel, isEditingControl
+  } }) => ({
+    preset, isEditingPanel, isEditingControl
   }),
   dispatch => {
     const {
-      editCustomPanelControl,
+      updateCustomPanelControl,
       startEditControl,
       finishEditControl
     } = bindActionCreators(PresetActions, dispatch)
@@ -275,10 +274,10 @@ export default connect(
       setParameter(moduleIndex, controlName, value) {
         dispatch(setParameter(moduleIndex, controlName, value))
       },
-      editCustomPanelControl,
-      setEditControl(isEditing) {
+      updateCustomPanelControl,
+      setEditControl(isEditing, index) {
         if (isEditing)
-          startEditControl()
+          startEditControl(0, index)
         else
           finishEditControl()
       }
