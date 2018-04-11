@@ -5,7 +5,6 @@ import Slider from '@components/dumbs/Slider'
 import Menu from '@components/dumbs/Menu'
 import Switch from '@components/dumbs/Switch'
 import Button from '@components/dumbs/Button'
-import InputButton from '@components/dumbs/InputButton'
 
 const Root = styled.div`
   width: 100%;
@@ -78,11 +77,6 @@ const StyledButton = styled(Button) `
   height: 36px;
 `
 
-const StyledInputButton = styled(InputButton) `
-  width: 50px;
-  height: 70px;
-`
-
 class GeneralPanel extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -119,12 +113,6 @@ class GeneralPanel extends React.Component {
         />
       case 'button':
         return <StyledButton
-          config={control}
-          value={param}
-          onToggle={pressed => this.onChange(control, pressed)}
-        />
-      case 'inputButton':
-        return <StyledInputButton
           config={control}
           value={param}
           onToggle={pressed => this.onChange(control, pressed)}

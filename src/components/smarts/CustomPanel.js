@@ -178,26 +178,23 @@ export class CustomPanel extends React.Component {
     if (!isEditingPanel) {
       return
     }
-    setEditControl(true, index)
+    setEditControl(true, index, control)
   }
 
-  controlToComponent(index, control, isEditingPanel) {
+  controlToComponent(control, isEditingPanel) {
     switch (control.type) {
       case 'button':
         return <StyledButton
-          key={index}
           isEditingPanel={isEditingPanel}
           onToggle={pressed => this.onChange(control, pressed)} />
 
       case 'switch':
         return <StyledSwitch
-          key={index}
           isEditingPanel={isEditingPanel}
           onToggle={selected => this.onChange(control, selected)} />
 
       case 'slider':
         return <StyledSlider
-          key={index}
           config={control.config}
           isEditingPanel={isEditingPanel}
           onChange={value => this.onChange(control, value)} />
@@ -241,7 +238,7 @@ export class CustomPanel extends React.Component {
                       <div></div>
                     </ResizeHandle>
                   ))}
-                  {this.controlToComponent(index, control, isEditingPanel)}
+                  {this.controlToComponent(control, isEditingPanel)}
                 </Resizable>
               </Draggable>
             )
@@ -256,6 +253,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { setParameter } from '@flow/modules/actions'
 import * as PresetActions from '@flow/preset/actions'
+import * as ControlEditorActions from '@flow/controlEditor/actions'
 
 export default connect(
   ({ preset: {
@@ -269,13 +267,18 @@ export default connect(
       startEditControl,
       finishEditControl
     } = bindActionCreators(PresetActions, dispatch)
+    const {
+      loadControl,
+      loadControlSuccess
+    } = bindActionCreators(ControlEditorActions, dispatch)
 
     return {
       setParameter(moduleIndex, controlName, value) {
         dispatch(setParameter(moduleIndex, controlName, value))
       },
       updateCustomPanelControl,
-      setEditControl(isEditing, index) {
+      setEditControl(isEditing, index, control) {
+        loadControl()
         if (isEditing)
           startEditControl(0, index)
         else

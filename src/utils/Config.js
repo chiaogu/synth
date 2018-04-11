@@ -2,6 +2,12 @@ import modules from '@assets/data/modules.json'
 
 const MODULES = () => JSON.parse(JSON.stringify(modules))
 
+const CONTROL = () => ({
+  "button": {
+
+  }
+})
+
 const PRESET = () => ({
   "0": {
     "id": "0",
