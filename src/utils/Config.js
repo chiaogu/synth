@@ -46,8 +46,39 @@ const PRESET = () => ({
             "actions": [
               {
                 "index": 1,
-                "id": "trigger"
+                "id": "trigger",
+                "params": {
+                  "true": true,
+                  "false": false
+                }
               }
+            ]
+          },
+          {
+            "type": "button",
+            "style": {
+              "width": 50,
+              "height": 50,
+              "left": 332,
+              "top": 0
+            },
+            "actions": [
+              {
+                "index": 1,
+                "id": "trigger",
+                "params": {
+                  "true": true,
+                  "false": false
+                }
+              },
+              {
+                "index": 0,
+                "id": "frequency.value",
+                "params": {
+                  "true": 220,
+                  "false": 440
+                }
+              },
             ]
           },
           {
