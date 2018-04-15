@@ -34,11 +34,31 @@ const AttrList = styled.div`
   -webkit-overflow-scrolling: touch;
 `
 
-const AttrName = styled.div`
+const AttrHeader = styled.div`
+  height: 32px;
   margin-top: 16px;
+  display: flex;
+  align-items: center;
   color: #fff;
+  flex-shrink: 0;
+  font-size: 18px;
 `
+
+const AttrColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 8px;
+  flex-shrink: 0;
+`
+
+const AttrName = styled.div`
+  display: flex;
+  color: #fff;
+  flex-shrink: 0;
+`
+
 const AttrRow = styled.div`
+  margin-top: 4px;
   display: flex;
   flex-shrink: 0;
 `
@@ -46,16 +66,21 @@ const AttrRow = styled.div`
 const AttrItem = styled.div`
   width: calc(50% - 16px);
   min-height: 36px;
-  margin: 8px;
   padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
   border-bottom: 2px solid #fff;
+  font-size: 14px;
   text-align: center;
   cursor: pointer;
   user-select: none;
+  ${({ value }) => value === 'true' && `
+    margin-right: 8px;
+  `}
+  ${({ value }) => value === 'false' && `
+    margin-left: 8px;
+  `}
   ${({ isSelected }) => isSelected ? `
     color: #000;
     background: #fff;
@@ -66,10 +91,6 @@ const AttrItem = styled.div`
 `
 
 class ButtonEditor extends React.Component {
-
-  constructor() {
-    super()
-  }
 
   componentWillReceiveProps(nextProps) {
     const { control, startCaptureMode, finishCaptureMode } = this.props
@@ -105,7 +126,7 @@ class ButtonEditor extends React.Component {
       return null
     }
 
-    const { actions } = control
+    const { actions, style } = control
 
     return (
       <Root>
@@ -113,30 +134,35 @@ class ButtonEditor extends React.Component {
           <StyledButton onToggle={pressed => this.onChange(pressed)} />
         </ControlWrapper>
         <AttrList>
-          <AttrName>label</AttrName>
-          <AttrRow>
-            <AttrItem>on</AttrItem>
-            <AttrItem>off</AttrItem>
-          </AttrRow>
-          <AttrName>actions</AttrName>
-          {actions.map(({ id, params, index: moduleIndex }, actionIndex) => (
-            <AttrRow key={actionIndex}>
-              {['true', 'false'].map((value, paramIndex) => (
-                <AttrItem
-                  key={paramIndex}
-                  isSelected={
-                    selectedIndex === actionIndex
-                    && selectedValue === value
-                  }
-                  onClick={e => this.onClickActionItem(actionIndex, value)}>{
-                    params[value] !== undefined && (
-                      <div>
-                        {id}<br />{`${params[value]}`}
-                      </div>
-                    )
-                  }</AttrItem>
-              ))}
+          <AttrHeader>properties</AttrHeader>
+          <AttrColumn>
+            <AttrName>label</AttrName>
+            <AttrRow>
+              <AttrItem value={'true'}>on</AttrItem>
+              <AttrItem value={'false'}>off</AttrItem>
             </AttrRow>
+          </AttrColumn>
+
+          <AttrHeader>actions</AttrHeader>
+          {actions.map(({ id, params, index: moduleIndex }, actionIndex) => (
+            <AttrColumn key={actionIndex}>
+              <AttrName>{id}</AttrName>
+              <AttrRow>
+                {['true', 'false'].map((value, paramIndex) => (
+                  <AttrItem
+                    key={paramIndex}
+                    value={value}
+                    isSelected={
+                      selectedIndex === actionIndex
+                      && selectedValue === value
+                    }
+                    onClick={e => this.onClickActionItem(actionIndex, value)}>
+                    {params[value] !== undefined && ( typeof params[value] === 'number' ?
+                    `${params[value].toFixed()}` : `${params[value]}`)}
+                  </AttrItem>
+                ))}
+              </AttrRow>
+            </AttrColumn>
           ))}
         </AttrList>
       </Root>

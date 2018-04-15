@@ -168,7 +168,7 @@ const Row = styled.div`
   display: flex;
 `
 
-const ControlFinderSpace = styled.div`
+const ControlEditorSpace = styled.div`
   max-height: 320px;
   flex-shrink: 0;
   background: #000;
@@ -269,9 +269,9 @@ class Preset extends React.Component {
           {isEditingPanel ? '↑' : '↓'}
         </BackButton>
         <Column>
-          <ControlFinderSpace isEditingControl={isEditingControl}>
+          <ControlEditorSpace isEditingControl={isEditingControl}>
             {isControlEditorShown && <ControlEditor />}
-          </ControlFinderSpace>
+          </ControlEditorSpace>
           <Row>
             <ModuleFinderSpace isEditing={isEditing} >
               {isModuleFinderShown && <StyledModuleFinder />}

@@ -11,6 +11,7 @@ const Root = styled.div`
 class ControlEditor extends React.Component {
   getEditorComponent(control, panelIndex, controlIndex) {
     switch (control.type) {
+      case 'switch':
       case 'button':
         return (
           <ButtonEditor
@@ -46,13 +47,15 @@ export default connect(
   ({ preset: {
     preset: { panels },
     currentEditingControl: { panelIndex, controlIndex }
-  } }) => ({
-    control: panelIndex !== undefined
-      && controlIndex !== undefined
-      && panels[panelIndex].controls[controlIndex],
-    controlIndex,
-    panelIndex
-  }),
+  } }) => {
+    return {
+      control: panelIndex !== undefined
+        && controlIndex !== undefined
+        && {...panels[panelIndex].controls[controlIndex]},
+      controlIndex,
+      panelIndex
+    }
+  },
   dispatch => ({
     updateCustomPanelControl(control, index) {
       dispatch(updateCustomPanelControl(control, index))

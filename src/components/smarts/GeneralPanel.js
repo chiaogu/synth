@@ -109,14 +109,32 @@ class GeneralPanel extends React.Component {
       capturingAction: {
         actionIndex,
         value: actionValue
-      }
+      },
+      updateCustomPanelControl
     } = this.props
 
+    const action = control.actions[actionIndex]
+
     switch (control.type) {
+      case 'switch':
       case 'button': {
-        console.log('setControlAction', panelIndex, controlIndex, actionIndex, actionValue, moduleIndex, id)
+        if (action.id !== id || action.index !== moduleIndex) {
+          control.actions[actionIndex] = {
+            id,
+            index: moduleIndex,
+            params: {
+              [`${actionValue}`]: value,
+              [`${!actionValue}`]: undefined
+            }
+          }
+        }else {
+          control.actions[actionIndex].params[`${actionValue}`] = value
+        }
+        break
       }
     }
+
+    updateCustomPanelControl(control, controlIndex)
   }
 
   controlToComponent(control, param) {
@@ -180,6 +198,7 @@ class GeneralPanel extends React.Component {
 
 import { connect } from 'react-redux'
 import { setParameter } from '@flow/modules/actions'
+import { updateCustomPanelControl } from '@flow/preset/actions'
 
 export default connect(
   ({ modules, controlEditor, preset }) => ({
@@ -194,6 +213,9 @@ export default connect(
   dispatch => ({
     setParameter(moduleIndex, controlName, value) {
       dispatch(setParameter(moduleIndex, controlName, value))
+    },
+    updateCustomPanelControl(control, index) {
+      dispatch(updateCustomPanelControl(control, index))
     }
   })
 )(GeneralPanel)
