@@ -82,13 +82,41 @@ class GeneralPanel extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     const module = this.props.modules[this.props.index]
     const nextModule = nextProps.modules[nextProps.index]
-    return !_.isEqual(module.params, nextModule.params) || !_.isEqual(module.config, nextModule.config)
+    return this.props.isCapturing !== nextProps.isCapturing
+      || !_.isEqual(module.params, nextModule.params)
+      || !_.isEqual(module.config, nextModule.config)
   }
 
   onChange(control, value) {
+    const { index, setParameter, isCapturing } = this.props
     const { id } = control
-    const { index, setParameter } = this.props
+
+    if (isCapturing) {
+      this.setControlAction(id, value)
+    }
+
     setParameter(index, id, value);
+  }
+
+  setControlAction(id, value) {
+    const {
+      index: moduleIndex,
+      editingControl: {
+        panelIndex,
+        controlIndex,
+        control
+      },
+      capturingAction: {
+        actionIndex,
+        value: actionValue
+      }
+    } = this.props
+
+    switch (control.type) {
+      case 'button': {
+        console.log('setControlAction', panelIndex, controlIndex, actionIndex, actionValue, moduleIndex, id)
+      }
+    }
   }
 
   controlToComponent(control, param) {
@@ -140,9 +168,9 @@ class GeneralPanel extends React.Component {
       <Root className={this.props.className}>
         <ModuleName>{name}</ModuleName>
         <ControlList>
-          <ControlListPadding/>
-            {components}
-          <ControlListPadding/>
+          <ControlListPadding />
+          {components}
+          <ControlListPadding />
         </ControlList>
       </Root>
     )
@@ -154,8 +182,14 @@ import { connect } from 'react-redux'
 import { setParameter } from '@flow/modules/actions'
 
 export default connect(
-  state => ({
-    modules: state.modules.modules
+  ({ modules, controlEditor, preset }) => ({
+    modules: modules.modules,
+    editingControl: preset.currentEditingControl,
+    isCapturing: controlEditor.isCapturing,
+    capturingAction: {
+      actionIndex: controlEditor.actionIndex,
+      value: controlEditor.value
+    }
   }),
   dispatch => ({
     setParameter(moduleIndex, controlName, value) {

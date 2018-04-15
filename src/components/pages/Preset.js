@@ -169,11 +169,12 @@ const Row = styled.div`
 `
 
 const ControlFinderSpace = styled.div`
+  max-height: 320px;
   flex-shrink: 0;
   background: #000;
   transition: height ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
   ${({ isEditingControl }) => isEditingControl ? `
-    height: 320px;
+    height: 40vh;
   ` : `
     height: 0
   `}

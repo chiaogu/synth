@@ -44,10 +44,11 @@ export const updateCustomPanelControl = (control, index) => ({
   index
 })
 
-export const startEditControl = (panelIndex, controlIndex) => ({
+export const startEditControl = (panelIndex, controlIndex, control) => ({
   type: TYPES.START_EDIT_CONTROL,
   panelIndex,
-  controlIndex
+  controlIndex,
+  control
 })
 
 export const finishEditControl = () => ({

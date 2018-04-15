@@ -1,24 +1,28 @@
 import { TYPES } from './actions';
 
 const INIT_STATE = {
-  isFetching: false,
-  control: []
+  isCapturing: false,
+  actionIndex: undefined,
+  value: undefined
 }
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
-    case TYPES.LOAD_CONTROL:{
+    case TYPES.START_CAPTURE_MODE: {
+      const { actionIndex, value } = action
       return {
         ...state,
-        isFetching: true
+        isCapturing: true,
+        actionIndex,
+        value
       }
     }
-    case TYPES.LOAD_CONTROL_SUCCESS:{
-      const { control } = action
+    case TYPES.FINISH_CAPTURE_MODE: {
       return {
         ...state,
-        isFetching: false,
-        control
+        isCapturing: false,
+        actionIndex: undefined,
+        value: undefined
       }
     }
     default:

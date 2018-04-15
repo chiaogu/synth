@@ -253,7 +253,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { setParameter } from '@flow/modules/actions'
 import * as PresetActions from '@flow/preset/actions'
-import * as ControlEditorActions from '@flow/controlEditor/actions'
 
 export default connect(
   ({ preset: {
@@ -267,10 +266,6 @@ export default connect(
       startEditControl,
       finishEditControl
     } = bindActionCreators(PresetActions, dispatch)
-    const {
-      loadControl,
-      loadControlSuccess
-    } = bindActionCreators(ControlEditorActions, dispatch)
 
     return {
       setParameter(moduleIndex, controlName, value) {
@@ -278,9 +273,8 @@ export default connect(
       },
       updateCustomPanelControl,
       setEditControl(isEditing, index, control) {
-        loadControl()
         if (isEditing)
-          startEditControl(0, index)
+          startEditControl(0, index, control)
         else
           finishEditControl()
       }

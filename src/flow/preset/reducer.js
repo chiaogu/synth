@@ -8,7 +8,8 @@ const INIT_STATE = {
   preset: undefined,
   currentEditingControl: {
     panelIndex: undefined,
-    controlIndex: undefined
+    controlIndex: undefined,
+    control: undefined
   }
 }
 
@@ -64,13 +65,14 @@ export default (state = INIT_STATE, action) => {
       }
     }
     case TYPES.START_EDIT_CONTROL: {
-      const { panelIndex, controlIndex } = action
+      const { panelIndex, controlIndex, control } = action
       return {
         ...state,
         isEditingControl: true,
         currentEditingControl: {
           panelIndex,
-          controlIndex
+          controlIndex,
+          control
         }
       }
     }
