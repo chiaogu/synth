@@ -8,10 +8,12 @@ export default DragSource('DEFAULT', {
     }
     return canDrag
   },
-  beginDrag({ children, item }) {
+  beginDrag({ children, item, onDragStart }) {
+    if (onDragStart) onDragStart()
     return { children, item }
   },
-  endDrag(props, monitor, component) {
+  endDrag({ onDragEnd }, monitor, component) {
+    if (onDragEnd) onDragEnd()
     if (!monitor.didDrop()) {
       return
     }

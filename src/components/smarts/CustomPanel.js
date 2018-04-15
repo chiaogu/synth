@@ -173,9 +173,17 @@ export class CustomPanel extends React.Component {
     this.setState({ isResizing: false })
   }
 
+  onTouchControl() {
+    this.hasBeenDrag = false
+  }
+
+  onDragControl() {
+    this.hasBeenDrag = true
+  }
+
   onSelectControl(control, index) {
     const { setEditControl, isEditingPanel, isEditingControl } = this.props
-    if (!isEditingPanel) {
+    if (!isEditingPanel || this.hasBeenDrag) {
       return
     }
     setEditControl(true, index, control)
@@ -218,9 +226,13 @@ export class CustomPanel extends React.Component {
               <Draggable
                 key={index}
                 canDrag={isEditingPanel && !isResizing}
-                item={{ control, index }}>
+                item={{ control, index }}
+                onDragStart={() => this.onDragControl()}
+                onDragEnd={() => this.onDragControl()}>
                 <Resizable
                   style={controlStyleToCss(control.style)}
+                  onTouchStart={e => this.onTouchControl()}
+                  onMouseDown={e => this.onTouchControl()}
                   onTouchEnd={e => this.onSelectControl(control, index)}
                   onMouseUp={e => this.onSelectControl(control, index)}>
                   {isEditingPanel && [0, 1, 2, 3].map(item => (
