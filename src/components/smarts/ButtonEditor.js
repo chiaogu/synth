@@ -51,10 +51,24 @@ const AttrColumn = styled.div`
   flex-shrink: 0;
 `
 
+const AttrNameRow = styled.div`
+  display: flex;
+  flex-shrink: 0;
+`
+
 const AttrName = styled.div`
   display: flex;
   color: #fff;
+  flex: 1 0;
+`
+
+const DeleteActionButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
   flex-shrink: 0;
+  cursor: pointer;
 `
 
 const AttrRow = styled.div`
@@ -120,6 +134,18 @@ class ButtonEditor extends React.Component {
     }
   }
 
+  deleteAction(index) {
+    const {
+      control,
+      controlIndex,
+      updateCustomPanelControl
+    } = this.props
+
+    control.actions.splice(index, 1)
+
+    updateCustomPanelControl(control, controlIndex)
+  }
+
   render() {
     const { control, actionIndex: selectedIndex, value: selectedValue } = this.props
     if (!control) {
@@ -146,7 +172,12 @@ class ButtonEditor extends React.Component {
           <AttrHeader>actions</AttrHeader>
           {actions.map(({ id, params, index: moduleIndex }, actionIndex) => (
             <AttrColumn key={actionIndex}>
-              <AttrName>{id}</AttrName>
+              <AttrNameRow>
+                <AttrName>{id}</AttrName>
+                <DeleteActionButton onClick={e => this.deleteAction(actionIndex)}>
+                  x
+                </DeleteActionButton>
+              </AttrNameRow>
               <AttrRow>
                 {['true', 'false'].map((value, paramIndex) => (
                   <AttrItem
@@ -157,8 +188,8 @@ class ButtonEditor extends React.Component {
                       && selectedValue === value
                     }
                     onClick={e => this.onClickActionItem(actionIndex, value)}>
-                    {params[value] !== undefined && ( typeof params[value] === 'number' ?
-                    `${params[value].toFixed()}` : `${params[value]}`)}
+                    {params[value] !== undefined && (typeof params[value] === 'number' ?
+                      `${params[value].toFixed()}` : `${params[value]}`)}
                   </AttrItem>
                 ))}
               </AttrRow>
@@ -173,12 +204,25 @@ class ButtonEditor extends React.Component {
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as ControlEditorActions from '@flow/controlEditor/actions'
+import { updateCustomPanelControl } from '@flow/preset/actions'
 
 export default connect(
-  ({ controlEditor: {
-    isCapturing, actionIndex, value
-  } }) => ({
-    isCapturing, actionIndex, value
+  ({
+    controlEditor: {
+      isCapturing,
+      actionIndex,
+      value
+    },
+    preset: {
+      currentEditingControl: {
+        controlIndex
+      }
+    }
+  }) => ({
+    isCapturing,
+    actionIndex,
+    value,
+    controlIndex
   }),
   dispatch => {
     const {
@@ -188,7 +232,10 @@ export default connect(
 
     return {
       startCaptureMode,
-      finishCaptureMode
+      finishCaptureMode,
+      updateCustomPanelControl(control, index) {
+        dispatch(updateCustomPanelControl(control, index))
+      }
     }
   }
 )(ButtonEditor)

@@ -79,7 +79,7 @@
     "className": "AmplitudeEnvelope",
     "controls": [
       {
-        "type": "button",
+        "type": "switch",
         "name": "trigger",
         "id": "trigger",
         "action": {
