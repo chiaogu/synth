@@ -104,6 +104,18 @@ const AttrItem = styled.div`
   `}
 `
 
+const AddActionButton = styled.div`
+  height: 56px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+`
+
 class ButtonEditor extends React.Component {
 
   componentWillReceiveProps(nextProps) {
@@ -132,6 +144,27 @@ class ButtonEditor extends React.Component {
     } else {
       startCaptureMode(index, value)
     }
+  }
+
+  addAction() {
+    const {
+      control,
+      controlIndex,
+      updateCustomPanelControl
+    } = this.props
+
+    control.actions.push({
+      index: undefined,
+      id: undefined,
+      params: {
+        'true': undefined,
+        'false': undefined
+      }
+    })
+
+    updateCustomPanelControl(control, controlIndex)
+
+    this.onClickActionItem(control.actions.length - 1, 'true')
   }
 
   deleteAction(index) {
@@ -173,7 +206,11 @@ class ButtonEditor extends React.Component {
           {actions.map(({ id, params, index: moduleIndex }, actionIndex) => (
             <AttrColumn key={actionIndex}>
               <AttrNameRow>
-                <AttrName>{id}</AttrName>
+                <AttrName>
+                  {moduleIndex === undefined ? '?' : moduleIndex}
+                  {` - `}
+                  {id === undefined ? '?' : id}
+                </AttrName>
                 <DeleteActionButton onClick={e => this.deleteAction(actionIndex)}>
                   x
                 </DeleteActionButton>
@@ -195,6 +232,7 @@ class ButtonEditor extends React.Component {
               </AttrRow>
             </AttrColumn>
           ))}
+          <AddActionButton onClick={e => this.addAction()}>+</AddActionButton>
         </AttrList>
       </Root>
     )

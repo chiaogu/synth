@@ -152,7 +152,7 @@
         "name": "frequency",
         "id": "frequency.value",
         "min": 0,
-        "max": 880,
+        "max": 8800,
         "defaultValue": 350
       },
       {
