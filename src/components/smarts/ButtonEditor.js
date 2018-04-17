@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Button from '@components/dumbs/Button'
+import Switch from '@components/dumbs/Switch'
 import _ from '@utils/lodash'
 
 const SHINE = '0px 2px 15px 0px rgba(255,255,255,1)'
@@ -19,6 +20,12 @@ const ControlWrapper = styled.div`
 `
 
 const StyledButton = styled(Button) `
+  width: 48px;
+  height: 48px;
+  box-shadow: ${SHINE};
+`
+
+const StyledSwitch = styled(Switch) `
   width: 48px;
   height: 48px;
   box-shadow: ${SHINE};
@@ -126,9 +133,19 @@ class ButtonEditor extends React.Component {
     }
   }
 
-  onChange(value) {
-    const { control } = this.props
-    console.log('onChange', value)
+  onChange(pressed) {
+    const { setParameter, control: { actions } } = this.props
+    actions.forEach(({ index, id, params }) => {
+      let value = pressed
+      if (params === undefined) {
+        setParameter(index, id, value)
+      } else {
+        value = params[value]
+        if (value !== undefined) {
+          setParameter(index, id, value)
+        }
+      }
+    });
   }
 
   onClickActionItem(index, value) {
@@ -185,20 +202,23 @@ class ButtonEditor extends React.Component {
       return null
     }
 
-    const { actions, style } = control
+    const { actions, style, type } = control
 
     return (
       <Root>
         <ControlWrapper>
-          <StyledButton onToggle={pressed => this.onChange(pressed)} />
+          { type === 'button' ?
+            <StyledButton onToggle={pressed => this.onChange(pressed)} /> :
+            <StyledSwitch onToggle={pressed => this.onChange(pressed)} />
+          }
         </ControlWrapper>
         <AttrList>
           <AttrHeader>properties</AttrHeader>
           <AttrColumn>
             <AttrName>label</AttrName>
             <AttrRow>
-              <AttrItem value={'true'}>on</AttrItem>
-              <AttrItem value={'false'}>off</AttrItem>
+              <AttrItem value={'true'}>1</AttrItem>
+              <AttrItem value={'false'}>0</AttrItem>
             </AttrRow>
           </AttrColumn>
 
@@ -243,6 +263,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as ControlEditorActions from '@flow/controlEditor/actions'
 import { updateCustomPanelControl } from '@flow/preset/actions'
+import { setParameter } from '@flow/modules/actions'
 
 export default connect(
   ({
@@ -273,6 +294,9 @@ export default connect(
       finishCaptureMode,
       updateCustomPanelControl(control, index) {
         dispatch(updateCustomPanelControl(control, index))
+      },
+      setParameter(moduleIndex, controlName, value) {
+        dispatch(setParameter(moduleIndex, controlName, value))
       }
     }
   }

@@ -29,7 +29,7 @@ export default class Switch extends React.Component {
 
   mapPropsToState({ value, config: { defaultValue } = {} }) {
     if(value === undefined) value = defaultValue
-    this.setState({ selected: value });
+    if(value !== undefined) this.setState({ selected: value });
   }
 
   onToggle() {
@@ -44,7 +44,7 @@ export default class Switch extends React.Component {
   render() {
     const { style: propsStyle } = this.props
     const { selected } = this.state
-    const state = selected ? 'on' : 'off'
+    const state = selected ? '1' : '0'
     const style = {
       background: selected ? '#000' : '#fff',
       color: selected ? '#fff' : '#000',
