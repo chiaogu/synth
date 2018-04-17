@@ -127,7 +127,7 @@ class GeneralPanel extends React.Component {
               [`${!actionValue}`]: undefined
             }
           }
-        }else {
+        } else {
           control.actions[actionIndex].params[`${actionValue}`] = value
         }
         break
@@ -178,7 +178,7 @@ class GeneralPanel extends React.Component {
     const { params = {}, config: { controls = [], name } } = modules[index]
 
     const components = controls.map((control, index) => {
-      const param = params[control.id] || control.defaultValue
+      const param = params[control.id] === undefined ? control.defaultValue : params[control.id]
       const component = this.controlToComponent(control, param)
 
       return (

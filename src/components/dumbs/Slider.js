@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import Hammer from 'react-hammerjs'
 
+const DAFAULT_DRAG_RANGE = 60
+
 const Root = styled.div`
   position: relative;
   box-shadow: 0px 2px 15px -5px rgba(0,0,0,0.6);
@@ -65,14 +67,24 @@ export default class Slider extends React.Component {
     }
   }
 
-  onPan(e) {
-    const { max, min } = this.props.config;
-    const acceleration = Math.max(0.1, Math.min(2, (e.deltaX + 100) / 100))
+  onPanStart(event) {
+    const { deltaX, deltaY } = event
+    this.previous = { x: deltaX, y: deltaY }
+  }
 
-    let ratio = this.state.ratio
-    ratio += (-e.velocityY) / 9 * acceleration
+  onPan(event) {
+    const { max, min } = this.props.config
+
+    const { deltaX, deltaY } = event
+    const velocityY = deltaY - this.previous.y
+    this.previous = { x: deltaX, y: deltaY }
+
+    const xRange = window.innerWidth / 2
+    const acceleration = 1 - Math.min(Math.abs(deltaX / xRange), 0.99)
+    const deltaRatio = - (velocityY / DAFAULT_DRAG_RANGE * acceleration)
+
+    let ratio = this.state.ratio + deltaRatio
     ratio = Math.max(0, Math.min(1, ratio))
-
     const value = min + ratio * (max - min)
 
     this.setState({ value, ratio })
@@ -88,7 +100,11 @@ export default class Slider extends React.Component {
 
     return (
       <Root className={className} style={style} >
-        <Background direction={'DIRECTION_ALL'} onPan={e => this.onPan(e)}>
+        <Background
+          direction={'DIRECTION_ALL'}
+          onPan={e => this.onPan(e)}
+          onPanStart={e => this.onPanStart(e)}
+        >
           <div>
             <Progress style={{ height: ratio * 100 + '%' }} />
             <Value>{value.toFixed()}</Value>
