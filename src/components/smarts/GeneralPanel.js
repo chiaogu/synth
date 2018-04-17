@@ -132,6 +132,13 @@ class GeneralPanel extends React.Component {
         }
         break
       }
+      case 'slider': {
+        control.actions[actionIndex] = {
+          id,
+          index: moduleIndex
+        }
+        break
+      }
     }
 
     updateCustomPanelControl(control, controlIndex)
@@ -171,7 +178,7 @@ class GeneralPanel extends React.Component {
     const { params = {}, config: { controls = [], name } } = modules[index]
 
     const components = controls.map((control, index) => {
-      const param = params[control.id]
+      const param = params[control.id] || control.defaultValue
       const component = this.controlToComponent(control, param)
 
       return (

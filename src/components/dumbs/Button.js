@@ -28,8 +28,7 @@ export default class Button extends React.Component {
     this.mapPropsToState(nextProps);
   }
 
-  mapPropsToState({ value, config: { defaultValue } = {} }) {
-    if(value === undefined) value = defaultValue
+  mapPropsToState({ value }) {
     if(value !== undefined) this.setState({ pressed: value })
   }
 

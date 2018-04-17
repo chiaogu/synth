@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import ButtonEditor from '@components/smarts/ButtonEditor'
+import ButtonEditor from './ButtonEditor'
+import SliderEditor from './SliderEditor'
 import _ from '@utils/lodash'
 
 const Root = styled.div`
@@ -25,6 +26,14 @@ class ControlEditor extends React.Component {
       case 'button':
         return (
           <ButtonEditor
+            control={control}
+            controlIndex={controlIndex}
+            panelIndex={panelIndex}
+          />
+        )
+      case 'slider':
+        return (
+          <SliderEditor
             control={control}
             controlIndex={controlIndex}
             panelIndex={panelIndex}

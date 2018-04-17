@@ -7,7 +7,7 @@ const Root = styled.div`
   box-shadow: 0px 2px 15px -5px rgba(0,0,0,0.6);
 `;
 
-const Background = styled(Hammer)`
+const Background = styled(Hammer) `
   background: #fff;
   position: relative;
   cursor: arrow;
@@ -58,11 +58,11 @@ export default class Slider extends React.Component {
 
   mapPropsToState(props) {
     let { value, config } = props
-    const { max, min, defaultValue } = config
-    if(value === undefined) value = defaultValue
-
-    const ratio = (value - min) / (max - min)
-    this.setState({ value, ratio })
+    const { max, min } = config
+    if (value !== undefined) {
+      const ratio = (value - min) / (max - min)
+      this.setState({ value, ratio })
+    }
   }
 
   onPan(e) {
@@ -83,13 +83,15 @@ export default class Slider extends React.Component {
   }
 
   render() {
-    const { style } = this.props;
+    const { style, className } = this.props
+    const { ratio, value } = this.state
+
     return (
-      <Root className={this.props.className} style={style} >
+      <Root className={className} style={style} >
         <Background direction={'DIRECTION_ALL'} onPan={e => this.onPan(e)}>
           <div>
-            <Progress style={{ height: this.state.ratio * 100 + '%' }} />
-            <Value>{this.state.value.toFixed()}</Value>
+            <Progress style={{ height: ratio * 100 + '%' }} />
+            <Value>{value.toFixed()}</Value>
           </div>
         </Background>
       </Root>
