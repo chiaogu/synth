@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from '@components/dumbs/Button'
 import Switch from '@components/dumbs/Switch'
-import _ from '@utils/lodash'
+import connect from '@components/smarts/ControlEditorLogic'
 
 const SHINE = '0px 2px 15px 0px rgba(255,255,255,1)'
 
@@ -125,75 +125,44 @@ const AddActionButton = styled.div`
 
 class ButtonEditor extends React.Component {
 
-  componentWillReceiveProps(nextProps) {
-    const { control, startCaptureMode, finishCaptureMode } = this.props
-    const isControlChanged = !_.isEqual(nextProps.control, control)
-    if (isControlChanged) {
-      finishCaptureMode()
-    }
-  }
-
   onChange(pressed) {
-    const { setParameter, control: { actions } } = this.props
-    actions.forEach(({ index, id, params }) => {
-      let value = pressed
-      if (params === undefined) {
-        setParameter(index, id, value)
-      } else {
-        value = params[value]
-        if (value !== undefined) {
-          setParameter(index, id, value)
-        }
-      }
-    });
+    const { performAction, control } = this.props
+    performAction(control, pressed)
   }
 
   onClickActionItem(index, value) {
     const {
-      startCaptureMode,
-      finishCaptureMode,
       actionIndex: currIndex,
-      value: currValue
+      value: currValue,
+      clickActionItem
     } = this.props
 
-    if (currIndex === index && currValue === value) {
-      finishCaptureMode()
-    } else {
-      startCaptureMode(index, value)
-    }
+    clickActionItem(currIndex, currValue, index, value)
   }
 
   addAction() {
     const {
       control,
       controlIndex,
-      updateCustomPanelControl
+      addAction
     } = this.props
 
-    control.actions.push({
-      index: undefined,
-      id: undefined,
-      params: {
-        'true': undefined,
-        'false': undefined
-      }
-    })
-
-    updateCustomPanelControl(control, controlIndex)
-
+    addAction(control, controlIndex)
     this.onClickActionItem(control.actions.length - 1, 'true')
   }
 
-  deleteAction(index) {
+  deleteAction(actionIndex) {
     const {
       control,
       controlIndex,
-      updateCustomPanelControl
+      actionIndex: capturingActionIndex,
+      value: capturingActionValue,
+      deleteAction
     } = this.props
-
-    control.actions.splice(index, 1)
-
-    updateCustomPanelControl(control, controlIndex)
+    if(capturingActionIndex === actionIndex) {
+      this.onClickActionItem(capturingActionIndex, capturingActionValue)
+    }
+    deleteAction(control, actionIndex, controlIndex)
   }
 
   render() {
@@ -259,45 +228,4 @@ class ButtonEditor extends React.Component {
   }
 }
 
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import * as ControlEditorActions from '@flow/controlEditor/actions'
-import { updateCustomPanelControl } from '@flow/preset/actions'
-import { setParameter } from '@flow/modules/actions'
-
-export default connect(
-  ({
-    controlEditor: {
-      isCapturing,
-      actionIndex,
-      value
-    },
-    preset: {
-      currentEditingControl: {
-        controlIndex
-      }
-    }
-  }) => ({
-    isCapturing,
-    actionIndex,
-    value,
-    controlIndex
-  }),
-  dispatch => {
-    const {
-      startCaptureMode,
-      finishCaptureMode
-    } = bindActionCreators(ControlEditorActions, dispatch)
-
-    return {
-      startCaptureMode,
-      finishCaptureMode,
-      updateCustomPanelControl(control, index) {
-        dispatch(updateCustomPanelControl(control, index))
-      },
-      setParameter(moduleIndex, controlName, value) {
-        dispatch(setParameter(moduleIndex, controlName, value))
-      }
-    }
-  }
-)(ButtonEditor)
+export default connect(ButtonEditor)

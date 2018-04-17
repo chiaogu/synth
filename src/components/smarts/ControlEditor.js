@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import ButtonEditor from '@components/smarts/ButtonEditor'
+import _ from '@utils/lodash'
 
 const Root = styled.div`
   width: 480px;
@@ -9,6 +10,15 @@ const Root = styled.div`
   margin: 0 auto;
 `
 class ControlEditor extends React.Component {
+
+  componentWillReceiveProps(nextProps) {
+    const { control, finishCaptureMode } = this.props
+    const isControlChanged = !_.isEqual(nextProps.control, control)
+    if (isControlChanged) {
+      finishCaptureMode()
+    }
+  }
+
   getEditorComponent(control, panelIndex, controlIndex) {
     switch (control.type) {
       case 'switch':
@@ -42,6 +52,7 @@ class ControlEditor extends React.Component {
 
 import { connect } from 'react-redux'
 import { updateCustomPanelControl } from '@flow/preset/actions'
+import { finishCaptureMode } from '@flow/controlEditor/actions'
 
 export default connect(
   ({ preset: {
@@ -59,6 +70,9 @@ export default connect(
   dispatch => ({
     updateCustomPanelControl(control, index) {
       dispatch(updateCustomPanelControl(control, index))
+    },
+    finishCaptureMode() {
+      dispatch(finishCaptureMode())
     }
   })
 )(ControlEditor)
