@@ -1,5 +1,4 @@
-import { TYPES } from './actions';
-import _ from '@utils/lodash';
+import { TYPES } from './actions'
 
 const INIT_STATE = {
   isFetching: false,

@@ -117,10 +117,10 @@ export class CustomPanel extends React.Component {
   }
 
   onDrop({ diff: { x, y }, item: { control, index } }) {
-    const { editCustomPanelControl } = this.props
+    const { updateCustomPanelControl } = this.props
     control.style.left += x
     control.style.top += y
-    editCustomPanelControl(control, index)
+    updateCustomPanelControl(control, index)
   }
 
 
@@ -129,22 +129,22 @@ export class CustomPanel extends React.Component {
   }
 
   onResize({ deltaX: x, deltaY: y }, { control, index }, handleIndex) {
-    const { editCustomPanelControl } = this.props
+    const { updateCustomPanelControl } = this.props
     const current = control.style
     const previous = this.sizeBeforeResize
     if (handleIndex === 0) {
       current.width = previous.width - x
       current.height = previous.height - y
-      if(current.width >= MINIMUN_CONTROL_SIZE){
+      if (current.width >= MINIMUN_CONTROL_SIZE) {
         current.left = previous.left + x
       }
-      if(current.height >= MINIMUN_CONTROL_SIZE){
+      if (current.height >= MINIMUN_CONTROL_SIZE) {
         current.top = previous.top + y
       }
     } else if (handleIndex === 1) {
       current.width = previous.width + x
       current.height = previous.height - y
-      if(current.height >= MINIMUN_CONTROL_SIZE){
+      if (current.height >= MINIMUN_CONTROL_SIZE) {
         current.top = previous.top + y
       }
     } else if (handleIndex === 2) {
@@ -153,7 +153,7 @@ export class CustomPanel extends React.Component {
     } else if (handleIndex === 3) {
       current.width = previous.width - x
       current.height = previous.height + y
-      if(current.width >= MINIMUN_CONTROL_SIZE){
+      if (current.width >= MINIMUN_CONTROL_SIZE) {
         current.left = previous.left + x
       }
     }
@@ -161,7 +161,7 @@ export class CustomPanel extends React.Component {
     current.width = Math.max(current.width, MINIMUN_CONTROL_SIZE)
     current.height = Math.max(current.height, MINIMUN_CONTROL_SIZE)
 
-    editCustomPanelControl(control, index)
+    updateCustomPanelControl(control, index)
   }
 
   onResizeHandleTouchDown(e) {
@@ -173,27 +173,36 @@ export class CustomPanel extends React.Component {
     this.setState({ isResizing: false })
   }
 
-  onSelectControl(control, index) {
-    console.log('onSelectControl', control, index)
+  onTouchControl() {
+    this.hasBeenDrag = false
   }
 
-  controlToComponent(index, control, isEditingPanel) {
+  onDragControl() {
+    this.hasBeenDrag = true
+  }
+
+  onSelectControl(control, index) {
+    const { setEditControl, isEditingPanel, isEditingControl } = this.props
+    if (!isEditingPanel || this.hasBeenDrag) {
+      return
+    }
+    setEditControl(true, index, control)
+  }
+
+  controlToComponent(control, isEditingPanel) {
     switch (control.type) {
       case 'button':
         return <StyledButton
-          key={index}
           isEditingPanel={isEditingPanel}
           onToggle={pressed => this.onChange(control, pressed)} />
 
       case 'switch':
         return <StyledSwitch
-          key={index}
           isEditingPanel={isEditingPanel}
           onToggle={selected => this.onChange(control, selected)} />
 
       case 'slider':
         return <StyledSlider
-          key={index}
           config={control.config}
           isEditingPanel={isEditingPanel}
           onChange={value => this.onChange(control, value)} />
@@ -217,9 +226,13 @@ export class CustomPanel extends React.Component {
               <Draggable
                 key={index}
                 canDrag={isEditingPanel && !isResizing}
-                item={{ control, index }}>
+                item={{ control, index }}
+                onDragStart={() => this.onDragControl()}
+                onDragEnd={() => this.onDragControl()}>
                 <Resizable
                   style={controlStyleToCss(control.style)}
+                  onTouchStart={e => this.onTouchControl()}
+                  onMouseDown={e => this.onTouchControl()}
                   onTouchEnd={e => this.onSelectControl(control, index)}
                   onMouseUp={e => this.onSelectControl(control, index)}>
                   {isEditingPanel && [0, 1, 2, 3].map(item => (
@@ -237,7 +250,7 @@ export class CustomPanel extends React.Component {
                       <div></div>
                     </ResizeHandle>
                   ))}
-                  {this.controlToComponent(index, control, isEditingPanel)}
+                  {this.controlToComponent(control, isEditingPanel)}
                 </Resizable>
               </Draggable>
             )
@@ -249,20 +262,34 @@ export class CustomPanel extends React.Component {
 }
 
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { setParameter } from '@flow/modules/actions'
-import { editCustomPanelControl } from '@flow/preset/actions'
+import * as PresetActions from '@flow/preset/actions'
 
 export default connect(
-  state => ({
-    preset: state.preset.preset,
-    isEditingPanel: state.preset.isEditingPanel
+  ({ preset: {
+    preset, isEditingPanel, isEditingControl
+  } }) => ({
+    preset, isEditingPanel, isEditingControl
   }),
-  dispatch => ({
-    setParameter(moduleIndex, controlName, value) {
-      dispatch(setParameter(moduleIndex, controlName, value))
-    },
-    editCustomPanelControl(control, index) {
-      dispatch(editCustomPanelControl(control, index))
+  dispatch => {
+    const {
+      updateCustomPanelControl,
+      startEditControl,
+      finishEditControl
+    } = bindActionCreators(PresetActions, dispatch)
+
+    return {
+      setParameter(moduleIndex, controlName, value) {
+        dispatch(setParameter(moduleIndex, controlName, value))
+      },
+      updateCustomPanelControl,
+      setEditControl(isEditing, index, control) {
+        if (isEditing)
+          startEditControl(0, index, control)
+        else
+          finishEditControl()
+      }
     }
-  })
+  }
 )(CustomPanel)

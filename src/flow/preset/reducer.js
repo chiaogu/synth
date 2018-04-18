@@ -4,7 +4,13 @@ const INIT_STATE = {
   isFetching: false,
   isEditing: false,
   isEditingPanel: false,
-  preset: undefined
+  isEditingControl: false,
+  preset: undefined,
+  currentEditingControl: {
+    panelIndex: undefined,
+    controlIndex: undefined,
+    control: undefined
+  }
 }
 
 export default (state = INIT_STATE, action) => {
@@ -48,7 +54,7 @@ export default (state = INIT_STATE, action) => {
         isEditingPanel: false
       }
     }
-    case TYPES.EDIT_CUSTOM_PANEL_CONTROL: {
+    case TYPES.UPDATE_CUSTOM_PANEL_CONTROL: {
       const { preset } = state
       const { control, index } = action
       preset.panels[0].controls[index] = control
@@ -56,6 +62,24 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
         preset: {...preset}
+      }
+    }
+    case TYPES.START_EDIT_CONTROL: {
+      const { panelIndex, controlIndex, control } = action
+      return {
+        ...state,
+        isEditingControl: true,
+        currentEditingControl: {
+          panelIndex,
+          controlIndex,
+          control
+        }
+      }
+    }
+    case TYPES.FINISH_EDIT_CONTROL: {
+      return {
+        ...state,
+        isEditingControl: false
       }
     }
     default:
