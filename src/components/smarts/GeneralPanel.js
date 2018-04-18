@@ -92,13 +92,14 @@ class GeneralPanel extends React.Component {
     const { id } = control
 
     if (isCapturing) {
-      this.setControlAction(id, value)
+      this.setControlAction(control, value)
     }
 
     setParameter(index, id, value);
   }
 
-  setControlAction(id, value) {
+  setControlAction(selectedControl, value) {
+    const { id } = selectedControl
     const {
       index: moduleIndex,
       editingControl: {
@@ -133,9 +134,15 @@ class GeneralPanel extends React.Component {
         break
       }
       case 'slider': {
-        control.actions[actionIndex] = {
-          id,
-          index: moduleIndex
+        const { type, max, min, defaultValue } = selectedControl
+        if (type === 'slider') {
+          control.config = {
+            max, min, defaultValue
+          }
+          control.actions[actionIndex] = {
+            id,
+            index: moduleIndex
+          }
         }
         break
       }

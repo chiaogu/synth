@@ -64,13 +64,14 @@ class SliderEditor extends React.Component {
       return null
     }
 
-    const { actions, style, type } = control
+    const { actions, style, type, config } = control
+    const { min, max, defaultValue } = config
 
     return (
       <Root>
         <ControlWrapper>
           <StyledSlider
-            config={control.config}
+            config={config}
             onChange={value => this.onChange(value)} />
         </ControlWrapper>
         <AttrList>
@@ -79,13 +80,13 @@ class SliderEditor extends React.Component {
             <HalfColumn>
               <AttrName>min</AttrName>
               <AttrRow>
-                <StyledAttrItem>0</StyledAttrItem>
+                <StyledAttrItem>{min}</StyledAttrItem>
               </AttrRow>
             </HalfColumn>
             <HalfColumn>
               <AttrName>max</AttrName>
               <AttrRow>
-                <StyledAttrItem>1</StyledAttrItem>
+                <StyledAttrItem>{max}</StyledAttrItem>
               </AttrRow>
             </HalfColumn>
           </Row>

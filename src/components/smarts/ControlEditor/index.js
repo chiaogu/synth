@@ -14,8 +14,9 @@ class ControlEditor extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { control, finishCaptureMode } = this.props
-    const isControlChanged = !_.isEqual(nextProps.control, control)
-    if (isControlChanged) {
+    const isDifferentType = nextProps.control.type !== control.type
+    const isDifferentControl = !_.isEqual(nextProps.control.style, control.style)
+    if (isDifferentType || isDifferentControl) {
       finishCaptureMode()
     }
   }

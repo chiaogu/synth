@@ -107,7 +107,7 @@ export default class Slider extends React.Component {
         >
           <div>
             <Progress style={{ height: ratio * 100 + '%' }} />
-            <Value>{value.toFixed()}</Value>
+            <Value>{value.toFixed(value < 1 && value > -1 && value !== 0 ? 2 : 0)}</Value>
           </div>
         </Background>
       </Root>
