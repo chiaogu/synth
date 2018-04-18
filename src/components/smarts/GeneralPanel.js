@@ -5,7 +5,6 @@ import Slider from '@components/dumbs/Slider'
 import Menu from '@components/dumbs/Menu'
 import Switch from '@components/dumbs/Switch'
 import Button from '@components/dumbs/Button'
-import InputButton from '@components/dumbs/InputButton'
 
 const Root = styled.div`
   width: 100%;
@@ -78,23 +77,78 @@ const StyledButton = styled(Button) `
   height: 36px;
 `
 
-const StyledInputButton = styled(InputButton) `
-  width: 50px;
-  height: 70px;
-`
-
 class GeneralPanel extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const module = this.props.modules[this.props.index]
     const nextModule = nextProps.modules[nextProps.index]
-    return !_.isEqual(module.params, nextModule.params) || !_.isEqual(module.config, nextModule.config)
+    return this.props.isCapturing !== nextProps.isCapturing
+      || !_.isEqual(module.params, nextModule.params)
+      || !_.isEqual(module.config, nextModule.config)
   }
 
   onChange(control, value) {
+    const { index, setParameter, isCapturing } = this.props
     const { id } = control
-    const { index, setParameter } = this.props
+
+    if (isCapturing) {
+      this.setControlAction(control, value)
+    }
+
     setParameter(index, id, value);
+  }
+
+  setControlAction(selectedControl, value) {
+    const { id } = selectedControl
+    const {
+      index: moduleIndex,
+      editingControl: {
+        panelIndex,
+        controlIndex,
+        control
+      },
+      capturingAction: {
+        actionIndex,
+        value: actionValue
+      },
+      updateCustomPanelControl
+    } = this.props
+
+    const action = control.actions[actionIndex]
+
+    switch (control.type) {
+      case 'switch':
+      case 'button': {
+        if (action.id !== id || action.index !== moduleIndex) {
+          control.actions[actionIndex] = {
+            id,
+            index: moduleIndex,
+            params: {
+              [`${actionValue}`]: value,
+              [`${!actionValue}`]: undefined
+            }
+          }
+        } else {
+          control.actions[actionIndex].params[`${actionValue}`] = value
+        }
+        break
+      }
+      case 'slider': {
+        const { type, max, min, defaultValue } = selectedControl
+        if (type === 'slider') {
+          control.config = {
+            max, min, defaultValue
+          }
+          control.actions[actionIndex] = {
+            id,
+            index: moduleIndex
+          }
+        }
+        break
+      }
+    }
+
+    updateCustomPanelControl(control, controlIndex)
   }
 
   controlToComponent(control, param) {
@@ -123,12 +177,6 @@ class GeneralPanel extends React.Component {
           value={param}
           onToggle={pressed => this.onChange(control, pressed)}
         />
-      case 'inputButton':
-        return <StyledInputButton
-          config={control}
-          value={param}
-          onToggle={pressed => this.onChange(control, pressed)}
-        />
     }
   }
 
@@ -137,7 +185,7 @@ class GeneralPanel extends React.Component {
     const { params = {}, config: { controls = [], name } } = modules[index]
 
     const components = controls.map((control, index) => {
-      const param = params[control.id]
+      const param = params[control.id] === undefined ? control.defaultValue : params[control.id]
       const component = this.controlToComponent(control, param)
 
       return (
@@ -152,9 +200,9 @@ class GeneralPanel extends React.Component {
       <Root className={this.props.className}>
         <ModuleName>{name}</ModuleName>
         <ControlList>
-          <ControlListPadding/>
-            {components}
-          <ControlListPadding/>
+          <ControlListPadding />
+          {components}
+          <ControlListPadding />
         </ControlList>
       </Root>
     )
@@ -164,14 +212,24 @@ class GeneralPanel extends React.Component {
 
 import { connect } from 'react-redux'
 import { setParameter } from '@flow/modules/actions'
+import { updateCustomPanelControl } from '@flow/preset/actions'
 
 export default connect(
-  state => ({
-    modules: state.modules.modules
+  ({ modules, controlEditor, preset }) => ({
+    modules: modules.modules,
+    editingControl: preset.currentEditingControl,
+    isCapturing: controlEditor.isCapturing,
+    capturingAction: {
+      actionIndex: controlEditor.actionIndex,
+      value: controlEditor.value
+    }
   }),
   dispatch => ({
     setParameter(moduleIndex, controlName, value) {
       dispatch(setParameter(moduleIndex, controlName, value))
+    },
+    updateCustomPanelControl(control, index) {
+      dispatch(updateCustomPanelControl(control, index))
     }
   })
 )(GeneralPanel)
