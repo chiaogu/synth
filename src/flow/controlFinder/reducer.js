@@ -1,7 +1,9 @@
 import { TYPES } from './actions';
 
 const INIT_STATE = {
-  isOpened: false
+  isOpened: false,
+  isFetching: false,
+  controls: []
 }
 
 export default (state = INIT_STATE, action) => {
@@ -16,6 +18,19 @@ export default (state = INIT_STATE, action) => {
         ...state,
         isOpened: false
       }
+    case TYPES.FIND_CONTROLS:
+      return {
+        ...state,
+        isFetching: true
+      }
+    case TYPES.FIND_CONTROLS_SUCCESS:{
+      const { controls } = action
+      return {
+        ...state,
+        isFetching: false,
+        controls
+      }
+    }
     default:
       return state
   }

@@ -1,0 +1,14 @@
+{
+  "button": {
+    "id": "button",
+    "name": "Button"
+  },
+  "switch": {
+    "id": "switch",
+    "name": "Switch"
+  },
+  "slider": {
+    "id": "slider",
+    "name": "Slider"
+  }
+}
