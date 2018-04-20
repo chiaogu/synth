@@ -25,7 +25,7 @@ export default DragSource('DEFAULT', {
   const { connectDragSource, isDragging, children } = props
   return connectDragSource(
     <div style={{
-      display: isDragging ? 'none' : 'block',
+      visibility: isDragging ? 'hidden' : 'visible',
       cursor: '-webkit-grab',
       userSelect: 'none'
     }}>

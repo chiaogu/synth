@@ -101,10 +101,13 @@ export class CustomPanel extends React.Component {
     }
   }
 
-  onChange({ actions = [] }, pressed) {
+  onChange({ actions = [] }, value) {
     const { setParameter } = this.props
     actions.forEach(({ index, id, params }) => {
-      let value = pressed
+      if(id === undefined) {
+        return
+      }
+
       if (params === undefined) {
         setParameter(index, id, value)
       } else {
@@ -116,11 +119,25 @@ export class CustomPanel extends React.Component {
     });
   }
 
-  onDrop({ diff: { x, y }, item: { control, index } }) {
-    const { updateCustomPanelControl } = this.props
-    control.style.left += x
-    control.style.top += y
-    updateCustomPanelControl(control, index)
+  onDrop({ diff, offset, item: { control, index, isFromFinder } }) {
+    if (!isFromFinder) {
+      const { updateCustomPanelControl } = this.props
+      control.style.left += diff.x
+      control.style.top += diff.y
+      updateCustomPanelControl(control, index)
+    } else {
+      const { addCustomPanelControl } = this.props
+      addCustomPanelControl({
+        type: control.id,
+        style: {
+          ...control.style,
+          left: offset.x,
+          top: offset.y,
+        },
+        config: control.config,
+        actions: []
+      })
+    }
   }
 
 
@@ -215,7 +232,6 @@ export class CustomPanel extends React.Component {
       isEditingPanel
     } = this.props
     const { isResizing } = this.state
-
     const { controls = [] } = panel
 
     return (
@@ -275,15 +291,18 @@ export default connect(
   dispatch => {
     const {
       updateCustomPanelControl,
+      addCustomPanelControl,
+      CustomPanelControl,
       startEditControl,
       finishEditControl
     } = bindActionCreators(PresetActions, dispatch)
 
     return {
+      updateCustomPanelControl,
+      addCustomPanelControl,
       setParameter(moduleIndex, controlName, value) {
         dispatch(setParameter(moduleIndex, controlName, value))
       },
-      updateCustomPanelControl,
       setEditControl(isEditing, index, control) {
         if (isEditing)
           startEditControl(0, index, control)

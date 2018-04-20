@@ -55,9 +55,9 @@ class Playground extends React.Component {
 
     return (
       <Root>
-        <TopBar>
+        {/* <TopBar>
           {this.getPresetSlots()}
-        </TopBar>
+        </TopBar> */}
         {this.getPresetComponent(preset)}
       </Root>
     )
