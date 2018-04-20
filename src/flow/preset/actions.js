@@ -8,6 +8,8 @@ export const TYPES = createConstants('PRESET', [
   'START_EDIT_PRESET_PANEL',
   'FINISH_EDIT_PRESET_PANEL',
   'UPDATE_CUSTOM_PANEL_CONTROL',
+  'ADD_CUSTOM_PANEL_CONTROL',
+  'REMOVE_CUSTOM_PANEL_CONTROL',
   'START_EDIT_CONTROL',
   'FINISH_EDIT_CONTROL'
 ])
@@ -43,6 +45,17 @@ export const updateCustomPanelControl = (control, index) => ({
   control,
   index
 })
+
+export const addCustomPanelControl = control => ({
+  type: TYPES.ADD_CUSTOM_PANEL_CONTROL,
+  control
+})
+
+export const removeCustomPanelControl = index => ({
+  type: TYPES.REMOVE_CUSTOM_PANEL_CONTROL,
+  index
+})
+
 
 export const startEditControl = (panelIndex, controlIndex, control) => ({
   type: TYPES.START_EDIT_CONTROL,

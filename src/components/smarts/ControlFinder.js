@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import Button from '@components/dumbs/Button'
+import Switch from '@components/dumbs/Switch'
+import Slider from '@components/dumbs/Slider'
 import Draggable from '@components/smarts/Draggable'
 import Droppable from '@components/smarts/Droppable'
 
@@ -34,33 +36,60 @@ const ControlName = styled.div`
   user-select: none;
 `
 
-const StyledButton = styled(Button) `
-  width: 48px;
-  height: 48px;
+const ControlWrapper = styled.div`
   box-shadow: ${SHINE};
 `
 
+const StyledButton = styled(Button) `
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+`
+
+const StyledSwitch = styled(Switch) `
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+`
+
+const StyledSlider = styled(Slider) `
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+`
+
 class ControlFinder extends React.Component {
+
+  controlToComponent(control) {
+    switch (control.id) {
+      case 'button':
+        return <StyledButton />
+
+      case 'switch':
+        return <StyledSwitch />
+
+      case 'slider':
+        return <StyledSlider config={control.config} />
+    }
+  }
 
   componentDidMount() {
     const { loadControls } = this.props
     loadControls()
   }
 
-  onDropControl(event) {
-    console.log('onDropControl', event)
-  }
-
   render() {
     const { controls } = this.props
 
     return (
-      <StyledDroppable onDrop={e => this.onDropControl(e)}>
+      <StyledDroppable>
         <Root>
           {controls.map((control, index) => (
             <ControlColumn key={index}>
-              <Draggable item={{ control, index }}>
-                <StyledButton />
+              <Draggable item={{ control, isFromFinder: true }}>
+                <ControlWrapper style={control.style}>
+                  {this.controlToComponent(control)}
+                </ControlWrapper>
               </Draggable>
               <ControlName>{control.name}</ControlName>
             </ControlColumn>

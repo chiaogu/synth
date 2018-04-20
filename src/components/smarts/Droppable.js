@@ -7,10 +7,9 @@ export default DropTarget('DEFAULT', {
   drop({ onDrop }, monitor, component) {
     const diff = monitor.getDifferenceFromInitialOffset()
     const offset = monitor.getSourceClientOffset()
-    console.log(offset)
     const item = monitor.getItem().item
     if (onDrop && monitor.isOver({ shallow: false })) {
-      onDrop({ diff, item })
+      onDrop({ diff, offset, item })
     }
   }
 }, (connect, monitor) => ({

@@ -69,7 +69,14 @@ class ButtonEditor extends React.Component {
       addAction
     } = this.props
 
-    addAction(control, controlIndex)
+    addAction(control, controlIndex, {
+      index: undefined,
+      id: undefined,
+      params: {
+        'true': undefined,
+        'false': undefined
+      }
+    })
     this.onClickActionItem(control.actions.length - 1, 'true')
   }
 

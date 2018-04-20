@@ -58,6 +58,20 @@ class SliderEditor extends React.Component {
     clickActionItem(currIndex, currValue, index)
   }
 
+  addAction() {
+    const {
+      control,
+      controlIndex,
+      addAction
+    } = this.props
+
+    addAction(control, controlIndex, {
+      index: undefined,
+      id: undefined
+    })
+    this.onClickActionItem(control.actions.length - 1)
+  }
+
   render() {
     const { control, actionIndex: selectedIndex, value: selectedValue } = this.props
     if (!control) {
@@ -102,6 +116,11 @@ class SliderEditor extends React.Component {
               </AttrRow>
             </AttrColumn>
           ))}
+          {actions.length === 0 &&
+            <AddActionButton onClick={e => this.addAction()}>
+              +
+            </AddActionButton>
+          }
         </AttrList>
       </Root>
     )
