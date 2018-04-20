@@ -1,0 +1,31 @@
+{
+  "button": {
+    "id": "button",
+    "name": "Button",
+    "style": {
+      "width": 48,
+      "height": 48
+    }
+  },
+  "switch": {
+    "id": "switch",
+    "name": "Switch",
+    "style": {
+      "width": 48,
+      "height": 48
+    }
+  },
+  "slider": {
+    "id": "slider",
+    "name": "Slider",
+    "style": {
+      "width": 48,
+      "height": 100
+    },
+    "config": {
+      "max": 1,
+      "min": 0,
+      "defaultValue": 0.5
+    }
+  }
+}

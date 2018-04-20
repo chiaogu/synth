@@ -82,6 +82,24 @@ export default (state = INIT_STATE, action) => {
         isEditingControl: false
       }
     }
+    case TYPES.ADD_CUSTOM_PANEL_CONTROL: {
+      const { preset } = state
+      const { control } = action
+      preset.panels[0].controls.push(control)
+      return {
+        ...state,
+        preset: {...preset}
+      }
+    }
+    case TYPES.REMOVE_CUSTOM_PANEL_CONTROL: {
+      const { preset } = state
+      const { index } = action
+      preset.panels[0].controls.splice(index, 1)
+      return {
+        ...state,
+        preset: {...preset}
+      }
+    }
     default:
       return state
   }

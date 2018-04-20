@@ -8,6 +8,7 @@ import DndList from '@components/dumbs/DndList'
 import { ID } from '@components/smarts/DragDropHandler'
 import CustomPanel from '@components/smarts/CustomPanel'
 import ControlEditor from '@components/smarts/ControlEditor'
+import ControlFinder from '@components/smarts/ControlFinder'
 
 const EDIT_MODE_TRANSITION = 600
 const TRANSITION_TIMEING_FUNC_IN = 'cubic-bezier(0.86, 0, 0.07, 1)';
@@ -82,6 +83,11 @@ const ModuleFinderToggle = TopBarButton.extend`
   ` : `
     box-shadow: 0px 10px 27px -8px rgba(0,0,0,1);
   `}
+`
+
+const ControlFinderToggle = TopBarButton.extend`
+  left: 120px;
+  box-shadow: 0px 10px 27px -8px rgba(0,0,0,1);
 `
 
 const BackButton = TopBarButton.extend`
@@ -180,6 +186,18 @@ const ControlEditorSpace = styled.div`
   `}
 `
 
+const ControlFinderSpace = styled.div`
+  max-height: 320px;
+  flex-shrink: 0;
+  background: #000;
+  transition: height ${EDIT_MODE_TRANSITION / 1000}s ${TRANSITION_TIMEING_FUNC_IN};
+  ${({ isControlFinderOpened }) => isControlFinderOpened ? `
+    height: 40vh;
+  ` : `
+    height: 0
+  `}
+`
+
 class Preset extends React.Component {
   componentDidMount() {
     this.loadModules(this.props)
@@ -206,7 +224,7 @@ class Preset extends React.Component {
     if (presetChanged)
       this.loadModules(nextProps)
 
-    const { isEditing, isEditingControl } = nextProps
+    const { isEditing, isEditingControl, isControlFinderOpened } = nextProps
 
     if (isEditing) {
       this.setState({ isPanelHide: true })
@@ -216,10 +234,16 @@ class Preset extends React.Component {
       setTimeout(() => this.setState({ isPanelHide: false }), EDIT_MODE_TRANSITION)
     }
 
-    if(isEditingControl){
+    if (isEditingControl) {
       setTimeout(() => this.setState({ isControlEditorShown: true }), EDIT_MODE_TRANSITION)
-    }else {
+    } else {
       this.setState({ isControlEditorShown: false })
+    }
+
+    if (isControlFinderOpened) {
+      setTimeout(() => this.setState({ isControlFinderShown: true }), EDIT_MODE_TRANSITION)
+    } else {
+      this.setState({ isControlFinderShown: false })
     }
   }
 
@@ -244,17 +268,20 @@ class Preset extends React.Component {
       isEditingPanel,
       isEditingControl,
       isTrashCanVisible,
+      isControlFinderOpened,
       preset = {},
       modules,
       loadPreset,
       loadModules,
       setEditMode,
-      setEditPanel
+      setEditPanel,
+      toggleControlFinder
     } = this.props
     const {
       isPanelHide,
       isModuleFinderShown,
-      isControlEditorShown
+      isControlEditorShown,
+      isControlFinderShown
     } = this.state
 
     return (
@@ -268,6 +295,10 @@ class Preset extends React.Component {
           onClick={e => setEditPanel(!isEditingPanel)}>
           {isEditingPanel ? '↑' : '↓'}
         </BackButton>
+        <ControlFinderToggle
+          onClick={e => toggleControlFinder(!isControlFinderOpened)}>
+          {isControlFinderOpened ? '↓' : '↑'}
+        </ControlFinderToggle>
         <Column>
           <ControlEditorSpace isEditingControl={isEditingControl}>
             {isControlEditorShown && <ControlEditor />}
@@ -302,6 +333,9 @@ class Preset extends React.Component {
               </DndList>
             </ModuleList>
           </Row>
+          <ControlFinderSpace isControlFinderOpened={isControlFinderOpened}>
+            {isControlFinderShown && <ControlFinder />}
+          </ControlFinderSpace>
         </Column>
       </Root>
     )
@@ -313,6 +347,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as ModulesActions from '@flow/modules/actions'
 import * as PresetActions from '@flow/preset/actions'
+import * as ControlFinderActions from '@flow/controlFinder/actions'
 import * as Config from '@utils/Config'
 
 export default connect(
@@ -322,6 +357,7 @@ export default connect(
     isEditingPanel: state.preset.isEditingPanel,
     isEditingControl: state.preset.isEditingControl,
     isTrashCanVisible: state.moduleFinder.isTrashCanVisible,
+    isControlFinderOpened: state.controlFinder.isOpened,
     modules: state.modules.modules
   }),
   dispatch => {
@@ -336,6 +372,10 @@ export default connect(
       finishEditPresetPanel,
       finishEditControl
     } = bindActionCreators(PresetActions, dispatch)
+    const {
+      openControlFinder,
+      closeControlFinder
+    } = bindActionCreators(ControlFinderActions, dispatch)
 
     return {
       loadModules(preset) {
@@ -362,6 +402,13 @@ export default connect(
         else
           finishEditPresetPanel()
         finishEditControl()
+      },
+      toggleControlFinder(open) {
+        if (open) {
+          openControlFinder()
+        } else {
+          closeControlFinder()
+        }
       }
     }
   }

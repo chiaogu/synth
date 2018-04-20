@@ -1,12 +1,8 @@
 import modules from '@assets/data/modules.json'
+import controls from '@assets/data/controls.json'
 
 const MODULES = () => JSON.parse(JSON.stringify(modules))
-
-const CONTROL = () => ({
-  "button": {
-
-  }
-})
+const CONTROLS = () => JSON.parse(JSON.stringify(controls))
 
 const PRESET = () => ({
   "0": {
@@ -180,4 +176,8 @@ export function getModules(ids) {
 
 export function findModules(params) {
   return Promise.resolve(Object.values(MODULES()))
+}
+
+export function findControls(params) {
+  return Promise.resolve(Object.values(CONTROLS()))
 }

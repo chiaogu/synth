@@ -48,15 +48,8 @@ export default Component => connect(
           dispatch(startCaptureMode(index, value))
         }
       },
-      addAction(control, controlIndex) {
-        control.actions.push({
-          index: undefined,
-          id: undefined,
-          params: {
-            'true': undefined,
-            'false': undefined
-          }
-        })
+      addAction(control, controlIndex, action) {
+        control.actions.push(action)
         dispatch(updateCustomPanelControl(control, controlIndex))
       },
       deleteAction(control, actionIndex, controlIndex) {

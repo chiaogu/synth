@@ -6,8 +6,11 @@ export default DropTarget('DEFAULT', {
   // hover(props, monitor, component) {},
   drop({ onDrop }, monitor, component) {
     const diff = monitor.getDifferenceFromInitialOffset()
+    const offset = monitor.getSourceClientOffset()
     const item = monitor.getItem().item
-    if (onDrop) onDrop({ diff, item })
+    if (onDrop && monitor.isOver({ shallow: false })) {
+      onDrop({ diff, offset, item })
+    }
   }
 }, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
