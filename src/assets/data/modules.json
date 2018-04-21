@@ -228,7 +228,12 @@
         "action": {
           "type": "call",
           "functionName": {
-            "true": "open",
+            "true": {
+              "name": "open",
+              "params": [
+                0
+              ]
+            },
             "false": "close"
           }
         },
