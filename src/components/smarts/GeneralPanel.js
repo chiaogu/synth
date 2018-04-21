@@ -163,7 +163,10 @@ class GeneralPanel extends React.Component {
         return <StyledMenu
           config={control}
           value={param}
-          onSelect={(choice, index) => this.onChange(control, choice.key)}
+          onSelect={(choice, index) => {
+            const value = choice.value !== undefined ? choice.value : choice.key
+            this.onChange(control, value)
+          }}
         />
       case 'switch':
         return <StyledSwitch

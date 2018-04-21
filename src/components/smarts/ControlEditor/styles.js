@@ -93,3 +93,22 @@ export const AddActionButton = styled.div`
   cursor: pointer;
   color: #fff;
 `
+
+export const ToolBar = styled.div`
+  margin-top: 16px;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: flex-end;
+`
+
+export const ToolBarButton = styled.div`
+  padding: 8px;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: ${SHINE};
+  color: #fff;
+  user-select: none;
+  cursor: pointer;
+`
