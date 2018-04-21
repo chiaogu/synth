@@ -14,7 +14,9 @@ import {
   AttrRow,
   AttrItem,
   DeleteActionButton,
-  AddActionButton
+  AddActionButton,
+  ToolBar,
+  ToolBarButton
 } from './styles'
 
 const Root = styled.div`
@@ -94,8 +96,17 @@ class ButtonEditor extends React.Component {
     deleteAction(control, actionIndex, controlIndex)
   }
 
+  deleteControl() {
+    const { controlIndex, deleteControl } = this.props
+    deleteControl(controlIndex)
+  }
+
   render() {
-    const { control, actionIndex: selectedIndex, value: selectedValue } = this.props
+    const {
+      control,
+      actionIndex: selectedIndex,
+      value: selectedValue } = this.props
+
     if (!control) {
       return null
     }
@@ -111,6 +122,10 @@ class ButtonEditor extends React.Component {
           }
         </ControlWrapper>
         <AttrList>
+          <ToolBar>
+            <ToolBarButton>Copy</ToolBarButton>
+            <ToolBarButton onClick={e => this.deleteControl()}>Delete</ToolBarButton>
+          </ToolBar>
           <AttrHeader>properties</AttrHeader>
           <AttrColumn>
             <AttrName>label</AttrName>
