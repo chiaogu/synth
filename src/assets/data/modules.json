@@ -215,6 +215,35 @@
       }
     ]
   },
+  "userMedia": {
+    "id": "userMedia",
+    "name": "User Media",
+    "type": "Tone",
+    "className": "UserMedia",
+    "controls": [
+      {
+        "type": "switch",
+        "name": "open",
+        "id": "open",
+        "action": {
+          "type": "call",
+          "functionName": {
+            "true": "open",
+            "false": "close"
+          }
+        },
+        "defaultValue": false
+      },
+      {
+        "type": "slider",
+        "name": "volume",
+        "id": "volume.value",
+        "min": -40,
+        "max": 0,
+        "defaultValue": -20
+      }
+    ]
+  },
   "amplitudeEnvelope": {
     "id": "amplitudeEnvelope",
     "name": "Amplitude Envelope",
