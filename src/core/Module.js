@@ -35,8 +35,13 @@ export default class Module {
 
     const { action: { type, functionName } = {} } = controlConfig
     if(type === 'call'){
-      const name = typeof functionName === 'object' ? functionName[value] : functionName
-      this.instance[name]()
+      const func = typeof functionName === 'object' ? functionName[value] : functionName
+      if(typeof func === 'object') {
+        const { name, params } = func
+        this.instance[name](...params)
+      }else {
+        this.instance[func]()
+      }
     }else {
       _.set(this.instance, key, value)
       // console.log(_.get(this.instance, key))
