@@ -348,6 +348,7 @@ import { bindActionCreators } from 'redux'
 import * as ModulesActions from '@flow/modules/actions'
 import * as PresetActions from '@flow/preset/actions'
 import * as ControlFinderActions from '@flow/controlFinder/actions'
+import * as ControlEditorActions from '@flow/controlEditor/actions'
 import * as Config from '@utils/Config'
 
 export default connect(
@@ -376,6 +377,9 @@ export default connect(
       openControlFinder,
       closeControlFinder
     } = bindActionCreators(ControlFinderActions, dispatch)
+    const {
+      finishCaptureMode
+    } = bindActionCreators(ControlEditorActions, dispatch)
 
     return {
       loadModules(preset) {
@@ -397,11 +401,13 @@ export default connect(
           finishEditPreset()
       },
       setEditPanel(isEditing) {
-        if (isEditing)
+        if (isEditing){
           startEditPresetPanel()
-        else
+        }else{
           finishEditPresetPanel()
-        finishEditControl()
+          finishEditControl()
+          finishCaptureMode()
+        }
       },
       toggleControlFinder(open) {
         if (open) {

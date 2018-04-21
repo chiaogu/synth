@@ -43,30 +43,127 @@
       },
       {
         "type": "menu",
+        "name": "note",
+        "id": "frequency.value",
+        "choices": [
+          {
+            "key": "C3",
+            "value": 130.8
+          },
+          {
+            "key": "C#3",
+            "value": 138.6
+          },
+          {
+            "key": "D3",
+            "value": 146.8
+          },
+          {
+            "key": "D#3",
+            "value": 155.6
+          },
+          {
+            "key": "E3",
+            "value": 164.8
+          },
+          {
+            "key": "F3",
+            "value": 174.6
+          },
+          {
+            "key": "F#3",
+            "value": 185
+          },
+          {
+            "key": "G3",
+            "value": 196
+          },
+          {
+            "key": "G#3",
+            "value": 207.7
+          },
+          {
+            "key": "A3",
+            "value": 220
+          },
+          {
+            "key": "A#3",
+            "value": 233.1
+          },
+          {
+            "key": "B3",
+            "value": 246.9
+          }
+        ]
+      },
+      {
+        "type": "menu",
         "name": "type",
         "id": "type",
         "choices": [
-          { "key": "sine" },
-          { "key": "square" },
-          { "key": "triangle" },
-          { "key": "sawtooth" },
-          { "key": "fatsine" },
-          { "key": "fatsquare" },
-          { "key": "fattriangle" },
-          { "key": "fatsawtooth" },
-          { "key": "fmsine" },
-          { "key": "fmsquare" },
-          { "key": "fmtriangle" },
-          { "key": "fmsawtooth" },
-          { "key": "amsine" },
-          { "key": "amsquare" },
-          { "key": "amtriangle" },
-          { "key": "amsawtooth" },
-          { "key": "pulsesine" },
-          { "key": "pulsesquare" },
-          { "key": "pulsetriangle" },
-          { "key": "pulsesawtooth" },
-          { "key": "pwm" }
+          {
+            "key": "sine"
+          },
+          {
+            "key": "square"
+          },
+          {
+            "key": "triangle"
+          },
+          {
+            "key": "sawtooth"
+          },
+          {
+            "key": "fatsine"
+          },
+          {
+            "key": "fatsquare"
+          },
+          {
+            "key": "fattriangle"
+          },
+          {
+            "key": "fatsawtooth"
+          },
+          {
+            "key": "fmsine"
+          },
+          {
+            "key": "fmsquare"
+          },
+          {
+            "key": "fmtriangle"
+          },
+          {
+            "key": "fmsawtooth"
+          },
+          {
+            "key": "amsine"
+          },
+          {
+            "key": "amsquare"
+          },
+          {
+            "key": "amtriangle"
+          },
+          {
+            "key": "amsawtooth"
+          },
+          {
+            "key": "pulsesine"
+          },
+          {
+            "key": "pulsesquare"
+          },
+          {
+            "key": "pulsetriangle"
+          },
+          {
+            "key": "pulsesawtooth"
+          },
+          {
+            "key": "pwm"
+          }
         ],
         "defaultValue": "sine"
       }
@@ -160,10 +257,18 @@
         "name": "rolloff",
         "id": "rolloff",
         "choices": [
-          { "key": -12 },
-          { "key": -24 },
-          { "key": -48 },
-          { "key": -96 }
+          {
+            "key": -12
+          },
+          {
+            "key": -24
+          },
+          {
+            "key": -48
+          },
+          {
+            "key": -96
+          }
         ],
         "defaultValue": -12
       },
@@ -172,14 +277,30 @@
         "name": "type",
         "id": "type",
         "choices": [
-          { "key": "lowpass" },
-          { "key": "highpass" },
-          { "key": "bandpass" },
-          { "key": "lowshelf" },
-          { "key": "highshelf" },
-          { "key": "notch" },
-          { "key": "allpass" },
-          { "key": "peaking" }
+          {
+            "key": "lowpass"
+          },
+          {
+            "key": "highpass"
+          },
+          {
+            "key": "bandpass"
+          },
+          {
+            "key": "lowshelf"
+          },
+          {
+            "key": "highshelf"
+          },
+          {
+            "key": "notch"
+          },
+          {
+            "key": "allpass"
+          },
+          {
+            "key": "peaking"
+          }
         ],
         "defaultValue": "lowpass"
       }
