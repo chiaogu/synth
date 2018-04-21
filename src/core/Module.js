@@ -12,7 +12,7 @@ export default class Module {
       return result
     }, {})
 
-    if(type === 'Native'){
+    if(type === 'Tone'){
       if(className === 'Master'){
         this.instance = Tone.Master;
       }else {
@@ -45,7 +45,7 @@ export default class Module {
 
   dispose(){
     const { type, className } = this.config
-    if(type === 'Native'){
+    if(type === 'Tone'){
       if(className !== 'Master'){
         this.instance.dispose()
       }

@@ -2,14 +2,14 @@
   "master": {
     "id": "master",
     "name": "Master Output",
-    "type": "Native",
+    "type": "Tone",
     "className": "Master",
     "controls": []
   },
   "omniOscillator": {
     "id": "omniOscillator",
     "name": "Omni Oscillator",
-    "type": "Native",
+    "type": "Tone",
     "className": "OmniOscillator",
     "controls": [
       {
@@ -169,10 +169,18 @@
       }
     ]
   },
+  "noise": {
+    "id": "noise",
+    "name": "Noise",
+    "type": "Tone",
+    "className": "Noise",
+    "controls": [
+    ]
+  },
   "amplitudeEnvelope": {
     "id": "amplitudeEnvelope",
     "name": "Amplitude Envelope",
-    "type": "Native",
+    "type": "Tone",
     "className": "AmplitudeEnvelope",
     "controls": [
       {
@@ -225,7 +233,7 @@
   "filter": {
     "id": "filter",
     "name": "Filter",
-    "type": "Native",
+    "type": "Tone",
     "className": "Filter",
     "controls": [
       {
@@ -309,7 +317,7 @@
   "compressor": {
     "id": "compressor",
     "name": "Compressor",
-    "type": "Native",
+    "type": "Tone",
     "className": "Compressor",
     "controls": [
       {
@@ -357,7 +365,7 @@
   "eq3": {
     "id": "eq3",
     "name": "EQ3",
-    "type": "Native",
+    "type": "Tone",
     "className": "EQ3",
     "controls": [
       {
@@ -405,7 +413,7 @@
   "freeverb": {
     "id": "freeverb",
     "name": "Freeverb",
-    "type": "Native",
+    "type": "Tone",
     "className": "Freeverb",
     "controls": [
       {
