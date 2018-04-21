@@ -1,4 +1,5 @@
 
+import _ from '@utils/lodash'
 import { connect } from 'react-redux'
 import {
   updateCustomPanelControl,
@@ -9,7 +10,10 @@ import {
   startCaptureMode,
   finishCaptureMode
 } from '@flow/controlEditor/actions'
-import { finishEditControl } from '@flow/preset/actions'
+import {
+  finishEditControl,
+  addCustomPanelControl
+ } from '@flow/preset/actions'
 
 export default Component => connect(
   ({
@@ -63,6 +67,10 @@ export default Component => connect(
       deleteControl(controlIndex) {
         dispatch(removeCustomPanelControl(controlIndex))
         dispatch(finishEditControl())
+      },
+      copyControl(control) {
+        const clone = _.cloneDeep(control)
+        dispatch(addCustomPanelControl(clone))
       }
     }
   }

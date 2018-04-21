@@ -101,6 +101,11 @@ class ButtonEditor extends React.Component {
     deleteControl(controlIndex)
   }
 
+  copyControl() {
+    const { copyControl, control } = this.props
+    copyControl(control)
+  }
+
   render() {
     const {
       control,
@@ -123,7 +128,7 @@ class ButtonEditor extends React.Component {
         </ControlWrapper>
         <AttrList>
           <ToolBar>
-            <ToolBarButton>Copy</ToolBarButton>
+            <ToolBarButton onClick={e => this.copyControl()}>Copy</ToolBarButton>
             <ToolBarButton onClick={e => this.deleteControl()}>Delete</ToolBarButton>
           </ToolBar>
           <AttrHeader>properties</AttrHeader>

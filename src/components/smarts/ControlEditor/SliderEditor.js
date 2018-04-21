@@ -13,7 +13,9 @@ import {
   AttrRow,
   AttrItem,
   DeleteActionButton,
-  AddActionButton
+  AddActionButton,
+  ToolBar,
+  ToolBarButton
 } from './styles'
 
 const Root = styled.div`
@@ -72,6 +74,16 @@ class SliderEditor extends React.Component {
     this.onClickActionItem(control.actions.length - 1)
   }
 
+  deleteControl() {
+    const { controlIndex, deleteControl } = this.props
+    deleteControl(controlIndex)
+  }
+
+  copyControl() {
+    const { copyControl, control } = this.props
+    copyControl(control)
+  }
+
   render() {
     const { control, actionIndex: selectedIndex, value: selectedValue } = this.props
     if (!control) {
@@ -89,6 +101,10 @@ class SliderEditor extends React.Component {
             onChange={value => this.onChange(value)} />
         </ControlWrapper>
         <AttrList>
+          <ToolBar>
+            <ToolBarButton onClick={e => this.copyControl()}>Copy</ToolBarButton>
+            <ToolBarButton onClick={e => this.deleteControl()}>Delete</ToolBarButton>
+          </ToolBar>
           <AttrHeader>properties</AttrHeader>
           <Row>
             <HalfColumn>
