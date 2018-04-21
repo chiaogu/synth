@@ -175,6 +175,44 @@
     "type": "Tone",
     "className": "Noise",
     "controls": [
+      {
+        "type": "switch",
+        "name": "start",
+        "id": "start",
+        "action": {
+          "type": "call",
+          "functionName": {
+            "true": "start",
+            "false": "stop"
+          }
+        },
+        "defaultValue": false
+      },
+      {
+        "type": "menu",
+        "name": "type",
+        "id": "type",
+        "choices": [
+          {
+            "key": "white"
+          },
+          {
+            "key": "pink"
+          },
+          {
+            "key": "brown"
+          }
+        ],
+        "defaultValue": "white"
+      },
+      {
+        "type": "slider",
+        "name": "playbackRate",
+        "id": "playbackRate",
+        "min": 0,
+        "max": 1,
+        "defaultValue": 1
+      }
     ]
   },
   "amplitudeEnvelope": {
