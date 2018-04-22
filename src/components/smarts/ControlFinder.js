@@ -104,7 +104,7 @@ class ControlFinder extends React.Component {
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as ControlFinderActions from '@flow/controlFinder/actions'
-import * as Config from '@utils/Config'
+import * as Config from '@utils/config'
 
 export default connect(
   state => ({

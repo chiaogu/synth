@@ -30,7 +30,7 @@ const StyledPreset = styled(Preset) `
 
 class Playground extends React.Component {
   componentDidMount() {
-    this.loadPreset('0')
+    this.loadPreset('1')
   }
 
   loadPreset(id) {
@@ -68,7 +68,7 @@ class Playground extends React.Component {
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as PresetActions from '@flow/preset/actions'
-import * as Config from '@utils/Config'
+import * as Config from '@utils/config'
 
 export default connect(
   state => ({

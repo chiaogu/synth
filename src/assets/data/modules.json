@@ -4,7 +4,22 @@
     "name": "Master Output",
     "type": "Tone",
     "className": "Master",
-    "controls": []
+    "controls": [
+      {
+        "type": "slider",
+        "name": "volume",
+        "id": "volume.value",
+        "min": -40,
+        "max": 0,
+        "defaultValue": 0
+      },
+      {
+        "type": "switch",
+        "name": "mute",
+        "id": "mute",
+        "defaultValue": false
+      }
+    ]
   },
   "omniOscillator": {
     "id": "omniOscillator",
