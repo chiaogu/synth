@@ -264,6 +264,13 @@
       }
     ]
   },
+  "sampler": {
+    "id": "sampler",
+    "name": "Sampler",
+    "type": "Tone",
+    "className": "Sampler",
+    "controls": []
+  },
   "amplitudeEnvelope": {
     "id": "amplitudeEnvelope",
     "name": "Amplitude Envelope",
