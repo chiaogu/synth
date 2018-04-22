@@ -58,7 +58,7 @@
       },
       {
         "type": "menu",
-        "name": "note",
+        "name": "pitch",
         "id": "frequency.value",
         "choices": [
           {
@@ -271,8 +271,6 @@
     "className": "Sampler",
     "controls": [
       {
-        "type": "button",
-        "name": "record",
         "id": "record",
         "action": {
           "type": "void"
@@ -288,9 +286,13 @@
         }
       },
       {
-        "type": "button",
-        "name": "trigger",
-        "id": "trigger",
+        "id": "pitch",
+        "action": {
+          "type": "void"
+        }
+      },
+      {
+        "id": "_trigger",
         "action": {
           "type": "call",
           "functionName": {
@@ -299,6 +301,12 @@
           }
         },
         "defaultValue": false
+      },
+      {
+        "id": "trigger",
+        "action": {
+          "type": "void"
+        }
       }
     ]
   },

@@ -30,6 +30,7 @@ export default class Core {
         }
       }catch(e) {
         alert(e.message)
+        console.error(e)
         return
       }
 

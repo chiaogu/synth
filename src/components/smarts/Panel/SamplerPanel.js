@@ -6,6 +6,7 @@ import Slider from '@components/dumbs/Slider'
 import Menu from '@components/dumbs/Menu'
 import Switch from '@components/dumbs/Switch'
 import Button from '@components/dumbs/Button'
+import { connect, setControlAction } from './PanelLogic'
 
 const Root = styled.div`
   width: 100%;
@@ -78,95 +79,56 @@ const StyledButton = styled(Button) `
   height: 36px;
 `
 
+const PITCHS = [
+  { key: 'C2' }, { key: 'D2' }, { key: 'E2' }, { key: 'F2' }, { key: 'G2' }, { key: 'A2' }, { key: 'B2' },
+  { key: 'C3' }, { key: 'D3' }, { key: 'E3' }, { key: 'F3' }, { key: 'G3' }, { key: 'A3' }, { key: 'B3' },
+  { key: 'C4' }, { key: 'D4' }, { key: 'E4' }, { key: 'F4' }, { key: 'G4' }, { key: 'A4' }, { key: 'B4' }
+]
+
 class SamplerPanel extends React.Component {
-  // setControlAction(selectedControl, value) {
-  //   const { id } = selectedControl
-  //   const {
-  //     index: moduleIndex,
-  //     editingControl: {
-  //       panelIndex,
-  //       controlIndex,
-  //       control
-  //     },
-  //     capturingAction: {
-  //       actionIndex,
-  //       value: actionValue
-  //     },
-  //     updateCustomPanelControl
-  //   } = this.props
-
-  //   const action = control.actions[actionIndex]
-
-  //   switch (control.type) {
-  //     case 'switch':
-  //     case 'button': {
-  //       if (action.id !== id || action.index !== moduleIndex) {
-  //         control.actions[actionIndex] = {
-  //           id,
-  //           index: moduleIndex,
-  //           params: {
-  //             [`${actionValue}`]: value,
-  //             [`${!actionValue}`]: undefined
-  //           }
-  //         }
-  //       } else {
-  //         control.actions[actionIndex].params[`${actionValue}`] = value
-  //       }
-  //       break
-  //     }
-  //     case 'slider': {
-  //       const { type, max, min, defaultValue } = selectedControl
-  //       if (type === 'slider') {
-  //         control.config = {
-  //           max, min, defaultValue
-  //         }
-  //         control.actions[actionIndex] = {
-  //           id,
-  //           index: moduleIndex
-  //         }
-  //       }
-  //       break
-  //     }
-  //   }
-
-  //   updateCustomPanelControl(control, controlIndex)
-  // }
-
-  // controlToComponent(control, param) {
-  //   switch (control.type) {
-  //     case 'slider':
-  //       return <StyledSlider
-  //         config={control}
-  //         value={param}
-  //         onChange={value => this.onChange(control, value)}
-  //       />
-  //     case 'menu':
-  //       return <StyledMenu
-  //         config={control}
-  //         value={param}
-  //         onSelect={(choice, index) => {
-  //           const value = choice.value !== undefined ? choice.value : choice.key
-  //           this.onChange(control, value)
-  //         }}
-  //       />
-  //     case 'switch':
-  //       return <StyledSwitch
-  //         config={control}
-  //         value={param}
-  //         onToggle={selected => this.onChange(control, selected)}
-  //       />
-  //     case 'button':
-  //       return <StyledButton
-  //         config={control}
-  //         value={param}
-  //         onToggle={pressed => this.onChange(control, pressed)}
-  //       />
-  //   }
-  // }
 
   constructor() {
     super()
     this.recorder = null
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { params: {
+      record: nextRecord,
+      trigger: nextTrigger
+    } = {} } = nextProps.modules[nextProps.index]
+    const { params: {
+      record,
+      trigger
+    } = {} } = this.props.modules[this.props.index]
+
+    if (record !== nextRecord) {
+      if (nextRecord) {
+        this.recorder = AudioUtils.record()
+        this.recorder.result.then(buffer => {
+          this.setParameter('buffer', true, ['C3', buffer])
+        })
+      } else {
+        if (this.recorder) {
+          this.recorder.stop()
+          this.recorder = null
+        }
+      }
+    }
+
+    if (trigger !== nextTrigger) {
+      const { index, modules } = this.props
+      const { params: { pitch = 'C3' } = {} } = modules[index]
+      this.setParameter('_trigger', nextTrigger, [pitch])
+    }
+  }
+
+  onChange(id, value) {
+    const { index, isCapturing } = this.props
+    if (isCapturing) {
+      setControlAction({ id }, value, this.props)
+    }
+    this.setParameter(id, value)
   }
 
   setParameter(id, value, params) {
@@ -175,27 +137,24 @@ class SamplerPanel extends React.Component {
   }
 
   onRecord(pressed) {
-    this.setParameter('record', pressed)
-    if (pressed) {
-      this.recorder = AudioUtils.record()
-      this.recorder.result.then(buffer => {
-        this.setParameter('buffer', true, ['C3', buffer])
-      })
-    } else {
-      if (this.recorder) {
-        this.recorder.stop()
-        this.recorder = null
-      }
-    }
+    this.onChange('record', pressed)
   }
 
-  onTrigger(note, pressed) {
-    this.setParameter('trigger', pressed, [note])
+  onTrigger(pressed) {
+    this.onChange('trigger', pressed)
+  }
+
+  setPitch(note) {
+    this.onChange('pitch', note)
   }
 
   render() {
     const { index, modules } = this.props
-    const { params = {}, config: { controls = [], name } } = modules[index]
+    const { params: {
+      pitch = 'C3',
+      trigger,
+      record
+     } = {}, config: { controls = [], name } } = modules[index]
 
     return (
       <Root className={this.props.className}>
@@ -203,15 +162,24 @@ class SamplerPanel extends React.Component {
         <ControlList>
           <ControlListPadding />
           <ControlWrapper>
-            <StyledButton onToggle={pressed => this.onRecord(pressed)} />
+            <StyledSwitch
+              value={record}
+              onToggle={pressed => this.onRecord(pressed)} />
             <ControlName>record</ControlName>
           </ControlWrapper>
-          {['G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3'].map((note ,index) => (
-            <ControlWrapper key={index}>
-              <StyledButton onToggle={pressed => this.onTrigger(note, pressed)} />
-              <ControlName>{note}</ControlName>
-            </ControlWrapper>
-          ))}
+          <ControlWrapper>
+            <StyledMenu
+              value={pitch}
+              config={{ choices: PITCHS }}
+              onSelect={choice => this.setPitch(choice.key)} />
+            <ControlName>pitch</ControlName>
+          </ControlWrapper>
+          <ControlWrapper>
+            <StyledSwitch
+              value={trigger}
+              onToggle={pressed => this.onTrigger(pressed)} />
+            <ControlName>trigger</ControlName>
+          </ControlWrapper>
           <ControlListPadding />
         </ControlList>
       </Root>
@@ -219,27 +187,4 @@ class SamplerPanel extends React.Component {
   }
 }
 
-
-import { connect } from 'react-redux'
-import { setParameter } from '@flow/modules/actions'
-import { updateCustomPanelControl } from '@flow/preset/actions'
-
-export default connect(
-  ({ modules, controlEditor, preset }) => ({
-    modules: modules.modules,
-    editingControl: preset.currentEditingControl,
-    isCapturing: controlEditor.isCapturing,
-    capturingAction: {
-      actionIndex: controlEditor.actionIndex,
-      value: controlEditor.value
-    }
-  }),
-  dispatch => ({
-    setParameter(moduleIndex, controlName, value, params) {
-      dispatch(setParameter(moduleIndex, controlName, value, params))
-    },
-    updateCustomPanelControl(control, index) {
-      dispatch(updateCustomPanelControl(control, index))
-    }
-  })
-)(SamplerPanel)
+export default connect(SamplerPanel)
