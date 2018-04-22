@@ -125,28 +125,16 @@ const PRESET = () => ({
     "name": "testNo2",
     "modules": [
       {
-        "id": "omniOscillator",
-        "params": {
-          "start": true,
-          "volume.value": -20,
-          "frequency.value": 220,
-          "type": "square"
-        }
-      },
-      {
-        "id": "amplitudeEnvelope",
-        "params": {
-          "attack": 0.1,
-          "decay": 0.2,
-          "sustain": 1,
-          "release": 0.8
-        }
-      },
-      {
-        "id": "filter"
+        "id": "sampler"
       },
       {
         "id": "master"
+      }
+    ],
+    "panels": [
+      {
+        "controls": [
+        ]
       }
     ]
   }

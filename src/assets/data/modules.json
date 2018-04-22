@@ -4,7 +4,22 @@
     "name": "Master Output",
     "type": "Tone",
     "className": "Master",
-    "controls": []
+    "controls": [
+      {
+        "type": "slider",
+        "name": "volume",
+        "id": "volume.value",
+        "min": -40,
+        "max": 0,
+        "defaultValue": 0
+      },
+      {
+        "type": "switch",
+        "name": "mute",
+        "id": "mute",
+        "defaultValue": false
+      }
+    ]
   },
   "omniOscillator": {
     "id": "omniOscillator",
@@ -43,7 +58,7 @@
       },
       {
         "type": "menu",
-        "name": "note",
+        "name": "pitch",
         "id": "frequency.value",
         "choices": [
           {
@@ -246,6 +261,52 @@
         "min": -40,
         "max": 0,
         "defaultValue": -20
+      }
+    ]
+  },
+  "sampler": {
+    "id": "sampler",
+    "name": "Sampler",
+    "type": "Tone",
+    "className": "Sampler",
+    "controls": [
+      {
+        "id": "record",
+        "action": {
+          "type": "void"
+        }
+      },
+      {
+        "id": "buffer",
+        "action": {
+          "type": "call",
+          "functionName": {
+            "true": "add"
+          }
+        }
+      },
+      {
+        "id": "pitch",
+        "action": {
+          "type": "void"
+        }
+      },
+      {
+        "id": "_trigger",
+        "action": {
+          "type": "call",
+          "functionName": {
+            "true": "triggerAttack",
+            "false": "triggerRelease"
+          }
+        },
+        "defaultValue": false
+      },
+      {
+        "id": "trigger",
+        "action": {
+          "type": "void"
+        }
       }
     ]
   },

@@ -5,6 +5,7 @@ import Slider from '@components/dumbs/Slider'
 import Menu from '@components/dumbs/Menu'
 import Switch from '@components/dumbs/Switch'
 import Button from '@components/dumbs/Button'
+import { connect, setControlAction } from './PanelLogic'
 
 const Root = styled.div`
   width: 100%;
@@ -92,63 +93,10 @@ class GeneralPanel extends React.Component {
     const { id } = control
 
     if (isCapturing) {
-      this.setControlAction(control, value)
+      setControlAction(control, value, this.props)
     }
 
     setParameter(index, id, value);
-  }
-
-  setControlAction(selectedControl, value) {
-    const { id } = selectedControl
-    const {
-      index: moduleIndex,
-      editingControl: {
-        panelIndex,
-        controlIndex,
-        control
-      },
-      capturingAction: {
-        actionIndex,
-        value: actionValue
-      },
-      updateCustomPanelControl
-    } = this.props
-
-    const action = control.actions[actionIndex]
-
-    switch (control.type) {
-      case 'switch':
-      case 'button': {
-        if (action.id !== id || action.index !== moduleIndex) {
-          control.actions[actionIndex] = {
-            id,
-            index: moduleIndex,
-            params: {
-              [`${actionValue}`]: value,
-              [`${!actionValue}`]: undefined
-            }
-          }
-        } else {
-          control.actions[actionIndex].params[`${actionValue}`] = value
-        }
-        break
-      }
-      case 'slider': {
-        const { type, max, min, defaultValue } = selectedControl
-        if (type === 'slider') {
-          control.config = {
-            max, min, defaultValue
-          }
-          control.actions[actionIndex] = {
-            id,
-            index: moduleIndex
-          }
-        }
-        break
-      }
-    }
-
-    updateCustomPanelControl(control, controlIndex)
   }
 
   controlToComponent(control, param) {
@@ -212,27 +160,4 @@ class GeneralPanel extends React.Component {
   }
 }
 
-
-import { connect } from 'react-redux'
-import { setParameter } from '@flow/modules/actions'
-import { updateCustomPanelControl } from '@flow/preset/actions'
-
-export default connect(
-  ({ modules, controlEditor, preset }) => ({
-    modules: modules.modules,
-    editingControl: preset.currentEditingControl,
-    isCapturing: controlEditor.isCapturing,
-    capturingAction: {
-      actionIndex: controlEditor.actionIndex,
-      value: controlEditor.value
-    }
-  }),
-  dispatch => ({
-    setParameter(moduleIndex, controlName, value) {
-      dispatch(setParameter(moduleIndex, controlName, value))
-    },
-    updateCustomPanelControl(control, index) {
-      dispatch(updateCustomPanelControl(control, index))
-    }
-  })
-)(GeneralPanel)
+export default connect(GeneralPanel)

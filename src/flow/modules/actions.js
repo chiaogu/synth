@@ -19,11 +19,12 @@ export const loadModulesSuccess = result => ({
   modules: result
 })
 
-export const setParameter = (moduleIndex, controlName, value) => ({
+export const setParameter = (moduleIndex, controlName, value, params) => ({
   type: TYPES.SET_PARAMETER,
   moduleIndex,
   controlName,
-  value
+  value,
+  params
 })
 
 export const insertModule = (module, index) => ({
