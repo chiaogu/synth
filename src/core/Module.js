@@ -12,46 +12,51 @@ export default class Module {
       return result
     }, {})
 
-    if(type === 'Tone'){
-      if(className === 'Master'){
+    if (type === 'Tone') {
+      if (className === 'Master') {
         this.instance = Tone.Master;
-      }else {
+      } else {
         this.instance = new Tone[className]();
       }
 
-      for(let key in params){
+      for (let key in params) {
         this.set(key, params[key]);
       }
     }
   }
 
-  connect({instance}) {
+  connect({ instance }) {
     this.instance.connect(instance);
   }
 
-  set(key, value) {
+  set(key, value, params) {
     const controlConfig = this.controlMap[key]
-    if(!controlConfig) return
+    if (!controlConfig) return
 
     const { action: { type, functionName } = {} } = controlConfig
-    if(type === 'call'){
+    if (type === 'call') {
       const func = typeof functionName === 'object' ? functionName[value] : functionName
-      if(typeof func === 'object') {
+      if (typeof func === 'object') {
         const { name, params } = func
         this.instance[name](...params)
-      }else {
-        this.instance[func]()
+      } else {
+        if(params !== undefined) {
+          this.instance[func](...params)
+        }else {
+          this.instance[func]()
+        }
       }
-    }else {
+    } else if (type === 'void') {
+    } else {
       _.set(this.instance, key, value)
       // console.log(_.get(this.instance, key))
     }
   }
 
-  dispose(){
+  dispose() {
     const { type, className } = this.config
-    if(type === 'Tone'){
-      if(className !== 'Master'){
+    if (type === 'Tone') {
+      if (className !== 'Master') {
         this.instance.dispose()
       }
     }

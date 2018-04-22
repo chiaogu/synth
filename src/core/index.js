@@ -1,6 +1,7 @@
 import Module from './Module'
 import { TYPES as MODULES_ACTION } from '@flow/modules/actions'
 import reduceModuleAction from '@flow/modules/reducer'
+import Sampler from './Sampler';
 
 export default class Core {
   constructor() {
@@ -23,13 +24,14 @@ export default class Core {
             break
           }
           case MODULES_ACTION.SET_PARAMETER:{
-            const { moduleIndex, controlName, value } = action
-            this.set(moduleIndex, controlName, value)
+            const { moduleIndex, controlName, value, params } = action
+            this.set(moduleIndex, controlName, value, params)
             break
           }
         }
       }catch(e) {
         alert(e.message)
+        console.error(e)
         return
       }
 
@@ -39,7 +41,14 @@ export default class Core {
 
   setModules(modules) {
     this.clearModules()
-    this.modules = modules.map(module => new Module(module))
+    this.modules = modules.map(module => {
+      switch(module.config.id) {
+        case 'sampler':
+          return new Sampler(module)
+        default:
+          return new Module(module)
+      }
+    })
     this.modules.forEach((module, index) => {
       if (index === 0) return
       this.modules[index - 1].connect(module)
@@ -53,8 +62,8 @@ export default class Core {
     this.modules = []
   }
 
-  set(index, key, value) {
+  set(index, key, value, params) {
     const module = this.modules[index]
-    module.set(key, value)
+    module.set(key, value, params)
   }
 }

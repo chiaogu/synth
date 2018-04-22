@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import GeneralPanel from '@components/smarts/GeneralPanel';
+import GeneralPanel from './GeneralPanel';
+import SamplerPanel from './SamplerPanel';
 
 export default class Panel extends React.Component {
 
@@ -9,9 +10,10 @@ export default class Panel extends React.Component {
   }
 
   getPanel(type) {
-    const { index, module } = this.props;
-
-    switch (module.type) {
+    const { index, module: { config: { id }} } = this.props
+    switch (id) {
+      case 'sampler':
+        return <SamplerPanel index={index}/>
       default:
         return <GeneralPanel index={index}/>
     }

@@ -349,7 +349,7 @@ import * as ModulesActions from '@flow/modules/actions'
 import * as PresetActions from '@flow/preset/actions'
 import * as ControlFinderActions from '@flow/controlFinder/actions'
 import * as ControlEditorActions from '@flow/controlEditor/actions'
-import * as Config from '@utils/Config'
+import * as Config from '@utils/config'
 
 export default connect(
   state => ({
