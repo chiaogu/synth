@@ -23,8 +23,8 @@ export default class Core {
             break
           }
           case MODULES_ACTION.SET_PARAMETER:{
-            const { moduleIndex, controlName, value } = action
-            this.set(moduleIndex, controlName, value)
+            const { moduleIndex, controlName, value, params } = action
+            this.set(moduleIndex, controlName, value, params)
             break
           }
         }
@@ -53,8 +53,8 @@ export default class Core {
     this.modules = []
   }
 
-  set(index, key, value) {
+  set(index, key, value, params) {
     const module = this.modules[index]
-    module.set(key, value)
+    module.set(key, value, params)
   }
 }

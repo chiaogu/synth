@@ -1,5 +1,7 @@
 import Promise from 'q'
 
+const audioContext = new AudioContext()
+
 export function record() {
   return (() => {
     let recorder = null
@@ -13,9 +15,10 @@ export function record() {
       recorder.onstop = () => {
         stream.getAudioTracks().forEach(track => track.stop())
         stream = null
-        const fileReader = new FileReader();
-        fileReader.onloadend = () => deferred.resolve(fileReader.result)
-        fileReader.readAsArrayBuffer(new Blob(chunks));
+        fetch(URL.createObjectURL(new Blob(chunks)))
+          .then(response => response.arrayBuffer())
+          .then(buffer => audioContext.decodeAudioData(buffer))
+          .then(buffer => deferred.resolve(buffer))
       }
       recorder.onerror = error => {
         stream.getAudioTracks().forEach(track => track.stop())

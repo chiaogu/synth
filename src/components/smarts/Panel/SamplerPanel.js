@@ -79,17 +79,6 @@ const StyledButton = styled(Button) `
 `
 
 class SamplerPanel extends React.Component {
-  // onChange(control, value) {
-  //   const { index, setParameter, isCapturing } = this.props
-  //   const { id } = control
-
-  //   if (isCapturing) {
-  //     this.setControlAction(control, value)
-  //   }
-
-  //   setParameter(index, id, value);
-  // }
-
   // setControlAction(selectedControl, value) {
   //   const { id } = selectedControl
   //   const {
@@ -180,11 +169,17 @@ class SamplerPanel extends React.Component {
     this.recorder = null
   }
 
-  onClickRecordButton(pressed) {
+  setParameter(id, value, params) {
+    const { index, setParameter } = this.props
+    setParameter(index, id, value, params)
+  }
+
+  onRecord(pressed) {
+    this.setParameter('record', pressed)
     if (pressed) {
       this.recorder = AudioUtils.record()
       this.recorder.result.then(buffer => {
-        console.log('recorded', buffer)
+        this.setParameter('buffer', true, ['C3', buffer])
       })
     } else {
       if (this.recorder) {
@@ -192,6 +187,10 @@ class SamplerPanel extends React.Component {
         this.recorder = null
       }
     }
+  }
+
+  onTrigger(note, pressed) {
+    this.setParameter('trigger', pressed, [note])
   }
 
   render() {
@@ -204,9 +203,15 @@ class SamplerPanel extends React.Component {
         <ControlList>
           <ControlListPadding />
           <ControlWrapper>
-            <StyledButton onToggle={pressed => this.onClickRecordButton(pressed)} />
+            <StyledButton onToggle={pressed => this.onRecord(pressed)} />
             <ControlName>record</ControlName>
           </ControlWrapper>
+          {['G2', 'A2', 'B2', 'C3', 'D3', 'E3', 'F3'].map((note ,index) => (
+            <ControlWrapper key={index}>
+              <StyledButton onToggle={pressed => this.onTrigger(note, pressed)} />
+              <ControlName>{note}</ControlName>
+            </ControlWrapper>
+          ))}
           <ControlListPadding />
         </ControlList>
       </Root>
@@ -230,8 +235,8 @@ export default connect(
     }
   }),
   dispatch => ({
-    setParameter(moduleIndex, controlName, value) {
-      dispatch(setParameter(moduleIndex, controlName, value))
+    setParameter(moduleIndex, controlName, value, params) {
+      dispatch(setParameter(moduleIndex, controlName, value, params))
     },
     updateCustomPanelControl(control, index) {
       dispatch(updateCustomPanelControl(control, index))

@@ -269,7 +269,38 @@
     "name": "Sampler",
     "type": "Tone",
     "className": "Sampler",
-    "controls": []
+    "controls": [
+      {
+        "type": "button",
+        "name": "record",
+        "id": "record",
+        "action": {
+          "type": "void"
+        }
+      },
+      {
+        "id": "buffer",
+        "action": {
+          "type": "call",
+          "functionName": {
+            "true": "add"
+          }
+        }
+      },
+      {
+        "type": "button",
+        "name": "trigger",
+        "id": "trigger",
+        "action": {
+          "type": "call",
+          "functionName": {
+            "true": "triggerAttack",
+            "false": "triggerRelease"
+          }
+        },
+        "defaultValue": false
+      }
+    ]
   },
   "amplitudeEnvelope": {
     "id": "amplitudeEnvelope",
