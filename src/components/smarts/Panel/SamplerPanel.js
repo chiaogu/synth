@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import _ from '@utils/lodash'
-import * as AudioUtils from '@utils/audioUtils'
 import Slider from '@components/dumbs/Slider'
 import Menu from '@components/dumbs/Menu'
 import Switch from '@components/dumbs/Switch'
@@ -86,42 +84,6 @@ const PITCHS = [
 ]
 
 class SamplerPanel extends React.Component {
-
-  constructor() {
-    super()
-    this.recorder = null
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { params: {
-      record: nextRecord,
-      trigger: nextTrigger
-    } = {} } = nextProps.modules[nextProps.index]
-    const { params: {
-      record,
-      trigger
-    } = {} } = this.props.modules[this.props.index]
-
-    if (record !== nextRecord) {
-      if (nextRecord) {
-        this.recorder = AudioUtils.record()
-        this.recorder.result.then(buffer => {
-          this.setParameter('buffer', true, ['C3', buffer])
-        })
-      } else {
-        if (this.recorder) {
-          this.recorder.stop()
-          this.recorder = null
-        }
-      }
-    }
-
-    if (trigger !== nextTrigger) {
-      const { index, modules } = this.props
-      const { params: { pitch = 'C3' } = {} } = modules[index]
-      this.setParameter('_trigger', nextTrigger, [pitch])
-    }
-  }
 
   onChange(id, value) {
     const { index, isCapturing } = this.props
