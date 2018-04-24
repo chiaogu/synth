@@ -1,4 +1,5 @@
 import Promise from 'q'
+import MediaRecorder from 'audio-recorder-polyfill'
 
 const audioContext = new AudioContext()
 
@@ -10,9 +11,7 @@ export function record() {
       audio: true
     })
     resolveStream.then(stream => {
-      const chunks = []
-      recorder = new MediaRecorder(stream)
-      recorder.onstop = () => {
+      const onStop = () => {
         stream.getAudioTracks().forEach(track => track.stop())
         stream = null
         fetch(URL.createObjectURL(new Blob(chunks)))
@@ -20,12 +19,17 @@ export function record() {
           .then(buffer => audioContext.decodeAudioData(buffer))
           .then(buffer => deferred.resolve(buffer))
       }
-      recorder.onerror = error => {
+      const onError = error => {
         stream.getAudioTracks().forEach(track => track.stop())
         stream = null
         deferred.reject(error)
       }
-      recorder.ondataavailable = ({ data }) => data.size && chunks.push(data)
+      const onDataAvailable = ({ data }) => data.size && chunks.push(data)
+
+      const chunks = []
+      recorder = new MediaRecorder(stream)
+      recorder.addEventListener('stop', onStop)
+      recorder.addEventListener('dataavailable', onDataAvailable)
       recorder.start()
     })
     return {
