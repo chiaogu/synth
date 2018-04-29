@@ -64,14 +64,14 @@ export default connect(
     return {
       loadPreset(id) {
         loadPreset()
-        // Config.getPreset(id).then(preset => {
-        //   loadPresetSuccess(preset)
-        // })
         let currentPreset = Storage.local.get('currentPreset')
-        console.log('storage', currentPreset)
         currentPreset = currentPreset || {
           modules: [],
-          panels: []
+          panels: [
+            {
+              controls: []
+            }
+          ]
         }
         loadPresetSuccess(currentPreset)
       }

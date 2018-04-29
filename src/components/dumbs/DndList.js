@@ -10,7 +10,8 @@ export default class DndList extends React.Component {
       getIndex = index => index,
       isDragDisable = () => false,
       isDropDisabled = false,
-      getItemStyle = index => ({})
+      getItemStyle = index => ({}),
+      style
     } = this.props
 
     return (
@@ -20,6 +21,7 @@ export default class DndList extends React.Component {
             ref={provided.innerRef}
             {...provided.droppableProps}
             style={{
+              ...style,
               height: 'fit-content',
               width: 'fit-content'
             }}>

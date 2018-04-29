@@ -314,6 +314,10 @@ class Preset extends React.Component {
                 {!isPanelHide && <StyledCustomPanel />}
               </CustomPanelWrapper>
               <DndList
+                style={{
+                  minHeight: '100px',
+                  minWidth: '100px',
+                }}
                 droppableId={ID.PRESET}
                 getItemStyle={() => ({
                   transition: 'all 0.6s',
