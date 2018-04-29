@@ -14,9 +14,8 @@ export const TYPES = createConstants('PRESET', [
   'FINISH_EDIT_CONTROL'
 ])
 
-export const loadPreset = id => ({
-  type: TYPES.LOAD_PRESET,
-  id
+export const loadPreset = () => ({
+  type: TYPES.LOAD_PRESET
 })
 
 export const loadPresetSuccess = result => ({

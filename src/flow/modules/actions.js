@@ -9,9 +9,8 @@ export const TYPES = createConstants('MODULES', [
   'DELETE_MODULE'
 ])
 
-export const loadModules = presetId => ({
-  type: TYPES.LOAD_MODULES,
-  presetId
+export const loadModules = () => ({
+  type: TYPES.LOAD_MODULES
 })
 
 export const loadModulesSuccess = result => ({
