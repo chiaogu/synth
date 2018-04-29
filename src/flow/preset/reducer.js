@@ -16,7 +16,6 @@ const INIT_STATE = {
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
     case TYPES.LOAD_PRESET: {
-      const { id } = action
       return {
         ...state,
         isFetching: true

@@ -2,22 +2,19 @@ import { TYPES } from './actions'
 
 const INIT_STATE = {
   isFetching: false,
-  modules: [],
-  presetId: undefined
+  modules: []
 }
 
 export default (state = INIT_STATE, action) => {
   switch (action.type) {
     case TYPES.LOAD_MODULES: {
-      const { presetId, modules } = action
       return {
         ...state,
-        isFetching: true,
-        presetId
+        isFetching: true
       }
     }
     case TYPES.LOAD_MODULES_SUCCESS: {
-      const { presetId, modules } = action
+      const { modules } = action
       return {
         ...state,
         isFetching: false,

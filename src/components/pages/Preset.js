@@ -383,7 +383,7 @@ export default connect(
 
     return {
       loadModules(preset) {
-        loadModules(preset.id)
+        loadModules()
         const ids = preset.modules.map(module => module.id)
         Config.getModules(ids)
           .then(modules => modules.map((module, index) => ({
