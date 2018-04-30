@@ -11,7 +11,9 @@ export const TYPES = createConstants('PRESET', [
   'ADD_CUSTOM_PANEL_CONTROL',
   'REMOVE_CUSTOM_PANEL_CONTROL',
   'START_EDIT_CONTROL',
-  'FINISH_EDIT_CONTROL'
+  'FINISH_EDIT_CONTROL',
+  'SHARE_PRESET',
+  'SHARE_PRESET_SUCCESS'
 ])
 
 export const loadPreset = () => ({
@@ -65,4 +67,12 @@ export const startEditControl = (panelIndex, controlIndex, control) => ({
 
 export const finishEditControl = () => ({
   type: TYPES.FINISH_EDIT_CONTROL
+})
+
+export const sharePreset = () => ({
+  type: TYPES.SHARE_PRESET
+})
+
+export const sharePresetSuccess = () => ({
+  type: TYPES.SHARE_PRESET_SUCCESS
 })

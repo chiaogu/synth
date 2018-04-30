@@ -1,10 +1,16 @@
-export const set = (key, value) => {
+const PRESET = 'Prest'
+
+const set = (key, value) => {
   window.localStorage.setItem(key, JSON.stringify(value))
+  return Promise.resolve()
 }
-export const get = (key) => {
+const get = (key) => {
   let value = window.localStorage.getItem(key)
   try {
     value = JSON.parse(value)
   } catch (e) { }
-  return value
+  return Promise.resolve(value)
 }
+
+export const saveCurrentPreset = preset => set(PRESET, preset)
+export const getCurrentPreset = () => get(PRESET)

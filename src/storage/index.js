@@ -1,6 +1,8 @@
 import * as _local from './local'
+import * as _remote from './remote'
 
 export const local = _local
+export const remote = _remote
 
 import { connect } from 'react-redux'
 export default connect(
@@ -18,7 +20,7 @@ export default connect(
         params: module.params
       }))
     }
-    local.set('currentPreset', currentPreset)
+    local.saveCurrentPreset(currentPreset)
   }
   return null
 })

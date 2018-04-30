@@ -5,6 +5,7 @@ const INIT_STATE = {
   isEditing: false,
   isEditingPanel: false,
   isEditingControl: false,
+  isSharing: false,
   preset: undefined,
   currentEditingControl: {
     panelIndex: undefined,
@@ -97,6 +98,19 @@ export default (state = INIT_STATE, action) => {
       return {
         ...state,
         preset: {...preset}
+      }
+    }
+    case TYPES.SHARE_PRESET: {
+      return {
+        ...state,
+        isSharing: true
+      }
+    }
+    case TYPES.SHARE_PRESET_SUCCESS: {
+      const { preset } = action
+      return {
+        ...state,
+        isSharing: false
       }
     }
     default:

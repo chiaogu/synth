@@ -30,8 +30,8 @@ const StyledPreset = styled(Preset) `
 
 class Playground extends React.Component {
   componentDidMount() {
-    const { loadPreset } = this.props
-    loadPreset()
+    const { loadPreset, match: { params: { presetId } } } = this.props
+    loadPreset(presetId)
   }
 
   render() {
@@ -64,16 +64,21 @@ export default connect(
     return {
       loadPreset(id) {
         loadPreset()
-        let currentPreset = Storage.local.get('currentPreset')
-        currentPreset = currentPreset || {
-          modules: [],
-          panels: [
-            {
-              controls: []
-            }
-          ]
-        }
-        loadPresetSuccess(currentPreset)
+
+        Promise.resolve()
+          .then(() => (id && Storage.remote.getPreset(id)))
+          .then(preset => preset || Storage.local.getCurrentPreset())
+          .then(preset => preset || {
+            modules: [],
+            panels: [
+              {
+                controls: []
+              }
+            ]
+          })
+          .then(preset => {
+            loadPresetSuccess(preset)
+          })
       }
     }
   }

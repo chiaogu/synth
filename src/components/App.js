@@ -1,4 +1,5 @@
 import React from 'react'
+import { Route } from 'react-router'
 import styled from 'styled-components'
 
 import Playground from '@components/pages/Playground'
@@ -14,7 +15,7 @@ export default class App extends React.Component {
     return (
       <DragDropHandler>
         <Root>
-          <Playground />
+          <Route path="/:presetId*" component={Playground}/>
         </Root>
       </DragDropHandler>
     );
