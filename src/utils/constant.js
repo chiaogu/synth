@@ -3,3 +3,4 @@ export const FIRE_BASE_CONFIG =  {
   authDomain: process.env.FIRE_BASE_AUTH_DOMAIN,
   projectId: process.env.FIRE_BASE_PROJECT_ID,
 }
+export const BASE_NAME = process.env.BASE_NAME
