@@ -1,7 +1,7 @@
 import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CleanWebpackPlugin from 'clean-webpack-plugin'
-
+import DotenvPlugin from 'dotenv-webpack'
 
 export default ({ prod } = {}) => ({
   entry: [
@@ -53,6 +53,7 @@ export default ({ prod } = {}) => ({
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
+    new DotenvPlugin(),
     new HtmlWebpackPlugin({
       template: `${__dirname}/src/index.html`,
       filename: 'index.html',
