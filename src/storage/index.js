@@ -18,7 +18,7 @@ export default connect(
         params: module.params
       }))
     }
-    local.set('currentPreset', currentPreset)
+    local.saveCurrentPreset(currentPreset)
   }
   return null
 })

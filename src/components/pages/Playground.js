@@ -64,16 +64,16 @@ export default connect(
     return {
       loadPreset(id) {
         loadPreset()
-        let currentPreset = Storage.local.get('currentPreset')
-        currentPreset = currentPreset || {
-          modules: [],
-          panels: [
-            {
-              controls: []
-            }
-          ]
-        }
-        loadPresetSuccess(currentPreset)
+        Storage.local.getCurrentPreset().then(preset => {
+          loadPresetSuccess(preset || {
+            modules: [],
+            panels: [
+              {
+                controls: []
+              }
+            ]
+          })
+        })
       }
     }
   }
