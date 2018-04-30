@@ -10,14 +10,16 @@ import reducers from '@flow/reducers'
 import App from '@components/App'
 import Core from '@core'
 import Storage from '@storage'
+import { BASE_NAME } from '@utils/constant'
 import './styles'
+import './ghredirect'
 
 const Root = styled.div`
   position: relative;
   height: 100%;
 `
 
-const history = createHistory()
+const history = createHistory(BASE_NAME && { basename: BASE_NAME })
 
 const store = createStore(
   reducers,

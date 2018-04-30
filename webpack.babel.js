@@ -2,6 +2,7 @@ import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CleanWebpackPlugin from 'clean-webpack-plugin'
 import DotenvPlugin from 'dotenv-webpack'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 
 export default ({ prod } = {}) => ({
   entry: [
@@ -54,7 +55,9 @@ export default ({ prod } = {}) => ({
     historyApiFallback: true
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin([
+      'dist'
+    ]),
     new DotenvPlugin({
       systemvars: true
     }),
@@ -62,6 +65,9 @@ export default ({ prod } = {}) => ({
       template: `${__dirname}/src/index.html`,
       filename: 'index.html',
       inject: 'body',
-    })
+    }),
+    new CopyWebpackPlugin([
+      { from: 'src/404.html', to: '404.html' }
+    ])
   ],
 })
