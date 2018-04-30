@@ -1,7 +1,7 @@
 import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CleanWebpackPlugin from 'clean-webpack-plugin'
-
+import DotenvPlugin from 'dotenv-webpack'
 
 export default ({ prod } = {}) => ({
   entry: [
@@ -17,7 +17,8 @@ export default ({ prod } = {}) => ({
       '@flow': path.join(path.resolve(__dirname, "src"), 'flow'),
       '@core': path.join(path.resolve(__dirname, "src"), 'core'),
       '@utils': path.join(path.resolve(__dirname, "src"), 'utils'),
-      '@assets': path.join(path.resolve(__dirname, "src"), 'assets')
+      '@assets': path.join(path.resolve(__dirname, "src"), 'assets'),
+      '@storage': path.join(path.resolve(__dirname, "src"), 'storage')
     },
     modules: [
       path.resolve(__dirname, "src"),
@@ -49,9 +50,12 @@ export default ({ prod } = {}) => ({
   devServer: {
     inline: true,
     port: 3333,
+    host: "0.0.0.0",
+    historyApiFallback: true
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
+    new DotenvPlugin(),
     new HtmlWebpackPlugin({
       template: `${__dirname}/src/index.html`,
       filename: 'index.html',

@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { css } from 'styled-components'
 import _ from '@utils/lodash'
+import { push } from 'react-router-redux'
+
 import Panel from '@components/smarts/Panel'
 import ModuleFinder from '@components/smarts/ModuleFinder'
 import DndList from '@components/dumbs/DndList'
@@ -92,6 +93,15 @@ const ControlFinderToggle = TopBarButton.extend`
 
 const BackButton = TopBarButton.extend`
   left: 16px;
+  box-shadow: 0px 10px 27px -8px rgba(0,0,0,1);
+`
+
+const ShareButton = TopBarButton.extend`
+  left: 172px;
+  width: 60px;
+  displat: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0px 10px 27px -8px rgba(0,0,0,1);
 `
 
@@ -203,22 +213,6 @@ class Preset extends React.Component {
     this.loadModules(this.props)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // const modulesChanged = !_.isEqual(this.props.modules, nextProps.modules)
-    // const isEditedChanged = this.props.isEditing !== nextProps.isEditing
-    // const isEditingPanelChanged = this.props.isEditingPanel !== nextProps.isEditingPanel
-    // const isPanelHideChanged = this.state.isPanelHide !== nextState.isPanelHide
-    // const isModuleFinderShownChanged = this.state.isModuleFinderShown !== nextState.isModuleFinderShown
-    // const isTrashCanVisibleChanged = this.props.isTrashCanVisible !== nextProps.isTrashCanVisible
-    // const isEditingControlChanged = this.props.isEditingControl !== nextProps.isEditingControl
-    // const isControlEditorShownChanged = this.props.isControlEditorShown !== nextProps.isControlEditorShown
-    // return modulesChanged || isEditedChanged || isPanelHideChanged
-    //   || isModuleFinderShownChanged || isEditingPanelChanged
-    //   || isTrashCanVisibleChanged || isEditingControlChanged
-    //   || isControlEditorShownChanged
-    return true
-  }
-
   componentWillReceiveProps(nextProps) {
     const presetChanged = this.props.preset.id !== nextProps.preset.id
     if (presetChanged)
@@ -264,6 +258,7 @@ class Preset extends React.Component {
 
   render() {
     const {
+      isSharing,
       isEditing,
       isEditingPanel,
       isEditingControl,
@@ -275,7 +270,8 @@ class Preset extends React.Component {
       loadModules,
       setEditMode,
       setEditPanel,
-      toggleControlFinder
+      toggleControlFinder,
+      sharePreset
     } = this.props
     const {
       isPanelHide,
@@ -299,6 +295,10 @@ class Preset extends React.Component {
           onClick={e => toggleControlFinder(!isControlFinderOpened)}>
           {isControlFinderOpened ? '↓' : '↑'}
         </ControlFinderToggle>
+        <ShareButton
+          onClick={e => sharePreset(preset, modules)}>
+          {isSharing ? '...' : 'Share'}
+        </ShareButton>
         <Column>
           <ControlEditorSpace isEditingControl={isEditingControl}>
             {isControlEditorShown && <ControlEditor />}
@@ -314,6 +314,10 @@ class Preset extends React.Component {
                 {!isPanelHide && <StyledCustomPanel />}
               </CustomPanelWrapper>
               <DndList
+                style={{
+                  minHeight: '100px',
+                  minWidth: '100px',
+                }}
                 droppableId={ID.PRESET}
                 getItemStyle={() => ({
                   transition: 'all 0.6s',
@@ -350,10 +354,12 @@ import * as PresetActions from '@flow/preset/actions'
 import * as ControlFinderActions from '@flow/controlFinder/actions'
 import * as ControlEditorActions from '@flow/controlEditor/actions'
 import * as Config from '@utils/config'
+import * as Storage from '@storage'
 
 export default connect(
   state => ({
     preset: state.preset.preset,
+    isSharing: state.preset.isSharing,
     isEditing: state.preset.isEditing,
     isEditingPanel: state.preset.isEditingPanel,
     isEditingControl: state.preset.isEditingControl,
@@ -371,7 +377,9 @@ export default connect(
       finishEditPreset,
       startEditPresetPanel,
       finishEditPresetPanel,
-      finishEditControl
+      finishEditControl,
+      sharePreset,
+      sharePresetSuccess
     } = bindActionCreators(PresetActions, dispatch)
     const {
       openControlFinder,
@@ -383,7 +391,7 @@ export default connect(
 
     return {
       loadModules(preset) {
-        loadModules(preset.id)
+        loadModules()
         const ids = preset.modules.map(module => module.id)
         Config.getModules(ids)
           .then(modules => modules.map((module, index) => ({
@@ -401,9 +409,9 @@ export default connect(
           finishEditPreset()
       },
       setEditPanel(isEditing) {
-        if (isEditing){
+        if (isEditing) {
           startEditPresetPanel()
-        }else{
+        } else {
           finishEditPresetPanel()
           finishEditControl()
           finishCaptureMode()
@@ -415,6 +423,23 @@ export default connect(
         } else {
           closeControlFinder()
         }
+      },
+      sharePreset(currentPreset, modules) {
+        sharePreset()
+        const preset = {
+          ...currentPreset,
+          modules: modules.map(({config: { id }, params}) => {
+            let trimmed = { id }
+            if(params) {
+              trimmed.params = params
+            }
+            return trimmed
+          })
+        }
+        Storage.remote.sharePreset(preset).then(id => {
+          sharePresetSuccess()
+          dispatch(push(`/${id}`))
+        })
       }
     }
   }

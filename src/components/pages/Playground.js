@@ -30,35 +30,15 @@ const StyledPreset = styled(Preset) `
 
 class Playground extends React.Component {
   componentDidMount() {
-    this.loadPreset('1')
-  }
-
-  loadPreset(id) {
-    const { loadPreset } = this.props
-    loadPreset(id)
-  }
-
-  getPresetComponent(preset) {
-    return !!preset ? <StyledPreset/> : undefined
-  }
-
-  getPresetSlots() {
-    return ['0', '1'].map((id, index) => (
-      <PresetSlot key={index} onClick={e => this.loadPreset(id)} >
-        {id}
-      </PresetSlot>
-    ))
+    const { loadPreset, match: { params: { presetId } } } = this.props
+    loadPreset(presetId)
   }
 
   render() {
-    const { preset, loadPreset } = this.props
-
+    const { preset } = this.props
     return (
       <Root>
-        {/* <TopBar>
-          {this.getPresetSlots()}
-        </TopBar> */}
-        {this.getPresetComponent(preset)}
+        {preset && <StyledPreset />}
       </Root>
     )
   }
@@ -69,6 +49,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as PresetActions from '@flow/preset/actions'
 import * as Config from '@utils/config'
+import * as Storage from '@storage'
 
 export default connect(
   state => ({
@@ -82,10 +63,22 @@ export default connect(
 
     return {
       loadPreset(id) {
-        loadPreset(id)
-        Config.getPreset(id).then(preset => {
-          loadPresetSuccess(preset)
-        })
+        loadPreset()
+
+        Promise.resolve()
+          .then(() => (id && Storage.remote.getPreset(id)))
+          .then(preset => preset || Storage.local.getCurrentPreset())
+          .then(preset => preset || {
+            modules: [],
+            panels: [
+              {
+                controls: []
+              }
+            ]
+          })
+          .then(preset => {
+            loadPresetSuccess(preset)
+          })
       }
     }
   }
