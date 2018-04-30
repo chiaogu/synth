@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import _ from '@utils/lodash'
+import { push } from 'react-router-redux'
 
 import Panel from '@components/smarts/Panel'
 import ModuleFinder from '@components/smarts/ModuleFinder'
@@ -436,8 +437,8 @@ export default connect(
           })
         }
         Storage.remote.sharePreset(preset).then(id => {
-          console.log(id)
           sharePresetSuccess()
+          dispatch(push(`/${id}`))
         })
       }
     }

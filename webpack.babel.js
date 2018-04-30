@@ -50,6 +50,8 @@ export default ({ prod } = {}) => ({
   devServer: {
     inline: true,
     port: 3333,
+    host: "0.0.0.0",
+    historyApiFallback: true
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),

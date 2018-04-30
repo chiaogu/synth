@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.babel.js --host 0.0.0.0",
+    "start": "webpack-dev-server --config ./webpack.babel.js",
     "build:dev": "webpack --config ./webpack.babel.js",
     "build:prod": "webpack --config ./webpack.babel.js --env.prod=true"
   },
@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "firebase": "^4.12.1",
+    "history": "^4.7.2",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
@@ -40,6 +41,7 @@
     "react-dom": "^16.3.1",
     "react-hammerjs": "^1.0.1",
     "react-redux": "^5.0.7",
+    "react-router-redux": "^5.0.0-alpha.9",
     "redux": "^3.7.2",
     "styled-components": "^2.2.1",
     "tone": "^0.11.12"

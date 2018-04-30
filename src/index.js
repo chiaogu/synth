@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import createHistory from 'history/createBrowserHistory'
+import { ConnectedRouter, routerMiddleware, push } from 'react-router-redux'
 import styled from 'styled-components'
 
 import reducers from '@flow/reducers'
@@ -15,16 +17,22 @@ const Root = styled.div`
   height: 100%;
 `
 
-const core = new Core();
+const history = createHistory()
+
 const store = createStore(
   reducers,
-  applyMiddleware(core.middleware())
+  applyMiddleware(
+    new Core().middleware(),
+    routerMiddleware(history)
+  )
 )
 
 ReactDOM.render(
   <Provider store={store}>
     <Root>
-      <App />
+      <ConnectedRouter history={history}>
+        <App/>
+      </ConnectedRouter>
       <Storage />
     </Root>
   </Provider>,
