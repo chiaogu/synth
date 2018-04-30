@@ -55,7 +55,9 @@ export default ({ prod } = {}) => ({
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
-    new DotenvPlugin(),
+    new DotenvPlugin({
+      systemvars: true
+    }),
     new HtmlWebpackPlugin({
       template: `${__dirname}/src/index.html`,
       filename: 'index.html',
